@@ -1,0 +1,97 @@
+{%extends 'blog/base.html'%}
+{% block content %}
+{%load static%}
+
+<title>About</title
+
+  <body class='container  col-lg-12 col-md-10 col-sm-10 p-1'>
+          <div class="mx-auto col-lg-10 col-md-8 col-sm-6 mt-5 p-4">   
+            <h3 class="p-2" > ABOUT THIS SITE </h3>
+            <strong class="" style="color:black;font-family:math;font-size:smaller;">Earn and have fun interacting with varoius tasks and reffer your friends to increase your earnings</strong>
+          </div>
+          <div style="display:-webkit-inline-box;overflow-x:scroll;" class="container p-1 m-1 rounded-lg bg-warning col-lg-12 col-md-10 col-sm-8">
+            <div class="side-bar  bg-light col-lg-4 col-sm-4 col-md-10 m-2 p-3 shadow-sm rounded-lg">
+                <p style="color:black;font-family:math;font-size:smaller;"class="mx-auto">
+                    <h5>WHAT IS THIS ?</h5>
+                    <ol style="font-size:smaller;font-family:cursive;">  
+                          1. This is a platform for young people to earn cash by doing daily tasks .<br>
+                          2. EARN money by Teaching  people stuff in your field through short blogs.<br>
+                          3. Reffer your friends and earn 100 kshs per person !. <br>
+                          4. If you have enough money withdraw and get your mullah.<br>
+
+                          <blockquote style="font-size:smaller; color:blueviolet;">NB: Earn extra points by writting a blog go to the icon written <b> New Post</b>
+                            and write a small (about 3 paragraphs) ,fun  blog about any topic.
+                          </blockquote>
+                    </ol>
+                  </p>
+                  <span style="">-----> </span>
+            </div>
+            <div class="side-bar  bg-primary col-lg-4 col-sm-12 col-md-10 m-2 p-4 shadow-sm rounded-lg">
+                <p style="color:black;font-family:math;font-size:smaller;"class="mx-auto">
+                    <h5>HOW DO I START ?</h5>
+                    <ol style="font-size:smaller;font-family:cursive;"> 
+                          1. After registration go to your profile and press the activate account button .<br>
+                          2. You will be directed to a page with a paybill number, pay the minimum kshs 100/= and submit the code .<br>
+                          3. After a few minutes our agents will verify the payment and activate your account giving you a refferal link. <br>
+                          4. Share the link to friends and family to earn the refferal bonus <br>
+                    </ol>
+                  </p>
+                  <span style="">-----> </span>
+            </div>
+              
+            <div class="side-bar  bg-light col-lg-4 col-sm-12 col-md-10 m-2 p-4 shadow-sm rounded-lg">
+                <p class="mx-auto">
+                  <h5>HOW DO REFFERALS WORK?</h5>
+                  <p style="font-size:smaller;font-family:cursive;">ONCE your account is active just share your link.For every ten active people you bring
+                  in, you earn 1000/=kshs.<br>
+                  A person's account is considered active if they have paid the entry fee.
+                  </p>
+                  <blockquote style="font-size:smaller; color:blueviolet;">NB: if the more refferals you have the more money you make but if
+                    your Reffered persons dont activate their accounts its not going to count.
+                  </blockquote>
+                </p>
+                <span style="">-----> </span>
+            </div>
+            <div class="side-bar  bg-danger col-lg-4 col-sm-12 col-md-10 m-2 p-4 shadow-sm rounded-lg">
+              <p style="color:white;font-family:math;font-size:smaller;"class="mx-auto">
+                <h5>SITE RULES </h5>
+                <ol style="font-size:smaller;font-family:cursive;"> 
+                  1. Content considered immoral,sexual,degrading or offensive will be taken down and the account will be warned or suspended .<br>
+                  2. You cannot withdraw any amount below Ksh1000.<br>
+                  3. You cannot do a task twice or more than once in a day. <br>
+                  4. Abuse of the site by triyng to gain an authorised access will lead to suspension and police involvement. <br>
+                  5. If your phone number does not match with your M-pesa number your account activation will be denied.<br>
+                </ol>
+              </p>
+          </div>
+          </div>
+       
+        <header class="container-fluid bg-dark pt-5 m-8 row">
+          <div class="container p-5 m-4 rounded-lg bg-danger col-lg-3">
+            <a class="mx-auto" href="{% url 'spaces_list'  'CYBER-SECURITY' %}"><h4>CYBER SECURITY, HACKING</h4></a>
+            <img class="rounded-circle" src="{%  static '\images\icons\hacker.png' %}" style="width:50%" alt="pic">
+          </div>
+          <div class="container p-5 m-4 rounded-sm bg-info col-lg-3">
+            <a class="mx-auto" href="{% url 'spaces_list' 'MUSIC AND ART' %}"><h4>MUSIC AND ART</h4></a>
+            <img class="rounded-circle" src="{%  static '\images\icons\hobby.png' %}" style="width:50%" alt="pic">
+          </div>
+          <div class="container p-5 m-4 rounded-lg bg-light col-lg-3">
+            <a class="mx-auto" href="{% url 'spaces_list' 'FOOD AND LIFESTYLE' %}"><h4>LIFESTYLE AND FOOD</h4></a>
+            <img class="rounded-circle" src="{%  static '\images\icons\health.png' %}" style="width:50%" alt="pic">
+          </div>
+          <div class="container p-5 m-4 rounded-sm bg-warning col-lg-3">
+            <a class="mx-auto" href="{% url 'spaces_list' 'LIFE HACKS AND JOBS' %}"><h4>LIFE HACKS AND JOBS</h4></a>
+            <img class="" src="{%  static '\images\icons\job.png' %}" style="width:50%" alt="pic">
+          </div>
+          <div class="container p-5 m-4 rounded-sm bg-light col-lg-3">
+            <a class="mx-auto" href="{% url 'spaces_list' 'PROGRAMMING AND DATA SCIENCE' %}"><h4 style="font-size:smaller;">PROGRAMMING,AI,ML</h4></a>
+            <img class="" src="{%  static '\images\icons\web-programming.png' %}" style="width:50%" alt="pic">
+          </div>
+    
+        </header>
+
+
+
+  </body>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+from django.db import models
+from django.contrib.auth.models import User
+from PIL import Image
+from django.core.validators import RegexValidator
+from blog.models import blogpost
+
+class profile(models.Model):
+    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    image = models.ImageField(default ='default.jpg', upload_to ='profile_pics')
+    bio = models.TextField(default=True)
+    preference = models.TextField(default=True)
+    level= models.IntegerField(default=1)
+    phone_number = models.IntegerField(default=0)
+    reffered_by = models.CharField(max_length=50,default=None,null=True)
+
+    def get_user_level(self):
+        pass
+    
+
+    def  __str__(self):
+        return  f'{self.user.username} Profile'
+
+
+    def save(self,*args,**kwargs):
+        super().save(*args,**kwargs)
+        img= Image.open(self.image.path)
+        if img.width> 300 or img.height>300:
+            outputsize=(300,300)
+            img.thumbnail(outputsize)
+            img.save(self.image.path)
+
+class Cashaccount(models.Model):
+    owner = models.ForeignKey(User,on_delete=models.CASCADE)
+    mpesa_code = models.CharField(max_length=10,default=None,null=True,validators=[RegexValidator(r"^[0-9|A-Z]{10}$",'invalid code')])
+    level_bonus = models.IntegerField(default=0)
+    refferals = models.ManyToManyField(profile,default=None)
+    amount = models.IntegerField(default=0)
+    is_valid = models.BooleanField(default=False)
+    has_withdrawn = models.BooleanField(default=False)
+    withdraw_failed = models.BooleanField(default=False)
+
+    def get_refferal_cash(self):
+        total = self.refferals.count()
+        total*=100
+        return total
+    
+    def get_total_cash(self,user):
+        posts = blogpost.objects.filter(author=user)
+        total=0
+        for post in posts:
+            cash=post.value
+            total+=cash
+        taskcash=self.get_refferal_cash()
+        total+=taskcash
+        return total
+
+    def get_total_tasks(self,user): 
+        posts = blogpost.objects.filter(author=user)
+        return posts.count()
+    
+    def withdraw_cash(self):
+        self.refferals.delete().all()
+        self.mpesa_code.delete()
+
+
+    def __str__ (self):
+        return f'{self.owner} with ksh {self.get_total_cash(self.owner)} has {self.refferals.count()} refferal(s)'
+
+
+class Withdrawrequest(models.Model):
+    account = models.ForeignKey(Cashaccount, on_delete=models.CASCADE)
+    request_date = models.DateTimeField(auto_now_add=True)
+    
+    def __str__ (self):
+        return f"{self.account.owner.username} requested to withdraw on date {self.request_date.day} "

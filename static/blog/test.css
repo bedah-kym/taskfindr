@@ -1,0 +1,9 @@
+@media (min-width:769px){
+    .funimage{
+        width:5%;
+    }
+}
+body{
+    color: blueviolet;
+    font-size: xx-small;
+}

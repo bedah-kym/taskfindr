@@ -1,0 +1,14 @@
+{% extends "blog/base.html"%}
+{% load static %}
+{% block content %}
+
+      <div class="container bg-light col-lg-4 shadow-lg p-4 mb-4  border border-info rounded-lg " style="margin-top:80px;">
+        <img class="card-img-bottom" src="{% static 'images/dumbbell.png' %}" style="width:30%" alt=""/>
+        <div style="font:size:medium;"class="mt-4 m-2 p-2 mx-auto row ">
+          <h1> Oops! </h1>
+          <p> hey ,sorry you are logged out</p>
+       </div>
+       <a class="nav-link "  href="{% url 'login' %}">Back Home</a>
+     </div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "blog/base.html"%}
+{% load static %}
+{% block content %}
+
+    <div class="container col-lg-4 shadow-lg p-4 mb-4 mt-2 border border-warning rounded-lg "style="font-size: smaller;font-family: cursive;">
+      <div style="margin:4px;"class="row">
+        <form class="col-lg-12 col-sm-12 mb-2"  method="POST" style=""> {% csrf_token %}
+
+            <div class="form-group shadow mb-4 p-4 mt-4 bg-success rounded 10">
+              <label for="name"style="font-family: ui-monospace;font-style: oblique;">
+                <h2 style="font-family:small">Register Today</h2></label>
+            </div>
+            {% if form.errors %}
+              <div class="bg-danger form-group shadow mb-4 p-4">
+                <span> ERROR </span>
+                <ul class="errorlist  m-1 p-1" style="text-align:left">
+                  {{form.errors}}
+                </ul>
+              </div>
+            {% endif %}
+            <div style=""class="form-group shadow mb-4 mt-2 p-4 mt-5">
+              <label for="username">Username</label>
+                {{form.username}}
+            </div>
+      
+            <div class="form-group shadow mb-4 p-4">
+              <label for="email">email</label>
+                {{form.email}}
+            </div>
+            <div class="form-group shadow mb-4 p-4">
+              <label for="reff_code">phone number</label>
+                {{form.phone}}
+            </div>
+            <div class="form-group shadow mb-4 p-4">
+              <label for="password1">new password</label>
+                {{form.password1}}
+            </div>
+            <div class="form-group shadow mb-4 p-4">
+              <label for="password2">password verification</label>
+                {{form.password2}}
+            </div>
+            
+            <span style="font-size:small;">by clicking submit you accept our <a href="{%url 'about' %}">Terms and conditions</a> </span>
+            <button type="submit" class="btn shadow mb-4 btn-outline-success">submit</button>
+            <a class="nav-link mt-2"  href="{% url 'login' %}">already have an account ?</a>
+        </form>
+
+     </div>
+   </div>
+
+{% endblock %}
