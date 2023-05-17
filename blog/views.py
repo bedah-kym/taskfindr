@@ -26,7 +26,7 @@ class postlistview(LoginRequiredMixin, ListView):
         reffs=account.refferals.count()
         amount= account.get_total_cash(user)
         tasks = account.get_total_tasks(user)
-        level = account.level_bonus
+        level = account.get_level_bonus()
         context = super().get_context_data(**kwargs)
         new={
             "reffs":reffs,

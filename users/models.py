@@ -13,10 +13,6 @@ class profile(models.Model):
     phone_number = models.IntegerField(default=0)
     reffered_by = models.CharField(max_length=50,default=None,null=True)
 
-    def get_user_level(self):
-        pass
-    
-
     def  __str__(self):
         return  f'{self.user.username} Profile'
 
@@ -44,7 +40,16 @@ class Cashaccount(models.Model):
         total*=100
         return total
     
+    def get_level_bonus(self):#if ur, say level 2 and above you get a bonus of your level multiplied by 100 (2*100)
+        bonus=0
+        if self.amount >= 200:
+            user_level = (self.amount//100)
+            bonus = user_level*100
+        return bonus
+
+    
     def get_total_cash(self,user):
+        bonus= self.get_level_bonus()
         posts = blogpost.objects.filter(author=user)
         total=0
         for post in posts:
@@ -52,6 +57,7 @@ class Cashaccount(models.Model):
             total+=cash
         taskcash=self.get_refferal_cash()
         total+=taskcash
+        total+=bonus
         return total
 
     def get_total_tasks(self,user): 
