@@ -19,6 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import (
     about_view,
+    termsview,
     postlistview,
     postdetailview,
     postcreateview,
@@ -33,6 +34,7 @@ from users.views import (
     Cashaccountupdate,
     Cashaccountdelete,
     withdrawalrequest,
+    levelup,
 )
 from django.contrib.auth import views
 
@@ -47,6 +49,7 @@ urlpatterns = [
     path('post/<int:pk>/delete/',postdeleteview.as_view(),name='post_delete'),
     path('register/<str:code>/',register_view,name='register'),
     path('withdraw/',withdrawalrequest,name='withdrawal_request'),
+    path('level_up/',levelup,name='level_up'),
     path('profile/',profile_view,name='profile'),
     path('account-activation/<int:pk>/',Cashaccountupdate.as_view(),name='activation'),
     path('delete-account/<int:pk>/',Cashaccountdelete.as_view(),name='delete_account'),
@@ -57,6 +60,7 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',views.PasswordResetConfirmView.as_view(template_name='blog/password_reset_confirm.html'),name='password_reset_confirm'),
     path('password-reset-complete/',views.PasswordResetCompleteView.as_view(template_name='blog/password_reset_complete.html'),name='password_reset_complete'),
     path('about/',about_view,name='about'),
+    path('terms_and_conditions/',termsview,name='terms'),
 
 ]
 if settings.DEBUG:

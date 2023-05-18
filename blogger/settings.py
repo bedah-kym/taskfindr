@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://db66-154-159-237-16.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://e16c-154-159-237-87.ngrok-free.app']
 
 # Application definition
 

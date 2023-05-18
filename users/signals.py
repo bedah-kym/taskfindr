@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.core.mail import send_mail,BadHeaderError
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
-from .models import Cashaccount as Ca,Withdrawrequest as Wr
+from .models import Cashaccount as Ca,Withdrawrequest as Wr,Leveluprequest as Lu
 from django.dispatch import receiver
 from .models import profile
 
@@ -11,6 +11,16 @@ from .models import profile
 def create_account(sender,instance,created,**kwargs):
     if created:
         Ca.objects.create(owner = instance.user)
+    else:
+        """if profile is saved check if has_leveled if true find the level request,delete then has_leveled =False
+        then save the signal will be called again but will do nothing.
+        """
+        if instance.leveled_up == True:
+            prof = Lu.objects.get(user_profile=instance)
+            prof.delete()
+            instance.leveled_up = False
+            instance.save()
+
         
 @receiver(post_save,sender=Ca)
 def track_refferal(sender,instance,created,**kwargs):

@@ -12,6 +12,7 @@ class profile(models.Model):
     level= models.IntegerField(default=1)
     phone_number = models.IntegerField(default=0)
     reffered_by = models.CharField(max_length=50,default=None,null=True)
+    leveled_up = models.BooleanField(default=False)
 
     def  __str__(self):
         return  f'{self.user.username} Profile'
@@ -44,7 +45,7 @@ class Cashaccount(models.Model):
         bonus=0
         if self.amount >= 200:
             user_level = (self.amount//100)
-            bonus = user_level*100
+            bonus = (user_level-1)*100
         return bonus
 
     
@@ -79,3 +80,12 @@ class Withdrawrequest(models.Model):
     
     def __str__ (self):
         return f"{self.account.owner.username} requested to withdraw on date {self.request_date.day} "
+
+class Leveluprequest(models.Model):
+    user_profile = models.ForeignKey(profile,on_delete=models.CASCADE)
+    request_date = models.DateTimeField(auto_now_add=True)
+    mpesa_code = models.CharField(max_length=10,default=None,null=True,validators=[RegexValidator(r"^[0-9|A-Z]{10}$",'invalid code')])
+    
+    def __str__ (self):
+        return f"{self.user_profile.user.username} requested to level up on date {self.request_date.day} "
+

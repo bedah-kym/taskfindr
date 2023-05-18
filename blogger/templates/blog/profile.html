@@ -55,6 +55,7 @@
                         {% endif %}
                         <div class="form-group bg-secondary shadow  m-1 p-4 "style="color:aliceblue">
                           <span ="profile pic"><span style="color:black;">Level Bouns $:</span> {{my_account.get_level_bonus}}/=<br>
+                          <a href="{% url 'level_up' %}"><button class="btn bg-primary">Level Up</button></a>
                           <hr style="background-color: chartreuse;">
                           <span ="profile pic"><span style="color:black;">Status : </span>{% if my_account.is_valid == True %} Account is Active{%else%}Account inactive{% endif %}<br>
                           <hr style="background-color: chartreuse;">
