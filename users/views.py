@@ -1,13 +1,13 @@
+from django.utils import timezone
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import registration_form, updateuser,updateprofile
-from .models import Cashaccount,profile,Withdrawrequest
+from .forms import registration_form, updateuser,updateprofile,activationform
+from .models import Cashaccount,profile,Withdrawrequest,Leveluprequest
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import UpdateView,DeleteView
 from.validators import Reffcodevalidator
-
 
 def register_view(request,**kwargs):
 
@@ -80,7 +80,18 @@ def withdrawalrequest(request):
         return redirect('home')
     return redirect ('profile')
 
-
+@login_required
+def levelup(request):
+    my_user = request.user
+    my_profile = profile.objects.get(user=my_user)
+    form = activationform()
+    if request.method == "POST":
+        form = activationform(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data.get('mpesa_code')
+            Leveluprequest.objects.create(user_profile = my_profile,mpesa_code = code,request_date = timezone.now() )
+        return redirect('profile')
+    return render(request,'blog/activation.html',{"form":form})
 
 
 class Cashaccountupdate(LoginRequiredMixin,UserPassesTestMixin, UpdateView):

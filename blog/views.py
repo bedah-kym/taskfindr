@@ -122,3 +122,6 @@ class postdeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
 
 def about_view(request):
     return render(request,'blog/about.html',{})
+
+def termsview(request):
+    return render(request,'blog/activation_success.html',{})
