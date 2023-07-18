@@ -1,66 +1,100 @@
-{%extends 'blog/base.html'%}
-
-{%load static%}
-{% block content %}
+{%extends 'blog/base.html'%} {%load static%} {% block content %}
 <title>Spaces</title>
-  <!--link rel="stylesheet" type="text/css" href="{% static 'blog/home.css' %}"-->
-  <body class='container bg-success col-lg-12 col-md-12 col-sm-12 m-10 p-1'>
-<!--header-->
-        <header>
-          <div class="category-header mx-auto bg-info">
-            <h3>{{view.kwargs.spaces}}</h3> {{view.queryset}}
+<!--link rel="stylesheet" type="text/css" href="{% static 'blog/home.css' %}"-->
+<body class="container bg-success col-lg-12 col-md-12 col-sm-12 m-10 p-1">
+  <!--header-->
+  <header>
+    <div class="category-header mx-auto bg-info">
+      <h3>{{view.kwargs.spaces}}</h3>
+      {{view.queryset}}
+    </div>
+  </header>
+  <!-- body-->
+  {% for post in posts %}
+
+  <div class="container bg-light col-lg-12 col-md-12 col-sm-12">
+    <div
+      class="container bg-light mt-3 pb-20 col-lg-12 col-md-12 col-sm-12"
+      id="home"
+      style="width: 70%"
+    >
+      <div
+        class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-12"
+      >
+        <div
+          class="card-header bg-info col-lg-6 col-sm-12 col-md-12 m-3 p-2 shadow-sm rounded-lg"
+        >
+          <div class="row p-2 m-2">
+            <img
+              class="rounded-circle"
+              src="{{post.author.profile.image.url}}"
+              style="width: 20%"
+              alt="pic"
+            />
+            <h2 class="mx-auto card-text row">
+              <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+            </h2>
           </div>
-        </header>
-<!-- body-->
-        {% for post in posts %}
-
-            <div class='container bg-light col-lg-12 col-md-12 col-sm-12'>
-                <div class="container bg-light mt-3 pb-20 col-lg-12 col-md-12 col-sm-12" id='home' style="width:70%">
-                      <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-12">
-                        <div class=" card-header bg-info col-lg-6 col-sm-12 col-md-12 m-3 p-2 shadow-sm rounded-lg">
-                          <div class='row p-2 m-2'>
-                            <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="width:20%" alt="pic">
-                            <h2 class="mx-auto card-text row"> <a  href="{% url 'post_detail' post.id %}">{{ post.title }}</a> </h2>
-
-                          </div>
-                          <div class=' row bg-light rounded-lg p-2 m-3 col-sm-12 ' style="width:50%">
-                            <a href="{% url 'user_post' post.author.username %}" class='mx-auto p-1 m-1'><strong>by {{post.author|upper}}</strong></a>
-                          </div>
-                        </div>
-                        <div class="card-body">
-                          <p class="card-text">{{ post.content}}</p>
-                        </div>
-                        <div class="card-footer bg-light">
-                          <p>{{ post.date_posted}}</p>
-                        </div>
-                     </div>
-                </div>
-            </div>
-
-        {% endfor %}
-        <div class="mx-auto m-2 p-1">
-          {% if is_paginated %}
-                {% if page_obj.has_previous %}
-                  <a class="btn btn-outline-warning m-1" href="?page = 1">first</a>
-                  <a class="btn btn-outline-primary m-1" href="?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                      <a class="btn btn-success m-1" href="?page={{num}}">{{num}}</a>
-                    {% elif num > page_obj.number|add:'-3' and num <= page_obj.number|add:'3' %}
-                        <a class="btn btn-outline-info m-1" href="?page={{num}}">{{num}}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                  <a class="btn btn-outline-info m-1" href="?page={{ page_obj.next_page_number }}">next</a>
-                  <a class="btn btn-outline-warning m-1" href="?page={{ page_obj.paginator.num_pages}}">last</a>
-                {% endif %}
-
-          {% endif %}
+          <div
+            class="row bg-light rounded-lg p-2 m-3 col-sm-12"
+            style="width: 50%"
+          >
+            <a
+              href="{% url 'user_post' post.author.username %}"
+              class="mx-auto p-1 m-1"
+              ><strong>by {{post.author|upper}}</strong></a
+            >
+          </div>
         </div>
+        <div class="card-body">
+          <p class="card-text">{{ post.content}}</p>
+        </div>
+        <div class="card-footer bg-light">
+          <p>{{ post.date_posted}}</p>
+          <p>
+            <a href="{% url 'like' post.id %}"
+              ><span class="material-symbols-outlined"> add_reaction </span>
+            </a>
+            {{likes}}
+            <a href="{% url 'dislike' post.id %}">
+              <span class="material-symbols-outlined">
+                sentiment_very_dissatisfied
+              </span>
+            </a>
+            {{dislikes}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    </body>
+  {% endfor %}
+  <div class="mx-auto m-2 p-1">
+    {% if is_paginated %} {% if page_obj.has_previous %}
+    <a class="btn btn-outline-warning m-1" href="?page = 1">first</a>
+    <a
+      class="btn btn-outline-primary m-1"
+      href="?page={{ page_obj.previous_page_number }}"
+      >previous</a
+    >
+    {% endif %} {% for num in page_obj.paginator.page_range %} {% if
+    page_obj.number == num %}
+    <a class="btn btn-success m-1" href="?page={{num}}">{{num}}</a>
+    {% elif num > page_obj.number|add:'-3' and num <= page_obj.number|add:'3' %}
+    <a class="btn btn-outline-info m-1" href="?page={{num}}">{{num}}</a>
+    {% endif %} {% endfor %} {% if page_obj.has_next %}
+    <a
+      class="btn btn-outline-info m-1"
+      href="?page={{ page_obj.next_page_number }}"
+      >next</a
+    >
+    <a
+      class="btn btn-outline-warning m-1"
+      href="?page={{ page_obj.paginator.num_pages}}"
+      >last</a
+    >
+    {% endif %} {% endif %}
+  </div>
+</body>
 
 {% endblock %}

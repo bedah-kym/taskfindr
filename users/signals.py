@@ -120,4 +120,14 @@ STEPS FOR THE WHOLE SHIT
                 the emails correspond to the action you take they are triggered when the cash account is saved so be carefull while 
                 saving anything in the admin since most logic is called after you save a model.
 
+im thinking of adding mpesaAPI so when you pay with mpesa we check if the request has failed or succeded if good,
+the signal is sent to activate your cash account if not we tell you to try again if you try more than 3 times we
+stop you so u can try after 1 hr .
+we will use the code submit form to submit the number to the mpesa api then the request is sent to daraja,we get the
+response(we need to process the request using a function which returns true or false.this function 
+will take the json response and check the status code then return.this function will be imported from validators.py)
+then activate the account.
+we should still maintain the mpesa code submit form as a fail safe but this could pose a challenge as one could try
+to pay thru mpesa and still send the code.to overcome this if mpesa is implemented the site admins will have to ignore
+and codes sent thru and let the system verify on its own
 """

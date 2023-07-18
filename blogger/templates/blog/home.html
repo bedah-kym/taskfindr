@@ -58,6 +58,18 @@
                         </div>
                         <div style="font-size:small"class="card-body">
                           <p class="card-text">{{post.content}} </p>
+                          <p>
+                            <a href="{% url 'like' post.id %}"
+                              ><span class="material-symbols-outlined"> add_reaction </span>
+                            </a>
+                            {{likes}}
+                            <a href="{% url 'dislike' post.id %}">
+                              <span class="material-symbols-outlined">
+                                sentiment_very_dissatisfied
+                              </span>
+                            </a>
+                            {{dislikes}}
+                          </p>
                           read more **
                         </div>
                         <div style="font-size:x-small;@mediaquery(min)"class="card-footer bg-light">
@@ -117,6 +129,8 @@
         <a href="https://www.flaticon.com/free-icons/code" title="code icons">Code icons created by Icongeek26 - Flaticon</a>
         <a href="https://www.flaticon.com/free-icons/job" title="job icons">Job icons created by Freepik - Flaticon</a>
         <a href="https://www.flaticon.com/free-icons/bow" title="bow icons">Bow icons created by Leremy - Flaticon</a>
+        <a href="https://www.flaticon.com/free-animated-icons/heart" title="heart animated icons">Heart animated icons created by Freepik - Flaticon</a>
+        <a href="https://www.flaticon.com/free-animated-icons/cancel" title="cancel animated icons">Cancel animated icons created by Freepik - Flaticon</a>
       </div>
       <div>
         @copyright 2023 DevBedah<br>
