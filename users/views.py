@@ -90,7 +90,12 @@ def levelup(request):
         if form.is_valid():
             code = form.cleaned_data.get('mpesa_code')
             Leveluprequest.objects.create(user_profile = my_profile,mpesa_code = code,request_date = timezone.now() )
-        return redirect('profile')
+            messages.success(request,f"Thank you {my_user} , we will verify your request and getback to you")
+            return redirect('profile')
+        else:
+            messages.warning(request,"sorry your request is invalid check your mpesa code")  
+            return redirect('profile')
+    messages.info(request,f"HI {my_user} ,pay here same way as before to levelup")
     return render(request,'blog/activation.html',{"form":form})
 
 

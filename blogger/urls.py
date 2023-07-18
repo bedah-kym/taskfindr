@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import (
@@ -26,7 +26,9 @@ from blog.views import (
     postupdateview,
     postdeleteview,
     userpostlistview,
-    categorypostlistview
+    categorypostlistview,
+    likepost,
+    dislikepost,
 )
 from users.views import (
     register_view,
@@ -40,6 +42,9 @@ from django.contrib.auth import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('payus/', include('PAYMENT.urls')),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include('API.urls')),
     path('',postlistview.as_view(),name='home'),
     path('post/new/',postcreateview.as_view(),name='new-post'),
     path('post/<int:pk>/',postdetailview.as_view(),name='post_detail'),
@@ -47,6 +52,8 @@ urlpatterns = [
     path('category/<str:spaces>/',categorypostlistview.as_view(),name='spaces_list'),
     path('post/<int:pk>/update/',postupdateview.as_view(),name='post_update'),
     path('post/<int:pk>/delete/',postdeleteview.as_view(),name='post_delete'),
+    path('likepost/<int:pk>/',likepost,name='like'),
+    path('dislikepost/<int:pk>/',dislikepost,name='dislike'),
     path('register/<str:code>/',register_view,name='register'),
     path('withdraw/',withdrawalrequest,name='withdrawal_request'),
     path('level_up/',levelup,name='level_up'),

@@ -1,5 +1,6 @@
-from django.shortcuts import get_list_or_404, render,get_object_or_404
-from .models import blogpost as post
+from django.shortcuts import get_list_or_404, render,get_object_or_404,redirect
+from django.urls import reverse
+from .models import blogpost as post,Postreaction 
 from django.contrib.auth.models import User
 from users.models import Cashaccount
 from django.utils import timezone
@@ -32,7 +33,7 @@ class postlistview(LoginRequiredMixin, ListView):
             "reffs":reffs,
             "tasks":tasks,
             "cash":amount,
-            "level":level
+            "level":level,
         }
         context.update(new) 
         return context
@@ -43,6 +44,17 @@ class postdetailview(LoginRequiredMixin,DetailView):
     model=post
     template_name='blog/post-detail.html'
     context_object_name= 'post'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        likes,dislikes = Postreaction.total_reactions(self.request,self.get_object())
+        reactions ={
+            "likes":likes,
+            "dislikes":dislikes
+        }
+        context.update(reactions)
+        return context
+        
 
 class userpostlistview(LoginRequiredMixin,ListView):
     model= post
@@ -119,7 +131,26 @@ class postdeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+    
+def likepost(request,pk):
+    fan=request.user
+    blog=post.objects.get(pk=pk)
+    if Postreaction.can_react(request,blog):        
+        Postreaction.objects.create(fan=fan,post=blog,reaction="like")
+    else:
+        Postreaction.change_reaction(request,blog)
 
+    return redirect(reverse('post_detail',kwargs={"pk":blog.id}))
+
+def dislikepost(request,pk):
+    fan=request.user
+    blog=post.objects.get(pk=pk)
+    if Postreaction.can_react(request,blog):        
+        Postreaction.objects.create(fan=fan,post=blog,reaction="dislike")
+    else:
+        Postreaction.change_reaction(request,blog)
+    return redirect(reverse('post_detail',kwargs={"pk":blog.id}))
+        
 def about_view(request):
     return render(request,'blog/about.html',{})
 

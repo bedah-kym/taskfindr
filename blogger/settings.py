@@ -18,6 +18,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 MPESA_ENVIRONMENT = os.environ.get('MPESA_ENVIRONMENT')
 
+
 # Credentials for the daraja app
 
 MPESA_CONSUMER_KEY = os.environ.get('MPESA_CONSUMER_KEY')
@@ -77,7 +78,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://e16c-154-159-237-87.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://394a-105-160-25-252.ngrok-free.app']
 
 # Application definition
 
@@ -91,8 +92,25 @@ INSTALLED_APPS =[
     'blog',
     'users',
     'API',
-    'PAYMENT'
+    'PAYMENT',
+    'django_daraja',
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly"
+    ],
+   #DEFAULT THROTTLE RATES
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 5
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -160,11 +178,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
