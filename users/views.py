@@ -1,5 +1,6 @@
 from django.utils import timezone
 from django.shortcuts import render,redirect
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import registration_form, updateuser,updateprofile,activationform
@@ -16,18 +17,18 @@ def register_view(request,**kwargs):
         if form.is_valid():
             username=form.cleaned_data.get('username')
             phonenumber = form.cleaned_data.get('phone')
-            form.save()
             code= kwargs['code']
             if Reffcodevalidator(code) == True:
+                form.save()
                 reff_code = code
                 owner = User.objects.get(username=username)
                 prof=profile.objects.create(user = owner,reffered_by = reff_code,phone_number=phonenumber)
                 prof.save()
                 messages.success(request,f'WELCOME {username} you are now a member.ACTIVATE your account now')
-                return redirect('profile')
+                return redirect('about')
             else:
                 messages.warning(request,f'Sorry {username} you need a valid refferal link to register,click register to use our default link')
-                return redirect('about')
+                return redirect(reverse("register",kwargs={"code":code}))
         else:
             pass
     else:
@@ -41,15 +42,19 @@ def profile_view(request):
     if request.method == "POST":
         u_form = updateuser(request.POST, instance=request.user)
         p_form = updateprofile(request.POST, request.FILES, instance= request.user.profile)
+        print(request.POST)
 
         if u_form.is_valid():
             u_form.save()
             messages.success(request,f'your profile has been updated ')
             return redirect('profile')
+    
+        
         if p_form.is_valid():
             p_form.save()
             messages.success(request,f'your profile has been updated ')
             return redirect('profile')
+       
         
     u_form = updateuser(instance=request.user)
     p_form = updateprofile(instance= request.user.profile)

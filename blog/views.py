@@ -91,19 +91,22 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         """
         user = self.request.user
         blog = post.objects.filter(author=user).last()
-        today = timezone.now().day
-        this_month = timezone.now().month
-        posted_month = blog.date_posted.month
-        posted_day = blog.date_posted.day
-        if this_month == posted_month:
-            if today == posted_day:
-                return False
-            else:
+        if blog :
+            today = timezone.now().day
+            this_month = timezone.now().month
+            posted_month = blog.date_posted.month
+            posted_day = blog.date_posted.day
+            if this_month == posted_month:
+                if today == posted_day:
+                    return False
+                else:
+                    return True
+            elif this_month > posted_month:
                 return True
-        elif this_month > posted_month:
-            return True
+            else:
+                return False
         else:
-            return False
+            return True
         
        
 
