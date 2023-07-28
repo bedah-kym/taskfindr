@@ -29,6 +29,7 @@ from blog.views import (
     categorypostlistview,
     likepost,
     dislikepost,
+    tasklistview
 )
 from users.views import (
     register_view,
@@ -46,6 +47,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('API.urls')),
     path('',postlistview.as_view(),name='home'),
+    path('ourtasks/',tasklistview,name='tasklist'),
     path('post/new/',postcreateview.as_view(),name='new-post'),
     path('post/<int:pk>/',postdetailview.as_view(),name='post_detail'),
     path('user/<str:username>/',userpostlistview.as_view(),name='user_post'),

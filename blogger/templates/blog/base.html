@@ -3,55 +3,118 @@
   <title>Home</title>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1,shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" type="txt/css" href="{% static 'blog\test.css' %}">
-
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'blog/nav/fonts/icomoon/style.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/nav/css/owl.carousel.min.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'blog/nav/css/bootstrap.min.css'%}">
+    <!-- Style -->
+    <link rel="stylesheet" href="{% static 'blog/nav/css/style.css'%}">
   </head>
-  <div class="container-fluid m-0 p-5">
-      <nav class="navbar navbar-expand-sm justify-content-center bg-dark fixed-top ">
-        <div class="container-fluid">
-          <li class="">
-            <a style="text-decoration:none;" href="{% url 'home' %}"><img src="\static\images\icons\job.png" style="width:15%;" alt=" "><strong style="color:aliceblue">TASKfindr</strong></a>
-          </li>
-        <!-- navbar links-->
-          <ul class="nav nav-tabs"style="font-size:smaller;">
-              <li class="nav-item">
-                <a style="color:snow" class="nav-link"  href="{% url 'about' %}">About</a>
-                <a style="color:snow" class="nav-link "  href="{% url 'home' %}">home</a>
-              </li>
-              
 
-              {% if user.is_authenticated %}
-                  <li class="nav-item">
-                    <a style="color:brown" class="nav-link" href="{% url 'logout' %}">log out </a>
-                    <a class="nav-link" href="{% url 'profile' %}">Profile </a>
-                  </li>
-                  <li class="nav-item">
-                    <a style="color:aquamarine" class="nav-link" href="{% url 'new-post' %}">New post </a>
-                  </li>
-                  <li class="nav-item">
-                    <a style="color:aliceblue" class="nav-link" href="#">Tasks</a>
-                  </li>
-              {%else%}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">log in </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link"  href="{% url 'register' 'blogadmin' %}">Register</a>
-                  </li>
-                  
-              {%endif%}
-              
-          </ul>
+  
+    <div class="site-mobile-menu site-navbar-target">
+      <div class="site-mobile-menu-header">
+        <div class="site-mobile-menu-close mt-3">
+          <span class="icon-close2 js-menu-toggle"></span>
         </div>
-      </nav>
+      </div>
+      <div class="site-mobile-menu-body"></div>
+    </div> <!-- .site-mobile-menu -->
+    
+    
+    <div class="site-navbar-wrap">
+      <div class="site-navbar-top">
+        <div class="container py-3">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <div class="d-flex mr-auto">
+                <a href="#" class="d-flex align-items-center mr-4">
+                  <span class="icon-envelope mr-2"></span>
+                  <span class="d-none d-md-inline-block">info@domain.com</span>
+                </a>
+                <a href="#" class="d-flex align-items-center mr-auto">
+                  <span class="icon-phone mr-2"></span>
+                  <span class="d-none d-md-inline-block">+1 234 4567 8910</span>
+                </a>
+              </div>
+            </div>
+            <div class="col-6 text-right">
+              <div class="mr-auto">
+                <a href="#" class="p-2 pl-0"><span class="icon-twitter"></span></a>
+                <a href="#" class="p-2 pl-0"><span class="icon-facebook"></span></a>
+                <a href="#" class="p-2 pl-0"><span class="icon-linkedin"></span></a>
+                <a href="#" class="p-2 pl-0"><span class="icon-instagram"></span></a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-navbar site-navbar-target js-sticky-header">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-2">
+              <h1 class="my-0 site-logo"><a style="text-decoration:none;" href="{% url 'home' %}">
+                <img src="\static\images\icons\job.png" style="width:25%;" alt=" ">
+                <strong style="color:aliceblue">TASKfindr</strong>
+              </a>
+            </h1>
+            </div>
+            <div class="col-10">
+              <nav class="site-navigation text-right" role="navigation">
+                <div class="container">
+                  <div class="d-inline-block d-lg-none ml-md-0 mr-auto py-3"><a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a></div>
+
+                  <ul class="site-menu main-menu js-clone-nav d-none d-lg-block">
+                    <li class="active"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
+                    {% if user.is_authenticated %}    
+                        <li class="has-children">
+                          <a class="nav-link" href="{% url 'tasklist' %}">TASKS</a>
+                          <ul class="dropdown arrow-top">
+                            <li><a class="nav-link" href="{% url 'new-post' %}">New post </a></li>
+                            <li><a class="nav-link" href="{% url 'new-post' %}">Wheel spin </a></li>
+                            <li><a class="nav-link" href="{% url 'profile' %}">reffer friends</a></li>
+                            <li class="has-children">
+                              <a href="{% url 'new-post' %}">Social boost </a>
+                              <ul class="dropdown">
+                                <li><a href="#">BOOST FB</a></li>
+                                <li><a href="#">BOOST TWITTER</a></li>
+                                <li><a href="#">BOOST YOUTUBE</a></li>
+                              </ul>
+                            </li>
+                          </ul>
+                        </li>
+                        <li><a href="{% url 'about' %}"class="nav-link">About</a></li>
+                        <a class="nav-link" href="{% url 'profile' %}">Profile </a>
+                        <a class="nav-link" href="{% url 'logout' %}">log out </a>
+                        
+                    {%else%}
+                        <a class="nav-link" href="{% url 'login' %}">log in </a>
+                        <a class="nav-link"  href="{% url 'register' 'blogadmin' %}">Register</a>     
+                    {%endif%}   
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="hero" style="background-image: url('/static/images/hero_1.jpg');">
+      <div class="events_hero">
+       <h1 style="font-size:large"> Welcome to TASKFINDR. Open a CashAccount then Choose a task, when the task is done we give you some cash<br>
+       so bring your friends because we want to build a community of online earners without any prior skills ot training</h1>
+      </div>
     </div>
 
       <section style="">
-        {% if messages %}
-          
+        {% if messages %} 
           {%for message in messages %}
             {% if message.tags == 'warning' %}
               <div class="mx-auto mt-5 alert alert-info col-lg-6" style="width:300px">WARNING</div>
@@ -68,9 +131,33 @@
           </div>
         </div>
       </section>
-
-
-
+      <footer class="jumbotron" style="font-size:xx-small">
+        <div style="">
+          credits
+          <a href="https://www.flaticon.com/free-icons/money" title="money icons">Money icons created by Freepik - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/list" title="list icons">List icons created by Freepik - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/next-level" title="next level icons">Next level icons created by iconixar - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/referral" title="referral icons">Referral icons created by Flat Icons - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/hobby" title="hobby icons">Hobby icons created by Backwoods - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/hacker" title="hacker icons">Hacker icons created by Freepik - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/wellness" title="wellness icons">Wellness icons created by GOWI - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/code" title="code icons">Code icons created by Icongeek26 - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/job" title="job icons">Job icons created by Freepik - Flaticon</a>
+          <a href="https://www.flaticon.com/free-icons/bow" title="bow icons">Bow icons created by Leremy - Flaticon</a>
+          <a href="https://www.flaticon.com/free-animated-icons/heart" title="heart animated icons">Heart animated icons created by Freepik - Flaticon</a>
+          <a href="https://www.flaticon.com/free-animated-icons/cancel" title="cancel animated icons">Cancel animated icons created by Freepik - Flaticon</a>
+        </div>
+        <div>
+          @copyright 2023 DevBedah<br>
+          EMAIL us @  <b>betaways@outlook.com</b>
+          <p><a href="{%url 'terms' %}">Terms and conditions</a></p>
+        </div>
+      </footer>
+  <script src="{% static 'blog\nav\js\jquery-3.3.1.min.js'%}"></script>
+  <script src="{% static 'blog\nav\js\popper.min.js'%}"></script>
+  <script src="{% static 'blog\nav\js\bootstrap.min.js'%}"></script>
+  <script src="{% static 'blog\nav\js\jquery.sticky.js'%}"></script>
+  <script src="{% static 'blog\nav\js\main.js'%}"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>

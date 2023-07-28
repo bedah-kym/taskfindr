@@ -153,7 +153,10 @@ def dislikepost(request,pk):
     else:
         Postreaction.change_reaction(request,blog)
     return redirect(reverse('post_detail',kwargs={"pk":blog.id}))
-        
+
+def tasklistview(request):
+    return render(request,'blog/tasklist.html',{})
+
 def about_view(request):
     return render(request,'blog/about.html',{})
 
