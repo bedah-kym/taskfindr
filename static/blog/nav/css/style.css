@@ -45,20 +45,33 @@ a {
   background-position: center center;
   background-repeat: no-repeat; 
 }
-@media (max-width:590px) {
+.events_hero{
+  backdrop-filter: brightness(0.5)
+}
+@media (min-width:590px) {
   .events_hero{
     color:#c1e016;
-    padding :70%;
+    padding :20%;
+    padding-top: 20%;
     text-align: center;
     font-size: larger;
   }
+  .logo_img{
+    width:25%;
+  }
+ 
 }
-.events_hero{
-  color:#c1e016;
-  padding: 20%;
-  text-align: center;
-  font-size: larger;
-  padding-top: 50%;
+@media (max-width:590px){
+  .events_hero{
+    color:#c1e016;
+    padding: 22%;
+    text-align: center;
+    font-size: larger;
+    padding-top: 50%;
+  }
+  .logo_img{
+    width:100%;
+  }
 }
 
 .site-navbar-wrap {
@@ -67,7 +80,7 @@ a {
   width: 100%;
   left: 0; }
   .site-navbar-wrap a {
-    color: #fff; }
+    color:#fff; }
   .site-navbar-wrap .site-navbar-top {
     font-size: 0.8rem; }
 

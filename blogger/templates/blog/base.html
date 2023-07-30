@@ -60,7 +60,7 @@
           <div class="row align-items-center">
             <div class="col-2">
               <h1 class="my-0 site-logo"><a style="text-decoration:none;" href="{% url 'home' %}">
-                <img src="\static\images\icons\job.png" style="width:25%;" alt=" ">
+                <img class="logo_img"src="\static\images\icons\job.png" alt=" ">
                 <strong style="color:aliceblue">TASKfindr</strong>
               </a>
             </h1>
@@ -74,7 +74,7 @@
                     <li class="active"><a href="{% url 'home' %}" class="nav-link">Home</a></li>
                     {% if user.is_authenticated %}    
                         <li class="has-children">
-                          <a class="nav-link" href="{% url 'tasklist' %}">TASKS</a>
+                          <a class="nav-link" href="{% url 'tasklist' %}">Tasks</a>
                           <ul class="dropdown arrow-top">
                             <li><a class="nav-link" href="{% url 'new-post' %}">New post </a></li>
                             <li><a class="nav-link" href="{% url 'new-post' %}">Wheel spin </a></li>
@@ -89,9 +89,9 @@
                             </li>
                           </ul>
                         </li>
-                        <li><a href="{% url 'about' %}"class="nav-link">About</a></li>
-                        <a class="nav-link" href="{% url 'profile' %}">Profile </a>
-                        <a class="nav-link" href="{% url 'logout' %}">log out </a>
+                        <li><a href="{% url 'about' %}"class="nav-link">Info Page</a></li>
+                        <li><a class="nav-link" href="{% url 'profile' %}">Profile </a></li>
+                        <li><a class="nav-link" href="{% url 'logout' %}">log out </a></li>
                         
                     {%else%}
                         <a class="nav-link" href="{% url 'login' %}">log in </a>
@@ -106,10 +106,18 @@
       </div>
     </div>
     
-    <div class="hero" style="background-image: url('/static/images/hero_1.jpg');">
-      <div class="events_hero">
+    <div class="hero " style="
+     background-image: url('/static/images/hero.webp');
+     background-blend-mode: multiply;">
+      <div class="events_hero ">
        <h1 style="font-size:large"> Welcome to TASKFINDR. Open a CashAccount then Choose a task, when the task is done we give you some cash<br>
-       so bring your friends because we want to build a community of online earners without any prior skills ot training</h1>
+       so bring your friends because we want to build a community of online earners without any prior skills or training. <br>
+       <a href="{% url 'about' %}">
+        <button class="mt-2 btn btn-primary">
+          <strong style="font-family:cursive"> click me </strong> for more info
+        </button>
+      </a>
+      </h1>
       </div>
     </div>
 
