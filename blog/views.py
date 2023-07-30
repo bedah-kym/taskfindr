@@ -47,7 +47,7 @@ class postdetailview(LoginRequiredMixin,DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        likes,dislikes = Postreaction.total_reactions(self.request,self.get_object())
+        likes,dislikes = Postreaction.total_reactions(self.get_object())
         reactions ={
             "likes":likes,
             "dislikes":dislikes
@@ -84,9 +84,16 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
     def form_valid(self,form):
         form.instance.author=self.request.user
         return super().form_valid(form)
+    
+    def is_unique_content(self,form):
+        """ id like to ensure that the content posted is unique so users dont repost the same shit
+        just checking the title is not worth it but we need to use an AI service.so before a post
+        is saved the test func will call this func send it to the AI ,parse the result and take action
+        """
+        pass
 
     def test_func(self):
-        """ check the current date aginst the date of the last post by the user
+        """ call is_unique_content if true, check the current date aginst the date of the last post by the user
         if the date is the same as current date then return false
         """
         user = self.request.user

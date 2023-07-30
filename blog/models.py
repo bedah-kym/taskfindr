@@ -49,7 +49,7 @@ class Postreaction(models.Model):
         verbose_name_plural = "Postreactions"
 
     def __str__(self):
-        return self.reaction
+        return f"{self.reaction} for post{self.post}"
 
     def get_absolute_url(self):
         return reverse("Postreaction_detail", kwargs={"pk": self.pk})
@@ -66,9 +66,9 @@ class Postreaction(models.Model):
         reactions = Postreaction.objects.filter(post=post,fan=request.user)
         reactions.delete()
 
-    def total_reactions(request,post):   
+    def total_reactions(post):   
         likes = Postreaction.objects.filter(post=post,reaction="like")
-        dislikes = Postreaction.objects.filter(post=post.id,reaction="dislike")
+        dislikes = Postreaction.objects.filter(post=post,reaction="dislike")
         total_likes = likes.count()
         total_dislikes = dislikes.count()
         return(total_likes,total_dislikes)

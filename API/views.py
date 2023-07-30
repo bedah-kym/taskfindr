@@ -1,8 +1,13 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics,permissions
-from  .serializers import BlogSerializer
+from  .serializers import BlogSerializer,postreactionserializer
 from . permissions import IsStaffEditorPermissions
+from blog.models import blogpost,Postreaction
 
-from blog.models import blogpost
+""" this api is built for mainly data analysis so we can use it to monitor who likes what
+and also push posts based on popularity.it can be expanded to see who does most tasks or
+who is inactive so they get an email or smth.
+"""
 
 class Bloglistview(generics.ListAPIView):
     permission_classes=[IsStaffEditorPermissions]
@@ -15,14 +20,13 @@ class Blogdetailview(generics.RetrieveUpdateDestroyAPIView):
     queryset = blogpost.objects.all()
     serializer_class = BlogSerializer
     lookup_field = "pk"
-    user_field= "author"
+  
 
 class MyBlogs(generics.ListAPIView):
     #change this to a blog view that filters using username from the url then use foreignkey serialization to show blog reactions
     permission_classes=[IsStaffEditorPermissions]
     queryset = blogpost.objects.all()
     serializer_class = BlogSerializer
-    user_field ="author" 
     # modify perform create function so the user is saved as default or check it in the video 4.04.39
 
     def get_queryset(self):
@@ -31,4 +35,17 @@ class MyBlogs(generics.ListAPIView):
         data = qs.filter(author=user)
         return data
     
+class Postreactionview(generics.ListAPIView):
+    """ this view will get you all the reactions on 
+    a particular post 
+    """
+    permission_classes=[IsStaffEditorPermissions]
+    queryset = Postreaction.objects.all()
+    serializer_class = postreactionserializer
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        pk = self.kwargs.get('pk')
+        blog = get_object_or_404(blogpost,id=pk)
+        data = qs.filter(post=blog)
+        return data

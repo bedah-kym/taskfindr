@@ -55,9 +55,10 @@ a {
 }
 .events_hero{
   color:#c1e016;
-  padding: 26%;
+  padding: 20%;
   text-align: center;
   font-size: larger;
+  padding-top: 50%;
 }
 
 .site-navbar-wrap {
