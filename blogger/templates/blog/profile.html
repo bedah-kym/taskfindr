@@ -5,7 +5,7 @@
     <body>
       <div class=" container-fluid row shadow m-1 p-2 mb-4 bg-light border border-danger " style="height:100% width:100%">
         <!-- profile container -->
-              <div class="col-lg-5 shadow-lg p-2 mb-4">
+              <div class="wow fadeInDown col-lg-5 shadow-lg p-2 mb-4"data-wow-delay="0.1s">
                     <div style="color:yellow;background: repeating-linear-gradient(45deg, black, transparent 50px);"class="col bg-danger rounded-sm mt-4 p-4">
                       <img class="rounded-circle" src="{{user.profile.image.url}}" style="height:80px" alt="jpg">
                       <p style="color:aliceblue"class="mx-auto"><b>{{user.username|upper}}</b> 
@@ -27,10 +27,10 @@
                       </p>
                       <form class="mb-4 bg-danger" enctype="multipart/form-data" method="POST" style="color:white;font-size:smaller;"> {% csrf_token %}
                         <div class="form-group shadow  m-2 p-2 "style="">
-                          <label style="font-size:smaller;"for="profile pic">New Phone number {{p_form.phone_number}}</label>
-                          <label style="font-size:smaller;"for="profile pic">New Profile image {{p_form.image}}</label>
+                          <label style="font-size:smaller;"for="profile pic">Phone number {{p_form.phone_number}}</label>
+                          <label style="font-size:smaller;"for="profile pic">Profile {{p_form.image}}</label>
                       </div>
-                        <button type="submit" class="btn shadow mt-2 bgsuccess">update profile info</button>
+                        <button type="submit" class="btn shadow mt-2 bg-success">update profile info</button>
                         {% if p_form.errors %}
                             <ul class="errorlist bg-warning m-1 p-1" style="text-align:left">
                               {{p_form.errors}}

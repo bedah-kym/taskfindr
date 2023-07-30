@@ -4,7 +4,8 @@ $(function() {
 		$(".js-sticky-header").sticky({topSpacing:0});
 	};
 	siteSticky();
-
+	
+	new WOW().init();
 	var siteMenuClone = function() {
 
 		$('.js-clone-nav').each(function() {
