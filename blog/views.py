@@ -23,6 +23,7 @@ class postlistview(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         user = self.request.user
+        total_users = User.objects.count()*100
         account = Cashaccount.objects.get(owner=user)
         reffs=account.refferals.count()
         amount= account.get_total_cash(user)
@@ -34,6 +35,7 @@ class postlistview(LoginRequiredMixin, ListView):
             "tasks":tasks,
             "cash":amount,
             "level":level,
+            "total_users":total_users
         }
         context.update(new) 
         return context

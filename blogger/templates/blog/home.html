@@ -16,9 +16,13 @@
             </div>
             <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
                 <div class='col p-2 m-2'>
-                  <p>your refferals : <span style="color:floralwhite;font-family:math;">
-                    <img src="static\images\icons\referral.png" style="width:20%" alt=" ">
-                    {{reffs}}</span></p>
+                  <p>Your Refferals : 
+                    <span style="color:floralwhite;font-family:math;">
+                      <img src="static\images\icons\referral.png" style="width:20%" alt=" ">
+                      {{reffs}}
+                    </span>
+                  </p>
+                  <span style="left:20px;top:10px;"class="btn btn-group btn-outline-success shadow-sm"> Thank you! we are currently at {{total_users}} users ! </span>
                   
                 </div>
             </div>
@@ -29,6 +33,7 @@
                     <img src="static\images\icons\level-up.png" style="width:20%" alt=" ">
                     {{level}}</span></p>
                 </div>
+                <a href="{% url 'level_up' %}"style="left:20px;bottom:10px;"class="btn btn-group btn-outline-dark shadow-sm"> level up and increase your level bonus</a>
             </div>
             <div class=" wow fadeInRight side-bar bg-danger col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
                 <div class='col p-2 m-2'>
@@ -41,7 +46,7 @@
                   </span></p>
                 </div>
             </div>
-           
+  
             <!-- body-->
         {% for post in posts %}
             <div class='wow fadeInLeft container bg-light col-lg-12 col-md-12 col-sm-12'style="padding-left:unset"data-wow-delay="0.1s">

@@ -24,7 +24,7 @@ def register_view(request,**kwargs):
                 owner = User.objects.get(username=username)
                 prof=profile.objects.create(user = owner,reffered_by = reff_code,phone_number=phonenumber)
                 prof.save()
-                messages.success(request,f'WELCOME {username} you are now a member.ACTIVATE your account now')
+                messages.success(request,f'WELCOME {username} you are now a member.ACTIVATE your account now and PLEASE READ THE SITE GUIDE')
                 return redirect('about')
             else:
                 messages.warning(request,f'Sorry {username} you need a valid refferal link to register,click register to use our default link')
