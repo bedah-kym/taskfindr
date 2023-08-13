@@ -21,7 +21,7 @@
             style="width: 20%"
             alt="pic"
           />
-          <h2 style="font-size: small" class="mx-auto card-text row">
+          <h2 style="font-size: large" class="mx-auto card-text row">
             <a href="{% url 'user_post' post.author.username %}"></a
             >by{{post.author}}
           </h2>
@@ -53,7 +53,7 @@
       <div class="card-body">
         <p class="card-text">{{ post.content}}</p>
       </div>
-      <div style="font-size: x-small" class="card-footer bg-light">
+      <div style="font-size: small" class="card-footer bg-light">
         <p>{{ post.date_posted}}</p>
         <p>
           <a href="{% url 'like' post.id %}"

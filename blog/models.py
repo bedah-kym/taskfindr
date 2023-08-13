@@ -1,4 +1,6 @@
 from django.db import models
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -73,3 +75,24 @@ class Postreaction(models.Model):
         total_dislikes = dislikes.count()
         return(total_likes,total_dislikes)
         
+
+class WheelSpin(models.Model):
+    spin_date = models.DateTimeField(auto_now_add=True)
+    spinner = models.ForeignKey(User,on_delete=models.CASCADE)
+    value = models.IntegerField()
+
+    def __str__(self) -> str:
+        return (f"{self.spinner} on {self.spin_date}")
+
+    def can_spin(user):
+        try:
+            last_spin = get_object_or_404(WheelSpin,spinner=user)
+        except Http404:
+            return True
+        now = timezone.now().day
+        last = last_spin.spin_date.day
+        if now == last:
+            return False
+        else:
+            return True
+    

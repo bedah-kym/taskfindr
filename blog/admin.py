@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import blogpost,Postreaction
+from .models import blogpost,Postreaction,WheelSpin
 
 class blogpostadmin(admin.ModelAdmin):
     list_display = ('author','date_posted','spaces')
@@ -7,3 +7,4 @@ class blogpostadmin(admin.ModelAdmin):
 
 admin.site.register(blogpost,blogpostadmin)
 admin.site.register(Postreaction)
+admin.site.register(WheelSpin)

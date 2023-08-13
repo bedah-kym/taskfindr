@@ -78,7 +78,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://394a-105-160-25-252.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://a4b6-185-216-33-220.ngrok-free.app']
 
 # Application definition
 
@@ -189,7 +189,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS=[BASE_DIR / 'static']
+STATICFILES_DIRS=[BASE_DIR / 'static/']
 
 MEDIA_URL='/media/'
 MEDIA_ROOT= BASE_DIR / 'media'

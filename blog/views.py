@@ -1,6 +1,9 @@
 from django.shortcuts import get_list_or_404, render,get_object_or_404,redirect
 from django.urls import reverse
-from .models import blogpost as post,Postreaction 
+import json
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .models import blogpost as post,Postreaction ,WheelSpin
 from django.contrib.auth.models import User
 from users.models import Cashaccount
 from django.utils import timezone
@@ -144,6 +147,7 @@ class postdeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
             return True
         return False
     
+@login_required  
 def likepost(request,pk):
     fan=request.user
     blog=post.objects.get(pk=pk)
@@ -154,6 +158,7 @@ def likepost(request,pk):
 
     return redirect(reverse('post_detail',kwargs={"pk":blog.id}))
 
+@login_required
 def dislikepost(request,pk):
     fan=request.user
     blog=post.objects.get(pk=pk)
@@ -163,8 +168,24 @@ def dislikepost(request,pk):
         Postreaction.change_reaction(request,blog)
     return redirect(reverse('post_detail',kwargs={"pk":blog.id}))
 
-def tasklistview(request):
-    return render(request,'blog/tasklist.html',{})
+@login_required
+def wheelspinview(request):
+    #first check if the user can spin then get the data
+    spinuser = request.user
+    if WheelSpin.can_spin(spinuser):
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            post_data= json.load(request)['post_data']     
+            data = {
+                'my_data':post_data,
+            }
+            WheelSpin.objects.create(spinner=spinuser,spin_date=timezone.now(),value=data['my_data'])
+            messages.warning(request,f"congrats we have added {data['my_data']}/= to your account ") 
+            return redirect('profile')
+    else:
+        messages.warning(request,"sorry you can only spin the wheel once a day !") 
+        return redirect('profile')
+
+    return render(request,'blog/wheel.html')
 
 def about_view(request):
     return render(request,'blog/about.html',{})
