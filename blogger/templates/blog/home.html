@@ -11,7 +11,11 @@
                 <div class='col p-2 m-2'>
                   <p class="mx-auto">tasks done <span style="color:floralwhite;font-family:math;">
                     <img src="static\images\icons\planning.png" style="width:20%" alt=" ">
-                     {{tasks}}</span></p>
+                     {%for key,value in tasks.items %}
+                      <p style="color:floralwhite;font-family:math;">{{key}}:{{value}}</p>
+                     {%endfor %}
+                    </span>
+                  </p>
                 </div>
             </div>
             <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">

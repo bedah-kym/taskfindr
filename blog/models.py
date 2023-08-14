@@ -75,7 +75,6 @@ class Postreaction(models.Model):
         total_dislikes = dislikes.count()
         return(total_likes,total_dislikes)
         
-
 class WheelSpin(models.Model):
     spin_date = models.DateTimeField(auto_now_add=True)
     spinner = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -86,13 +85,16 @@ class WheelSpin(models.Model):
 
     def can_spin(user):
         try:
-            last_spin = get_object_or_404(WheelSpin,spinner=user)
+            last_spin = WheelSpin.objects.filter(spinner=user).last()
         except Http404:
             return True
-        now = timezone.now().day
-        last = last_spin.spin_date.day
-        if now == last:
-            return False
+        if last_spin:
+            now = timezone.now().day
+            last = last_spin.spin_date.day
+            if now == last:
+                return False
+            else:
+                return True
         else:
             return True
     
