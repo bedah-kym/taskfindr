@@ -76,12 +76,12 @@ def withdrawalrequest(request):
     my_user = request.user
     account= Cashaccount.objects.get(owner=my_user)
     amount = account.get_total_cash(my_user)
-    if amount >= 100: # change to 1000 also change in template
+    if amount >= 1000 and account.is_valid==True: # change to 1000 also change in template
         WR = Withdrawrequest.objects.create(account=account)
         WR.save()
         messages.success(request,"request sent,you will recieve an email once the agents verify your account balance")
     else:
-        messages.warning(request,"sorry, you dont have enough cash GO back and continue earning")
+        messages.warning(request,"sorry, you dont have enough cash GO back and continue earning,also check if ur account is activated")
         return redirect('home')
     return redirect ('profile')
 

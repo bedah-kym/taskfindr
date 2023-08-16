@@ -80,6 +80,13 @@ class Cashaccount(models.Model):
         self.refferals.delete().all()
         self.mpesa_code.delete()
 
+    def reposess_account(user):
+        ac = Cashaccount.objects.filter(owner=user)[0]
+        if ac:
+            ac.is_valid=False
+            ac.save()
+
+    
     def __str__ (self):
         return f'{self.owner} with ksh {self.get_total_cash(self.owner)} has {self.refferals.count()} refferal(s)'
 

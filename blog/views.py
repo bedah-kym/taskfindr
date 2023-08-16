@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import blogpost as post,Postreaction ,WheelSpin
 from django.contrib.auth.models import User
-from users.models import Cashaccount
+from users.models import Cashaccount,profile
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import (
@@ -16,7 +16,8 @@ from django.views.generic import (
     DeleteView
 )
 
-class postlistview(LoginRequiredMixin, ListView):
+class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
+   
     model= post
     template_name='blog/home.html'
     context_object_name='posts'
@@ -43,7 +44,39 @@ class postlistview(LoginRequiredMixin, ListView):
         context.update(new) 
         return context
     
-    
+    def test_func(self):
+        """function that checks your last login, if ur incative for more than a month
+        we send you an email then flag you as in active untill you log back in, if you dont log innot we wait for two
+        months then lock ur cash account
+        """
+        user = self.request.user
+        last_login = user.last_login.month
+        this_month = timezone.now().month
+        today = timezone.now().day
+        last_login_day = user.last_login.day
+        if last_login < this_month:
+            #if you last logged in last month check below which day of last month did you log  in and comapre with todays date
+            if (this_month - last_login) ==1:
+                """logic here is that if you minus todays date ie 16 (aug)with any date from last month eg 30 (july) it will
+                always give you a negative number unless the difference between the dates is a month.ie 16aug -16july ==0 
+                which will mean a month has passed 
+                """
+                #send warning email 
+                if (today-last_login_day) >=0:
+                    return False
+                else:
+                    return True
+            elif (this_month - last_login) >=3:
+                #SEND EMAIL & call delete ac func if ur passed three months we just take ur a/c
+                Cashaccount.reposess_account(user)
+                if user.is_active:
+                    user.is_active=False
+                    user.save()
+                print(f'{user} account-reposessed')
+                return False
+            else:
+                return False
+        return True
 
 class postdetailview(LoginRequiredMixin,DetailView):
     model=post
@@ -178,9 +211,11 @@ def wheelspinview(request):
             data = {
                 'my_data':post_data,
             }
-            WheelSpin.objects.create(spinner=spinuser,spin_date=timezone.now(),value=data['my_data'])
-            messages.warning(request,f"congrats we have added {data['my_data']}/= to your account ") 
-            return redirect('profile')
+            options=[10,20,30,40,50,60]
+            if data['my_data'] in options:
+                WheelSpin.objects.create(spinner=spinuser,spin_date=timezone.now(),value=data['my_data'])
+                messages.warning(request,f"congrats we have added {data['my_data']}/= to your account ") 
+                return redirect('home')
     else:
         messages.warning(request,"sorry you can only spin the wheel once a day !") 
         return redirect('profile')
