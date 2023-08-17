@@ -29,6 +29,7 @@ from blog.views import (
     categorypostlistview,
     likepost,
     dislikepost,
+    wheelspinview
 )
 from users.views import (
     register_view,
@@ -37,6 +38,7 @@ from users.views import (
     Cashaccountdelete,
     withdrawalrequest,
     levelup,
+    admincheckaccounts,
 )
 from django.contrib.auth import views
 
@@ -46,6 +48,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('API.urls')),
     path('',postlistview.as_view(),name='home'),
+    path('spin-the-wheel/',wheelspinview,name='wheelspin'),
     path('post/new/',postcreateview.as_view(),name='new-post'),
     path('post/<int:pk>/',postdetailview.as_view(),name='post_detail'),
     path('user/<str:username>/',userpostlistview.as_view(),name='user_post'),
@@ -59,6 +62,7 @@ urlpatterns = [
     path('level_up/',levelup,name='level_up'),
     path('profile/',profile_view,name='profile'),
     path('account-activation/<int:pk>/',Cashaccountupdate.as_view(),name='activation'),
+    path('check-accounts/',admincheckaccounts,name='check_accounts'),
     path('delete-account/<int:pk>/',Cashaccountdelete.as_view(),name='delete_account'),
     path('login/',views.LoginView.as_view(template_name='blog/login.html'),name='login'),
     path('logout/',views.LogoutView.as_view(template_name='blog/landing-page.html'),name='logout'),

@@ -2,35 +2,44 @@
 {% load static %}
 {% block content %}
 <title>Home</title>
-
+  
   <body class='container bg-success col-lg-12 col-md-12 col-sm-12 m-10 p-1'>
-<!--notice board-->
+         <!--notice board-->
             <div class=" col-lg-1 col-sm-2 col-md-1 col-sm-10 m-2 p-2">
             </div>
-            <div class=" side-bar bg-success col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow-sm rounded-lg">
+            <div class=" wow fadeInRight side-bar bg-success col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
                 <div class='col p-2 m-2'>
                   <p class="mx-auto">tasks done <span style="color:floralwhite;font-family:math;">
                     <img src="static\images\icons\planning.png" style="width:20%" alt=" ">
-                     {{tasks}}</span></p>
+                     {%for key,value in tasks.items %}
+                      <p style="color:floralwhite;font-family:math;">{{key}}:{{value}}</p>
+                     {%endfor %}
+                    </span>
+                  </p>
                 </div>
             </div>
-            <div class=" side-bar bg-warning col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow-sm rounded-lg">
+            <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
                 <div class='col p-2 m-2'>
-                  <p>your refferals : <span style="color:floralwhite;font-family:math;">
-                    <img src="static\images\icons\referral.png" style="width:20%" alt=" ">
-                    {{reffs}}</span></p>
+                  <p>Your Refferals : 
+                    <span style="color:floralwhite;font-family:math;">
+                      <img src="static\images\icons\referral.png" style="width:20%" alt=" ">
+                      {{reffs}}
+                    </span>
+                  </p>
+                  <span style="left:20px;top:10px;"class="btn btn-group btn-outline-success shadow-sm"> Thank you! we are currently at {{total_users}} users ! </span>
                   
                 </div>
             </div>
 
-            <div class=" side-bar bg-info col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow-sm rounded-lg">
+            <div class=" wow fadeInRight side-bar bg-info col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
                 <div class='col p-2 m-2'>
                   <p>level bonus: <span style="color:floralwhite;font-family:math;">
                     <img src="static\images\icons\level-up.png" style="width:20%" alt=" ">
                     {{level}}</span></p>
                 </div>
+                <a href="{% url 'level_up' %}"style="left:20px;bottom:10px;"class="btn btn-group btn-outline-dark shadow-sm"> level up and increase your level bonus</a>
             </div>
-            <div class=" side-bar bg-danger col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow-sm rounded-lg">
+            <div class=" wow fadeInRight side-bar bg-danger col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
                 <div class='col p-2 m-2'>
                   <p>account: ksh<span style="color:floralwhite;font-family:math;">
                     <img src="static\images\icons\wallet.png" style="width:20%" alt=" ">
@@ -41,16 +50,16 @@
                   </span></p>
                 </div>
             </div>
-           
+  
             <!-- body-->
         {% for post in posts %}
-            <div class='container bg-light col-lg-12 col-md-12 col-sm-12'>
+            <div class='wow fadeInLeft container bg-light col-lg-12 col-md-12 col-sm-12'style="padding-left:unset"data-wow-delay="0.1s">
                 <div class="container bg-light mt-3 pb-20 col-lg-8 col-md-12 col-sm-12" id='home' style="height:50%">
                       <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-6">
                         <div class=" card-header bg-info col-lg-6 col-sm-6 col-md-12 m-3 p-2 shadow-sm rounded-lg">
                           <div class='row p-2 m-2'>
                             <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="width:20%" alt="pic">
-                            <h2 class="mx-auto card-text row"> <a  href="{% url 'user_post' post.author.username %}"><span style="font-size:small;font-family:cursive;color:aliceblue">by {{post.author}}</span></h2>
+                            <h2 class="mx-auto card-text row"> <a  href="{% url 'user_post' post.author.username %}"><span style="font-size:large;font-family:cursive;color:aliceblue">by {{post.author}}</span></h2>
                           </div>
                           <div class=' row bg-light rounded-lg p-2 m-3 col-sm-12 ' style="">
                             <a href="{% url 'post_detail' post.id %}"style="text-decoration:none;color:black;" class='mx-auto p-1 m-1'><strong>{{post.title|upper}}</strong></a>
@@ -62,17 +71,17 @@
                             <a href="{% url 'like' post.id %}"
                               ><span class="material-symbols-outlined"> add_reaction </span>
                             </a>
-                            {{likes}}
+                            {{likes}} <span style="font-family:monospace;">like<span/>
                             <a href="{% url 'dislike' post.id %}">
                               <span class="material-symbols-outlined">
                                 sentiment_very_dissatisfied
                               </span>
                             </a>
-                            {{dislikes}}
+                            {{dislikes}} <span style="font-family:monospace;">dislike<span/>
                           </p>
                           read more **
                         </div>
-                        <div style="font-size:x-small;@mediaquery(min)"class="card-footer bg-light">
+                        <div style="font-size:small;@mediaquery(min)"class="card-footer bg-light">
                           <p>{{ post.date_posted}}</p> <p><a href="{% url 'spaces_list' post.spaces %}" style="text-decoration:none;color:black"class='mx-auto p-1 m-1'><b>{{post.spaces}}</b></a>
                             {%if post.spaces == "MUSIC AND ART" %}
                               <img class="funimage" src="static\images\icons\hobby.png" style="width:15%" alt=" "/>
@@ -116,28 +125,7 @@
         </div>
 
     </body>
-    <footer class="jumbotron" style="font-size:xx-small">
-      <div style="">
-        credits
-        <a href="https://www.flaticon.com/free-icons/money" title="money icons">Money icons created by Freepik - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/list" title="list icons">List icons created by Freepik - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/next-level" title="next level icons">Next level icons created by iconixar - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/referral" title="referral icons">Referral icons created by Flat Icons - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/hobby" title="hobby icons">Hobby icons created by Backwoods - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/hacker" title="hacker icons">Hacker icons created by Freepik - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/wellness" title="wellness icons">Wellness icons created by GOWI - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/code" title="code icons">Code icons created by Icongeek26 - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/job" title="job icons">Job icons created by Freepik - Flaticon</a>
-        <a href="https://www.flaticon.com/free-icons/bow" title="bow icons">Bow icons created by Leremy - Flaticon</a>
-        <a href="https://www.flaticon.com/free-animated-icons/heart" title="heart animated icons">Heart animated icons created by Freepik - Flaticon</a>
-        <a href="https://www.flaticon.com/free-animated-icons/cancel" title="cancel animated icons">Cancel animated icons created by Freepik - Flaticon</a>
-      </div>
-      <div>
-        @copyright 2023 DevBedah<br>
-        EMAIL us @  <b>betaways@outlook.com</b>
-        <p><a href="{%url 'terms' %}">Terms and conditions</a></p>
-      </div>
-    </footer>
+    
 
 
 {% endblock %}

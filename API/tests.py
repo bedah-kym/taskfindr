@@ -15,6 +15,6 @@ def auth():
 def postlist(headers):
     listendpoint = 'http://127.0.0.1:8100/api/myblogs/'
     response = requests.get(url=listendpoint,headers=headers)
-    return response.json()
+    return response.json()["results"][1]["spaces"]
 
 print(postlist(headers))

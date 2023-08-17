@@ -1,0 +1,77 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TASKfindr wheel</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="\static\images\icons\favicon_io\favicon-32x32.png"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'blog/nav/css/bootstrap.min.css'%}"
+    />
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{% static 'blog/nav/css/wheel.css'%}" />
+  </head>
+  <header>
+    <div class="col-2">
+      <h1 class="my-0 site-logo">
+        <a style="text-decoration: none" href="{% url 'home' %}">
+          <img
+            style="width: 100px; left: 100px; top: 50px"
+            class="logo_img"
+            src="\static\images\icons\job.png"
+            alt=" "
+          />
+          <strong style="color: aliceblue">TASKfindr </strong>
+        </a>
+      </h1>
+    </div>
+  </header>
+  <body>
+    <section style="">
+      {% if messages %} {%for message in messages %}
+      <div
+        class="mx-auto mt-5 alert alert-{{message.tags}} col-lg-6"
+        style="width: 300px"
+      >
+        {{ message}}
+      </div>
+      {% endfor %} {% endif %}
+      <div class="container-fluid p-2 bg-light">
+        <div class="row">{% block content %} {% endblock %}</div>
+      </div>
+    </section>
+    <div class="wrapper">
+      <div class="container">
+        <canvas id="wheel"></canvas>
+        <button id="spin-btn">Spin</button>
+        <img
+          src="https://cutewallpaper.org/24/yellow-arrow-png/155564497.jpg"
+          alt="spinner arrow"
+        />
+      </div>
+      <div id="final-value">
+        <p>Click On The Spin Button To Start</p>
+      </div>
+    </div>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <!-- Chart JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Chart JS Plugin for displaying text over chart -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
+    <!-- Script -->
+    <script src="{% static 'blog\nav\js\wheel.js'%}"></script>
+  </body>
+</html>

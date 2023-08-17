@@ -1,4 +1,6 @@
 from django.db import models
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -49,7 +51,7 @@ class Postreaction(models.Model):
         verbose_name_plural = "Postreactions"
 
     def __str__(self):
-        return self.reaction
+        return f"{self.reaction} for post{self.post}"
 
     def get_absolute_url(self):
         return reverse("Postreaction_detail", kwargs={"pk": self.pk})
@@ -66,10 +68,33 @@ class Postreaction(models.Model):
         reactions = Postreaction.objects.filter(post=post,fan=request.user)
         reactions.delete()
 
-    def total_reactions(request,post):   
+    def total_reactions(post):   
         likes = Postreaction.objects.filter(post=post,reaction="like")
-        dislikes = Postreaction.objects.filter(post=post.id,reaction="dislike")
+        dislikes = Postreaction.objects.filter(post=post,reaction="dislike")
         total_likes = likes.count()
         total_dislikes = dislikes.count()
         return(total_likes,total_dislikes)
         
+class WheelSpin(models.Model):
+    spin_date = models.DateTimeField(auto_now_add=True)
+    spinner = models.ForeignKey(User,on_delete=models.CASCADE)
+    value = models.IntegerField()
+
+    def __str__(self) -> str:
+        return (f"{self.spinner} on {self.spin_date}")
+
+    def can_spin(user):
+        try:
+            last_spin = WheelSpin.objects.filter(spinner=user).last()
+        except Http404:
+            return True
+        if last_spin:
+            now = timezone.now().day
+            last = last_spin.spin_date.day
+            if now == last:
+                return False
+            else:
+                return True
+        else:
+            return True
+    

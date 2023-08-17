@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 from django.core.validators import RegexValidator
-from blog.models import blogpost
+from blog.models import blogpost,WheelSpin
 
 class profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -47,11 +47,14 @@ class Cashaccount(models.Model):
             user_level = (self.amount//100)
             bonus = (user_level-1)*100
         return bonus
-
     
     def get_total_cash(self,user):
         bonus= self.get_level_bonus()
         posts = blogpost.objects.filter(author=user)
+        spins = WheelSpin.objects.filter(spinner=user)
+        spincash = 0
+        for spin in spins:
+            spincash += spin.value
         total=0
         for post in posts:
             cash=post.value
@@ -59,17 +62,31 @@ class Cashaccount(models.Model):
         taskcash=self.get_refferal_cash()
         total+=taskcash
         total+=bonus
+        total +=spincash
         return total
 
     def get_total_tasks(self,user): 
         posts = blogpost.objects.filter(author=user)
-        return posts.count()
+        spins = WheelSpin.objects.filter(spinner=user)
+        p=posts.count()
+        s=spins.count()
+        tasks={
+            "posts":p,
+            "spins":s
+        }
+        return tasks
     
     def withdraw_cash(self):
         self.refferals.delete().all()
         self.mpesa_code.delete()
 
+    def reposess_account(user):
+        ac = Cashaccount.objects.filter(owner=user).first()
+        if ac:
+            ac.is_valid=False
+            #ac.save()
 
+    
     def __str__ (self):
         return f'{self.owner} with ksh {self.get_total_cash(self.owner)} has {self.refferals.count()} refferal(s)'
 

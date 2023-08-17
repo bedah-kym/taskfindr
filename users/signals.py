@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from .models import Cashaccount as Ca,Withdrawrequest as Wr,Leveluprequest as Lu
 from django.dispatch import receiver
 from .models import profile
+from blog.models import WheelSpin
 
 
 @receiver(post_save,sender=profile)
@@ -53,7 +54,7 @@ def send_email(sender,created,instance,**kwargs):
     """
     if created:
         to_email = instance.owner.email
-        from_email = 'bedankimani860@gmail.com'
+        from_email = 'Taskfindrkenyaltd@outlook.com'
         print('sending greeting email to',to_email)
         send_mail(
             'WELCOME TO TASKfindr',
@@ -67,7 +68,7 @@ def send_email(sender,created,instance,**kwargs):
         if instance.is_valid:
             
             to_email = instance.owner.email
-            from_email = 'bedankimani860@gmail.com'
+            from_email = 'Taskfindrkenyaltd@outlook.com'
             if instance.has_withdrawn:
                 print('sending withdraw success email to',to_email)
                 try:
@@ -83,6 +84,8 @@ def send_email(sender,created,instance,**kwargs):
                 instance.has_withdrawn=False
                 instance.save()
                 ac = get_object_or_404(Wr,account=instance) # delete the withdraw request instance
+                spins = WheelSpin.objects.filter(spinner=instance.owner.username)#delete all wheelspins
+                spins.all().delete()
                 ac.delete()
             if instance.withdraw_failed:
                 try:

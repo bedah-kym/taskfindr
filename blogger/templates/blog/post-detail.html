@@ -1,71 +1,72 @@
 {%extends 'blog/base.html'%} {% load static %} {% block content %}
-<div class="container bg-light col-lg-12 col-md-12 col-sm-12">
-  <div class="container bg-light col-lg-12 col-md-12 col-sm-12">
+<div
+  class="container bg-light col-lg-12 col-md-12 col-sm-12"
+  style="margin-top: 10%; padding-left: unset"
+>
+  <div
+    class="container bg-light mt-3 pb-20 col-lg-8 col-md-12 col-sm-12"
+    id="home"
+    style="height: 50%"
+  >
     <div
-      class="container bg-light mt-3 pb-20 col-lg-8 col-md-12 col-sm-12"
-      id="home"
-      style="height: 50%"
+      class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10"
     >
       <div
-        class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10"
+        class="card-header bg-info col-lg-6 col-sm-10 col-md-12 m-3 p-2 shadow-sm rounded-lg"
       >
-        <div
-          class="card-header bg-info col-lg-6 col-sm-10 col-md-12 m-3 p-2 shadow-sm rounded-lg"
-        >
-          <div class="row p- m-1">
-            <img
-              class="rounded-circle"
-              src="{{post.author.profile.image.url}}"
-              style="width: 20%"
-              alt="pic"
-            />
-            <h2 style="font-size: small" class="mx-auto card-text row">
-              <a href="{% url 'user_post' post.author.username %}"></a
-              >by{{post.author}}
-            </h2>
-          </div>
-          <div class="row bg-light rounded-lg p-2 m-3 col-sm-12" style="">
-            <p>
-              <strong class="mx-auto p-1 m-1" style="font-size: small"
-                >{{ post.title|upper }}</strong
-              >
-            </p>
-            {% if user == post.author %}
-            <div>
-              <a
-                style="font-size: xx-small"
-                class="btn btn-outline-info m-1"
-                href="{% url 'post_update' post.id %}"
-                >update</a
-              >
-              <a
-                style="font-size: xx-small"
-                class="btn btn-outline-danger m-1"
-                href="{% url 'post_delete' post.id %}"
-                >delete</a
-              >
-            </div>
-            {% endif %}
-          </div>
+        <div class="row p- m-1">
+          <img
+            class="rounded-circle"
+            src="{{post.author.profile.image.url}}"
+            style="width: 20%"
+            alt="pic"
+          />
+          <h2 style="font-size: large" class="mx-auto card-text row">
+            <a href="{% url 'user_post' post.author.username %}"></a
+            >by{{post.author}}
+          </h2>
         </div>
-        <div class="card-body">
-          <p class="card-text">{{ post.content}}</p>
-        </div>
-        <div style="font-size: x-small" class="card-footer bg-light">
-          <p>{{ post.date_posted}}</p>
+        <div class="row bg-light rounded-lg p-2 m-3 col-sm-12" style="">
           <p>
-            <a href="{% url 'like' post.id %}"
-              ><span class="material-symbols-outlined"> add_reaction </span>
-            </a>
-            {{likes}}
-            <a href="{% url 'dislike' post.id %}">
-              <span class="material-symbols-outlined">
-                sentiment_very_dissatisfied
-              </span>
-            </a>
-            {{dislikes}}
+            <strong class="mx-auto p-1 m-1" style="font-size: large"
+              >{{ post.title|upper }}</strong
+            >
           </p>
+          {% if user == post.author %}
+          <div>
+            <a
+              style="font-size: xx-small"
+              class="btn btn-outline-info m-1"
+              href="{% url 'post_update' post.id %}"
+              >update</a
+            >
+            <a
+              style="font-size: xx-small"
+              class="btn btn-outline-danger m-1"
+              href="{% url 'post_delete' post.id %}"
+              >delete</a
+            >
+          </div>
+          {% endif %}
         </div>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ post.content}}</p>
+      </div>
+      <div style="font-size: small" class="card-footer bg-light">
+        <p>{{ post.date_posted}}</p>
+        <p>
+          <a href="{% url 'like' post.id %}"
+            ><span class="material-symbols-outlined"> add_reaction </span>
+          </a>
+          {{likes}}
+          <a href="{% url 'dislike' post.id %}">
+            <span class="material-symbols-outlined">
+              sentiment_very_dissatisfied
+            </span>
+          </a>
+          {{dislikes}}
+        </p>
       </div>
     </div>
   </div>

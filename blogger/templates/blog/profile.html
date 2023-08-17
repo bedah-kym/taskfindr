@@ -4,17 +4,18 @@
 
     <body>
       <div class=" container-fluid row shadow m-1 p-2 mb-4 bg-light border border-danger " style="height:100% width:100%">
-              <div class="col-lg-5 shadow-lg p-2 mb-4">
-                    <div class="col bg-danger rounded-sm mt-4 p-4">
+        <!-- profile container -->
+              <div class="wow fadeInDown col-lg-5 shadow-lg p-2 mb-4"data-wow-delay="0.1s">
+                    <div style="color:yellow;background: repeating-linear-gradient(45deg, black, transparent 50px);"class="col bg-danger rounded-sm mt-4 p-4">
                       <img class="rounded-circle" src="{{user.profile.image.url}}" style="height:80px" alt="jpg">
-                      <p class="mx-auto"><b>{{user.username|upper}}</b> 
+                      <p style="color:aliceblue"class="mx-auto"><b>{{user.username|upper}}</b> 
                         <img src="\static\images\icons\level-up.png" style="width:20%" alt=" ">LEVEL {{request.user.profile.level}}
                         <div class="form-group shadow  m-1 p-2 "style="color:aliceblue">
-                          <span ="profile pic"><span style="color:black;font-size:small;">Reffered by :</span> {{my_profile.reffered_by}}</span><br>
-                          <span ="profile pic"> <span style="color:black;font-size:small;">my phone number:</span> +254{{my_profile.phone_number}}</span><br>
+                          <span ="profile pic"><strong style="color:aqua;font-size:large;">Reffered by :</strong> {{my_profile.reffered_by}}</span><br>
+                          <span ="profile pic"> <strong style="color:aqua;font-size:large;">My contact:</strong> +254{{my_profile.phone_number}}</span><br>
                           {% if my_account.is_valid == True %}
-                          <span style="font-family:auto;color:midnightblue;font-size:smaller;" ="profile pic">
-                             <b style="color:midnightblue;font-size:medium;">my link :</b> <br> 
+                          <span style="font-family:auto;color:aliceblue;font-size:smaller;"class="shadow ">
+                             <strong style="color:aqua;font-size:large;">My link :</strong> <br> 
                               http://127.0.0.1:8100/register/{{my_profile.user.username}}/ 
                           </span>
                           {%else%}
@@ -24,14 +25,15 @@
                           {% endif %}
                         </div>
                       </p>
-                      <form class="mb-4 bg-danger" enctype="multipart/form-data" method="POST" style="height:90%;font-size:smaller;"> {% csrf_token %}
+                      <form class="mb-4 bg-danger" enctype="multipart/form-data" method="POST" style="color:white;font-size:smaller;"> {% csrf_token %}
                         <div class="form-group shadow  m-2 p-2 "style="">
-                            <label style="font-size:smaller;"for="profile pic">New Phone number {{p_form.phone_number}}</label>
-                        </div>
-                        <button type="submit" class="btn shadow mt-2 bgsuccess">update phone number</button>
+                          <label style="font-size:smaller;"for="profile pic">Phone number {{p_form.phone_number}}</label>
+                          <label style="font-size:smaller;"for="profile pic">Profile {{p_form.image}}</label>
+                      </div>
+                        <button type="submit" class="btn shadow mt-2 bg-success">update profile info</button>
                         {% if p_form.errors %}
                             <ul class="errorlist bg-warning m-1 p-1" style="text-align:left">
-                              {{p_formerrors}}
+                              {{p_form.errors}}
                             </ul>
                         {% endif %}
                       </form>
@@ -74,20 +76,18 @@
                     
                     
               </div>
-              
+              <!-- user update form -->
               <div class="col-lg-5 m-2 p-2">
                 <div class="mx-auto bg-info m-4 p-2">
-                  <p><b>profile update<b></p>
+                  <p><h3>profile update</h3></p>
                 </div>
 
-                <form class="p-2 bg-light" enctype="multipart/form-data" method="POST" style="height:90%;font-size:smaller;"> {% csrf_token %}
-                  <div class="form-group shadow  m-1 p-4 "style="">
-                      <label style="font-size:smaller;"for="profile pic">image {{p_form.image}}</label>
-                  </div>
-                  <div class="form-group shadow mb-2 mt-2 p-2 mt-4">
+                <form class="p-2 bg-light" enctype="multipart/form-data" method="POST" style="font-size:larger;background: repeating-linear-gradient(45deg, gray , transparent 50px);"> {% csrf_token %}
+                  
+                  <div class="form-group shadow mb-2 mt-2 p-3 mt-4">
                      <label for="email">email {{u_form.email}}</label>
                   </div>
-                  <div class="form-group shadow mb-2 mt-2 p-2 mt-4">
+                  <div class="form-group shadow mb-2 mt-2 p-3 mt-4">
                     <label for="username">username {{u_form.username}}</label>
                   </div>
                   <button type="submit" class="btn shadow mt-2 btn-outline-success">update user info </button>

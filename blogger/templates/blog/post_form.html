@@ -1,32 +1,32 @@
-{% extends "blog/base.html"%}
-{% load static %}
-{% block content %}
+{% extends "blog/base.html"%} {% load static %} {% block content %}
 
-<div class=" container-fluid row shadow-lg p-4 mb-4 bg-light border border-danger " style="height:100% width:100%">
-    <form class="col-lg-12 col-sm-6 mb-10"  method="POST" style="height:500px"> {% csrf_token %}
+<div
+  class="container-fluid row shadow-lg p-4 mb-4 bg-light border border-danger"
+  style="height:100% width:100%"
+>
+  <form class="col-lg-12 col-sm-6 mb-10" method="POST" style="height: 500px">
+    {% csrf_token %}
 
-      <div class="form-group shadow mt-4 p-2 mt-2 bg-success rounded 10">
-        <label for="name"><h2>new post</h2></label>
-      </div>
-      <div class="form-group shadow mb-4 mt-2 p-4 mt-5 bg-light">
-        <span>catchy title</span>
-          {{form.title}}
-      </div>
-      <div class="form-group shadow mb-4 p-4 bg-light">
-        <span>content</span>
-          {{form.content}}
-      </div>
-      <div class="form-group shadow mb-4 p-4 bg-light">
-        <span>category</span>
-          {{form.spaces}}
-      </div>
+    <div class="form-group shadow mt-4 p-2 mt-2 bg-success rounded 10">
+      <label for="name"><h2>new post</h2></label>
+    </div>
+    <div class="form-group shadow mb-4 mt-2 p-4 mt-5 bg-light">
+      <span>catchy title</span>
+      {{form.title}}
+    </div>
+    <div style="width: 100%" class="form-group shadow mb-4 p-4 bg-light">
+      <span>content</span>
+      {{form.content}}
+    </div>
+    <div class="form-group shadow mb-4 p-4 bg-light">
+      <span>category</span>
+      {{form.spaces}}
+    </div>
 
-      <button type="submit" class="btn shadow mb-8 btn-outline-success">post</button>
+    <button type="submit" class="btn shadow mb-8 btn-outline-success">
+      post
+    </button>
   </form>
-
-
-  
 </div>
-
 
 {% endblock %}

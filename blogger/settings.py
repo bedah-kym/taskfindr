@@ -78,7 +78,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://394a-105-160-25-252.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://a4b6-185-216-33-220.ngrok-free.app']
 
 # Application definition
 
@@ -189,7 +189,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS=[BASE_DIR / 'static']
+STATICFILES_DIRS=[BASE_DIR / 'static/']
 
 MEDIA_URL='/media/'
 MEDIA_ROOT= BASE_DIR / 'media'
@@ -197,20 +197,16 @@ MEDIA_ROOT= BASE_DIR / 'media'
 LOGIN_REDIRECT_URL='home'
 LOGIN_URL='login'
 
-EMAIL_HOST='smtp.gmail.com'
-EMAIL_PORT=587
-EMAIL_HOST_USER ='bedankimani860@gmail.com'
-EMAIL_HOST_PASSWORD ='ntzn koid sube zktz'
+EMAIL_HOST= os.environ.get('EMAIL_HOST')
+EMAIL_PORT= 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD =os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS =True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
 BASE_URL = "http://localhost:8100"
 
-#DEV_SERVER = len(sys.argv) > 1 and sys.argv[1] == "runserver"
 
-#USE_NGROK = os.environ.get("USE_NGROK", "False") == "True" and os.environ.get("RUN_MAIN", None) != "true"
-#USER_NGROK= True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
