@@ -104,6 +104,54 @@ def levelup(request):
     return render(request,'blog/activation.html',{"form":form})
 
 
+@login_required
+def admincheckaccounts(request):
+        """function that checks your last login, if ur incative for more than a month
+        we send you an email then flag you as in active untill you log back in, if you dont log in we wait for two
+        months then lock ur cash account.IT only works if ur admin
+        """
+        if request.user.is_staff or request.user.is_superuser:
+            allusers = User.objects.all()
+            accounts_warned=0
+            accounts_reposessed=0
+            accounts_checked=0 
+            for myuser in allusers:
+                if myuser.last_login and myuser.is_superuser==False:
+                    last_login = myuser.last_login.month
+                    last_login_day = myuser.last_login.day
+                    this_month = timezone.now().month
+                    today = timezone.now().day
+                    if last_login < this_month:
+                        #if you last logged in last month check below which day of last month did you log  in and comapre with todays date
+                        if (this_month - last_login) == 1:
+                            """logic here is that if you minus todays date ie 16 (aug)with any date from last month eg 30 (july) it will
+                            always give you a negative number unless the difference between the dates is a month.ie 16aug -16july ==0 
+                            which will mean a month has passed 
+                            """
+                            #send warning email 
+                            if (today-last_login_day) >= 0:
+                                accounts_warned+=1
+                                accounts_checked+=1 
+                            accounts_checked+=1
+                        elif (this_month - last_login) >=3:
+                            #SEND EMAIL & call delete ac func if ur passed three months we just take ur a/c
+                            accounts_reposessed+=1
+                            accounts_checked+=1 
+                            Cashaccount.reposess_account(myuser)
+                            if myuser.is_active:
+                                myuser.is_active=False
+                                myuser.save()
+                    accounts_checked+=1
+                    ctx={
+                    "checked":accounts_checked,
+                    "reposessed":accounts_reposessed,
+                    "warned":accounts_warned
+                    }
+        else:
+            messages.warning(request,"your not an authorisedmf ")
+        
+        return render(request,'blog/accountchecker.html',ctx)
+
 class Cashaccountupdate(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model=Cashaccount
     template_name= 'blog/activation.html'

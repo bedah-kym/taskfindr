@@ -81,10 +81,10 @@ class Cashaccount(models.Model):
         self.mpesa_code.delete()
 
     def reposess_account(user):
-        ac = Cashaccount.objects.filter(owner=user)[0]
+        ac = Cashaccount.objects.filter(owner=user).first()
         if ac:
             ac.is_valid=False
-            ac.save()
+            #ac.save()
 
     
     def __str__ (self):
