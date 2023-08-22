@@ -54,7 +54,7 @@ def send_email(sender,created,instance,**kwargs):
     """
     if created:
         to_email = instance.owner.email
-        from_email = 'Taskfindrkenyaltd@outlook.com'
+        from_email = 'taskfindrlimited@gmail.com'
         print('sending greeting email to',to_email)
         send_mail(
             'WELCOME TO TASKfindr',
@@ -68,7 +68,7 @@ def send_email(sender,created,instance,**kwargs):
         if instance.is_valid:
             
             to_email = instance.owner.email
-            from_email = 'Taskfindrkenyaltd@outlook.com'
+            from_email = 'taskfindrlimited@gmail.com'
             if instance.has_withdrawn:
                 print('sending withdraw success email to',to_email)
                 try:

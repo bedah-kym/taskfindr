@@ -148,7 +148,8 @@ def admincheckaccounts(request):
                     "warned":accounts_warned
                     }
         else:
-            messages.warning(request,"your not an authorisedmf ")
+            messages.warning(request,"your not an authorised mf! ")
+            return redirect('home')
         
         return render(request,'blog/accountchecker.html',ctx)
 
