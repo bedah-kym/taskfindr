@@ -1,6 +1,7 @@
 from django.shortcuts import get_list_or_404, render,get_object_or_404,redirect
 from django.urls import reverse
 import json
+from templated_email import send_templated_mail
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import blogpost as post,Postreaction ,WheelSpin
@@ -64,7 +65,6 @@ class postdetailview(LoginRequiredMixin,DetailView):
         context.update(reactions)
         return context
         
-
 class userpostlistview(LoginRequiredMixin,ListView):
     model= post
     template_name='blog/user_posts.html'
@@ -124,8 +124,6 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         else:
             return True
         
-       
-
 class postupdateview(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model=post
     template_name= 'blog/post_form.html'
@@ -197,4 +195,17 @@ def about_view(request):
     return render(request,'blog/about.html',{})
 
 def termsview(request):
+    return render(request,'blog/activation_success.html',{})
+
+def test_email(request):
+    send_templated_mail(
+        template_name='welcome',
+        from_email='taskfindrlimited@gmail.com',
+        recipient_list=['bedankimani860@gmail.com'],
+        context={
+            'username':request.user.username,
+            'full_name':content
+            
+        },
+    )
     return render(request,'blog/activation_success.html',{})
