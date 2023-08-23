@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
-from django.core.mail import send_mail,BadHeaderError
+from .emails import send_info_email
+from django.core.mail import BadHeaderError
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from .models import Cashaccount as Ca,Withdrawrequest as Wr,Leveluprequest as Lu
@@ -53,32 +54,12 @@ def send_email(sender,created,instance,**kwargs):
     3. if your withdrawal fails
     """
     if created:
-        to_email = instance.owner.email
-        from_email = 'taskfindrlimited@gmail.com'
-        print('sending greeting email to',to_email)
-        send_mail(
-            'WELCOME TO TASKfindr',
-            f'Hi,{instance.owner.username} thank you for joining our site we made this site so people like you can earn so giddy up and activate your account to start earning.',
-            from_email,
-            [to_email],
-            fail_silently=False,
-        )
-        
+        send_info_email(instance,"created")       
     else:
-        if instance.is_valid:
-            
-            to_email = instance.owner.email
-            from_email = 'taskfindrlimited@gmail.com'
+        if instance.is_valid: 
             if instance.has_withdrawn:
-                print('sending withdraw success email to',to_email)
                 try:
-                    send_mail(
-                'TASKfindr withdrawal success',
-                f'Hi,{instance.owner.username} your withdrawal request is successfull, we will send you the amount on your phone number shortly.',
-                from_email,
-                [to_email],
-                fail_silently=False,
-                )
+                    send_info_email(instance,"success")
                 except BadHeaderError :
                     return 
                 instance.has_withdrawn=False
@@ -89,14 +70,7 @@ def send_email(sender,created,instance,**kwargs):
                 ac.delete()
             if instance.withdraw_failed:
                 try:
-                    print('sending withdraw failed email',to_email)
-                    send_mail(
-                'TASKfindr Withdrawal failed ',
-                f'Hi,{instance.owner.username} your withdrawal request has beed denied,check if your mpesa phone number matches the one in your profile or call us on 07..........',
-                from_email,
-                [to_email],
-                fail_silently=False,
-                )
+                    send_info_email(instance,"failed")      
                 except BadHeaderError :
                     return
                 instance.withdraw_failed=False

@@ -29,7 +29,9 @@ from blog.views import (
     categorypostlistview,
     likepost,
     dislikepost,
-    wheelspinview
+    wheelspinview,
+    test_email
+    
 )
 from users.views import (
     register_view,
@@ -60,6 +62,7 @@ urlpatterns = [
     path('register/<str:code>/',register_view,name='register'),
     path('withdraw/',withdrawalrequest,name='withdrawal_request'),
     path('level_up/',levelup,name='level_up'),
+    path('test_email/',test_email,name='email'),
     path('profile/',profile_view,name='profile'),
     path('account-activation/<int:pk>/',Cashaccountupdate.as_view(),name='activation'),
     path('check-accounts/',admincheckaccounts,name='check_accounts'),

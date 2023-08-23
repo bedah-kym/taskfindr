@@ -96,7 +96,7 @@ class Withdrawrequest(models.Model):
     request_date = models.DateTimeField(auto_now_add=True)
     
     def __str__ (self):
-        return f"{self.account.owner.username} requested to withdraw on date {self.request_date.day} "
+        return f"{self.account.owner.username} requested to withdraw on month {self.request_date.month} ,{self.request_date.day}th "
 
 class Leveluprequest(models.Model):
     user_profile = models.ForeignKey(profile,on_delete=models.CASCADE)
@@ -104,5 +104,5 @@ class Leveluprequest(models.Model):
     mpesa_code = models.CharField(max_length=10,default=None,null=True,validators=[RegexValidator(r"^[0-9|A-Z]{10}$",'invalid code')])
     
     def __str__ (self):
-        return f"{self.user_profile.user.username} requested to level up on date {self.request_date.day} "
+        return f"{self.user_profile.user.username} requested to level up on month{self.request_date.month}, {self.request_date.day}th "
 
