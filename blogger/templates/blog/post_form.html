@@ -1,32 +1,55 @@
 {% extends "blog/base.html"%} {% load static %} {% block content %}
 
-<div
-  class="container-fluid row shadow-lg p-4 mb-4 bg-light border border-danger"
-  style="height:100% width:100%"
->
+<div class="col-lg 10 col-md-10 col-sm-12"> 
   <form class="col-lg-12 col-sm-6 mb-10" method="POST" style="height: 500px">
     {% csrf_token %}
+    <div class="shadow mt-4 p-2 mt-4 bg-success rounded 10"></div>
+    <div class="card">
+      <div class="card-header">GUIDELINES FOR BLOG WRITTERS</div>
+      <div class="card-body">
 
-    <div class="form-group shadow mt-4 p-2 mt-2 bg-success rounded 10">
-      <label for="name"><h2>new post</h2></label>
+        <ol>
+          <li> <b>You are allowed only one blog post a day ! </b></li>
+          <li>blogs need to be short, not more than 500 words. As for headings keep them below 50 words so they are eye catching and straight foward.</li>
+          <li>
+            write about breaking news, gossip , facts , or even what you do on a
+            daily basis,teach a concept or just tell a story.have fun!
+          </li>
+          <li>
+            Think of these short blogs like tweets, short ideas that educate !
+          </li>
+          <li>
+            NO pictures,NO videos these features will be unlocked in phase 2 of
+            taskfindr.
+          </li>
+          <li><b>SEXUAL CONTENT, WEAK OR COPIED CONTENT WILL BE FLAGGED BY OUR AI AND LEAD TO YOUR POST BEING DELETED AND MONEY GAINED FROM IT LOST AS WELL AS A PENALTY OF KSHS 100/= </b></li>
+          <li>If you want to write alot of content on a subject divide it into threads then post a single thread(blog) a day.</li>
+
+        </ol>
+      </div>
+      <div class="card-footer">
+        <div class="form-group mb-4 mt-2 p-4 mt-5 bg-light">
+          <span>catchy title</span>
+          {{form.title}}
+        </div>
+        <div style="width: 100%" class="form-group mb-4 p-4 bg-light">
+          <span>content</span>
+          {{form.content}}
+        </div>
+        <div class="form-group  mb-4 p-4 bg-light">
+          <span>category</span>
+          {{form.spaces}}
+        </div>
+    
+        <button type="submit" class="btn shadow mb-8 btn-outline-success">
+          post
+        </button>
+      </form>
     </div>
-    <div class="form-group shadow mb-4 mt-2 p-4 mt-5 bg-light">
-      <span>catchy title</span>
-      {{form.title}}
-    </div>
-    <div style="width: 100%" class="form-group shadow mb-4 p-4 bg-light">
-      <span>content</span>
-      {{form.content}}
-    </div>
-    <div class="form-group shadow mb-4 p-4 bg-light">
-      <span>category</span>
-      {{form.spaces}}
+    
+      </div>
+
     </div>
 
-    <button type="submit" class="btn shadow mb-8 btn-outline-success">
-      post
-    </button>
-  </form>
-</div>
-
+   
 {% endblock %}

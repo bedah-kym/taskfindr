@@ -14,7 +14,7 @@ def send_info_email(instance,event):
     elif event == "success":
         content = f'Hi,{username} your withdrawal request is successfull, we will send you the amount on your phone number shortly.'  
     elif event == "failed":
-        content = f'Hi{username} your withdrawal request has beed denied,check if your mpesa phone number matches the one in your profile.Thank you',
+        content = f'Hi{username} your withdrawal request has beed denied,check if your mpesa phone number matches the one in your profile and the mpesa code submitted it correct.Thank you',
     else:
         content = f'sorry we are experiencing a technical glitch in our email system please ignore this email '
     send_templated_mail(
@@ -23,7 +23,7 @@ def send_info_email(instance,event):
             recipient_list=[to_email],
             context={
                 'username':username,
-                'full_name':content  
+                'content':content  
             },
             fail_silently=False,
         )   
@@ -45,7 +45,7 @@ def warning_email(user,event):
             recipient_list=[to_email],
             context={
                 'username':user.username,
-                'full_name':content  
+                'content':content  
             },
             fail_silently=False,
         )   
