@@ -65,8 +65,13 @@
                             <a href="{% url 'post_detail' post.id %}"style="text-decoration:none;color:black;" class='mx-auto p-1 m-1'><strong>{{post.title|upper}}</strong></a>
                           </div>
                         </div>
-                        <div style="font-size:small"class="card-body">
+                        <div style="font-size:medium"class="card-body text-truncate">
                           <p class="card-text">{{post.content}} </p>
+                          <div class="clearfix">
+                            <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-info float-sm-right" style="margin-bottom:15px;">
+                              read more ..
+                            </a>
+                          </div>
                           <p>
                             <a href="{% url 'like' post.id %}"
                               ><span class="material-symbols-outlined"> add_reaction </span>
@@ -79,7 +84,6 @@
                             </a>
                             {{dislikes}} <span style="font-family:monospace;">dislike<span/>
                           </p>
-                          read more **
                         </div>
                         <div style="font-size:small;@mediaquery(min)"class="card-footer bg-light">
                           <p>{{ post.date_posted}}</p> <p><a href="{% url 'spaces_list' post.spaces %}" style="text-decoration:none;color:black"class='mx-auto p-1 m-1'><b>{{post.spaces}}</b></a>

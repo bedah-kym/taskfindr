@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.shortcuts import render,redirect
 from django.urls import reverse
+from templated_email import send_templated_mail
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import registration_form, updateuser,updateprofile,activationform
@@ -9,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import UpdateView,DeleteView
 from.validators import Reffcodevalidator
+from .emails import warning_email
 
 def register_view(request,**kwargs):
 
@@ -75,32 +77,38 @@ def profile_view(request):
 def withdrawalrequest(request):
     my_user = request.user
     account= Cashaccount.objects.get(owner=my_user)
-    amount = account.get_total_cash(my_user)
-    if amount >= 1000 and account.is_valid==True: # change to 1000 also change in template
-        WR = Withdrawrequest.objects.create(account=account)
-        WR.save()
-        messages.success(request,"request sent,you will recieve an email once the agents verify your account balance")
-    else:
-        messages.warning(request,"sorry, you dont have enough cash GO back and continue earning,also check if ur account is activated")
-        return redirect('home')
+    existing =  Withdrawrequest.objects.filter(account=account)
+    if not existing :
+        amount = account.get_total_cash(my_user)
+        if amount >= 1000 and account.is_valid==True: # change to 1000 also change in template
+        
+            WR = Withdrawrequest.objects.create(account=account)
+            WR.save()
+            messages.success(request,"request sent,you will recieve an email once the agents verify your account balance")
+        else:
+            messages.warning(request,"sorry, you dont have enough cash GO back and continue earning,also check if ur account is activated")
+            return redirect('home')
     return redirect ('profile')
 
 @login_required
 def levelup(request):
     my_user = request.user
     my_profile = profile.objects.get(user=my_user)
+    lastlevelup = Leveluprequest.objects.filter(user_profile=my_profile)
     form = activationform()
-    if request.method == "POST":
-        form = activationform(request.POST)
-        if form.is_valid():
-            code = form.cleaned_data.get('mpesa_code')
-            Leveluprequest.objects.create(user_profile = my_profile,mpesa_code = code,request_date = timezone.now() )
-            messages.success(request,f"Thank you {my_user} , we will verify your request and getback to you")
-            return redirect('profile')
-        else:
-            messages.warning(request,"sorry your request is invalid check your mpesa code")  
-            return redirect('profile')
-    messages.info(request,f"HI {my_user} ,pay here same way as before to levelup")
+    if not lastlevelup:
+        if request.method == "POST":
+            form = activationform(request.POST)
+            if form.is_valid():
+                code = form.cleaned_data.get('mpesa_code')
+                Leveluprequest.objects.create(user_profile = my_profile,mpesa_code = code,request_date = timezone.now() )
+                messages.success(request,f"Thank you {my_user} , we will verify your request and getback to you")
+                return redirect('profile')
+            else:
+                messages.warning(request,"sorry your request is invalid check your mpesa code")  
+                return redirect('profile')
+        messages.info(request,f"HI {my_user} ,pay here same way as before to levelup")
+    messages.info(request,f"HI {my_user} ,wait while we clear your pending levelup request")
     return render(request,'blog/activation.html',{"form":form})
 
 
@@ -128,13 +136,13 @@ def admincheckaccounts(request):
                             always give you a negative number unless the difference between the dates is a month.ie 16aug -16july ==0 
                             which will mean a month has passed 
                             """
-                            #send warning email 
+                            warning_email(myuser,"warn")
                             if (today-last_login_day) >= 0:
                                 accounts_warned+=1
                                 accounts_checked+=1 
                             accounts_checked+=1
                         elif (this_month - last_login) >=3:
-                            #SEND EMAIL & call delete ac func if ur passed three months we just take ur a/c
+                            warning_email(myuser," ")
                             accounts_reposessed+=1
                             accounts_checked+=1 
                             Cashaccount.reposess_account(myuser)
@@ -148,7 +156,8 @@ def admincheckaccounts(request):
                     "warned":accounts_warned
                     }
         else:
-            messages.warning(request,"your not an authorisedmf ")
+            messages.warning(request,"your not an authorised mf! ")
+            return redirect('home')
         
         return render(request,'blog/accountchecker.html',ctx)
 

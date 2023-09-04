@@ -1,12 +1,14 @@
-from django.shortcuts import get_list_or_404, render,get_object_or_404,redirect
+from django.http import HttpResponse
+from django.shortcuts import render,get_object_or_404,redirect
 from django.urls import reverse
 import json
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import blogpost as post,Postreaction ,WheelSpin
 from django.contrib.auth.models import User
-from users.models import Cashaccount,profile
+from users.models import Cashaccount
 from django.utils import timezone
+from .plagiarism_detection import calculate_similarity
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import (
     ListView,
@@ -15,6 +17,22 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from django.conf import settings
+from django.shortcuts import redirect
+
+
+def error_404_view(request, exception):
+
+	# we add the path to the 404.html file
+	# here. The name of our HTML file is 404.html
+	return render(request, 'blog/404.html')
+
+def error_403_view(request, exception):
+
+	# we add the path to the 404.html file
+	# here. The name of our HTML file is 404.html
+	return render(request, 'blog/403_csrf.html')
+
 
 class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
    
@@ -49,6 +67,7 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
            return True
        else:
            return False
+
 class postdetailview(LoginRequiredMixin,DetailView):
     model=post
     template_name='blog/post-detail.html'
@@ -64,7 +83,6 @@ class postdetailview(LoginRequiredMixin,DetailView):
         context.update(reactions)
         return context
         
-
 class userpostlistview(LoginRequiredMixin,ListView):
     model= post
     template_name='blog/user_posts.html'
@@ -92,22 +110,33 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
 
     def form_valid(self,form):
         form.instance.author=self.request.user
-        return super().form_valid(form)
+        content = form.instance.content
+        if self.is_unique(content): 
+            return super().form_valid(form)
+        else:
+            return HttpResponse('YOUR CONTENT IS NOT ORIGINAL, PLEASE REVISE YOUR CONTENT AND REPOST')
     
-    def is_unique_content(self,form):
-        """ id like to ensure that the content posted is unique so users dont repost the same shit
-        just checking the title is not worth it but we need to use an AI service.so before a post
-        is saved the test func will call this func send it to the AI ,parse the result and take action
-        """
-        pass
+    def is_unique(self,content):
+        # Check for plagiarism against existing posts using nltk lib
+        existing_posts = post.objects.all()
+        for singlepost in existing_posts:
+            similarity = calculate_similarity(content, singlepost.content)
+            if similarity > 0.7:  # Adjust the threshold as needed
+                # Flag the post as potential plagiarism or take appropriate action
+                # You can also provide feedback to the user
+                # For this example, we'll just print a message
+                print(f"Potential plagiarism detected: Similarity with '{singlepost.title}': {similarity}")
+                return False
+        return True
+        
 
     def test_func(self):
         """ call is_unique_content if true, check the current date aginst the date of the last post by the user
         if the date is the same as current date then return false
         """
         user = self.request.user
-        blog = post.objects.filter(author=user).last()
-        if blog :
+        blog = post.objects.filter(author=user).last()   
+        if blog:
             today = timezone.now().day
             this_month = timezone.now().month
             posted_month = blog.date_posted.month
@@ -123,9 +152,7 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
                 return False
         else:
             return True
-        
        
-
 class postupdateview(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model=post
     template_name= 'blog/post_form.html'
@@ -198,3 +225,5 @@ def about_view(request):
 
 def termsview(request):
     return render(request,'blog/activation_success.html',{})
+
+

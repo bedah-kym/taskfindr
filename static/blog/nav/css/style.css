@@ -71,6 +71,7 @@ a {
   }
   .logo_img{
     width:100%;
+    padding: 2px;
   }
 }
 
@@ -96,11 +97,13 @@ a {
     top: -7px;
     position: relative; }
     .site-navbar .site-logo a {
+      padding: 30px;
       font-weight: 200;
       color: #fff;
       font-size: 20px;
       font-weight: bold;
-      text-transform: uppercase; }
+      text-transform: uppercase;
+      }
   .site-navbar .site-navigation .site-menu {
     margin-bottom: 0; }
     .site-navbar .site-navigation .site-menu a {

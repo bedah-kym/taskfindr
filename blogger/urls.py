@@ -30,6 +30,7 @@ from blog.views import (
     likepost,
     dislikepost,
     wheelspinview
+    
 )
 from users.views import (
     register_view,
@@ -74,5 +75,7 @@ urlpatterns = [
     path('terms_and_conditions/',termsview,name='terms'),
 
 ]
+handler404 = 'blog.views.error_404_view'
+handler403 = 'blog.views.error_403_view'
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

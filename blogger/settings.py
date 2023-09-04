@@ -78,7 +78,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://a4b6-185-216-33-220.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://c93e-154-159-21-212.ngrok-free.app']
 
 # Application definition
 
@@ -197,6 +197,7 @@ MEDIA_ROOT= BASE_DIR / 'media'
 LOGIN_REDIRECT_URL='home'
 LOGIN_URL='login'
 
+#gmail settings
 EMAIL_HOST= os.environ.get('EMAIL_HOST')
 EMAIL_PORT= 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -206,7 +207,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 BASE_URL = "http://localhost:8100"
 
+# chatgpt settings
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
+OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/engines/davinci/completions'  # Adjust the endpoint as needed.
 
+
+TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
