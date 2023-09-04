@@ -12,6 +12,7 @@ and also push posts based on popularity.it can be expanded to see who does most 
 who is inactive so they get an email or smth.
 """
 
+    
 class Bloglistview(generics.ListAPIView):
     permission_classes=[IsStaffEditorPermissions]
     queryset = blogpost.objects.all()
