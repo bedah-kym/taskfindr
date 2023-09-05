@@ -17,22 +17,17 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.conf import settings
+
+from django.utils.safestring import mark_safe
+from .forms import CustomPostForm
 from django.shortcuts import redirect
 
 
 def error_404_view(request, exception):
-
-	# we add the path to the 404.html file
-	# here. The name of our HTML file is 404.html
 	return render(request, 'blog/404.html')
 
 def error_403_view(request, exception):
-
-	# we add the path to the 404.html file
-	# here. The name of our HTML file is 404.html
 	return render(request, 'blog/403_csrf.html')
-
 
 class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
    
@@ -105,7 +100,7 @@ class categorypostlistview(LoginRequiredMixin,ListView):
 
 class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
     model=post
-    fields=['title','content','spaces']
+    form_class = CustomPostForm
     template_name='blog/post_form.html'
 
     def form_valid(self,form):

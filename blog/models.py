@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from tinymce.models import HTMLField 
+from tinymce.views import render
 
 CATEGORY_CHOICES = [
     ("MUSIC AND ART", "Music and Art"),
@@ -15,7 +17,7 @@ CATEGORY_CHOICES = [
 
 class blogpost(models.Model):
     title = models.CharField(max_length=100)
-    content = models.TextField(max_length=500)
+    content = models.TextField(max_length=1000)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     spaces = models.CharField(choices=CATEGORY_CHOICES,max_length=30,null=False,default=None)

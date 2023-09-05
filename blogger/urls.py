@@ -73,6 +73,9 @@ urlpatterns = [
     path('password-reset-complete/',views.PasswordResetCompleteView.as_view(template_name='blog/password_reset_complete.html'),name='password_reset_complete'),
     path('about/',about_view,name='about'),
     path('terms_and_conditions/',termsview,name='terms'),
+    path('tinymce/', include('tinymce.urls')),
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 
 ]
 handler404 = 'blog.views.error_404_view'

@@ -83,6 +83,8 @@ CSRF_TRUSTED_ORIGINS = ['https://c93e-154-159-21-212.ngrok-free.app']
 # Application definition
 
 INSTALLED_APPS =[
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -95,37 +97,48 @@ INSTALLED_APPS =[
     'PAYMENT',
     'django_daraja',
     'rest_framework',
-    'rest_framework.authtoken'
-    'tinymce',
+    'rest_framework.authtoken',
+    'django_feedparser',
+    
 ]
 
-TINYMCE_JS_URL = 'http://debug.example.org/tiny_mce/tiny_mce_src.js'
-TINYMCE_DEFAULT_CONFIG = {
-    "height": "320px",
-    "width": "960px",
-    "menubar": "file edit view insert format tools table help",
-    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
-    "fullscreen insertdatetime media table paste code help wordcount spellchecker",
-    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
-    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
-    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
-    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
-    "a11ycheck ltr rtl | showcomments addcomment code",
-    "custom_undo_redo_levels": 10,
-    "language": "es_ES",  # To force a specific language instead of the Django current language.
-}
-TINYMCE_SPELLCHECKER = True
-TINYMCE_COMPRESSOR = True
-TINYMCE_EXTRA_MEDIA = {
-    'css': {
-        'all': [
-            ...
-        ],
+
+JET_SIDE_MENU_COMPACT = False
+JET_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultIndexDashboard'
+JET_CHANGE_FORM_SIBLING_LINKS = True
+
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
     },
-    'js': [
-        ...
-    ],
-}
+    {
+        'theme': 'green',
+        'color': '#44b78b',
+        'title': 'Green'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#2faa60',
+        'title': 'Light Green'
+    },
+    {
+        'theme': 'light-violet',
+        'color': '#a464c4',
+        'title': 'Light Violet'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#5EADDE',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
