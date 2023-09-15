@@ -29,7 +29,8 @@ from blog.views import (
     categorypostlistview,
     likepost,
     dislikepost,
-    wheelspinview
+    wheelspinview,
+    social_boost
     
 )
 from users.views import (
@@ -72,9 +73,11 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',views.PasswordResetConfirmView.as_view(template_name='blog/password_reset_confirm.html'),name='password_reset_confirm'),
     path('password-reset-complete/',views.PasswordResetCompleteView.as_view(template_name='blog/password_reset_complete.html'),name='password_reset_complete'),
     path('about/',about_view,name='about'),
+    path('social-boost/',social_boost,name='social'),
     path('terms_and_conditions/',termsview,name='terms'),
     path('tinymce/', include('tinymce.urls')),
     path('jet/', include('jet.urls', 'jet')),
+    path('verification/', include('verify_email.urls')),	
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 
 ]

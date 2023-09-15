@@ -29,6 +29,10 @@ def error_404_view(request, exception):
 def error_403_view(request, exception):
 	return render(request, 'blog/403_csrf.html')
 
+@login_required
+def social_boost(request):
+    return render(request,'blog/social.html')
+
 class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
    
     model= post
@@ -118,9 +122,7 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
             similarity = calculate_similarity(content, singlepost.content)
             if similarity > 0.7:  # Adjust the threshold as needed
                 # Flag the post as potential plagiarism or take appropriate action
-                # You can also provide feedback to the user
-                # For this example, we'll just print a message
-                print(f"Potential plagiarism detected: Similarity with '{singlepost.title}': {similarity}")
+                messages.warning(self.request,f"Potential plagiarism detected: Similarity with '{singlepost.title}': {similarity}")
                 return False
         return True
         

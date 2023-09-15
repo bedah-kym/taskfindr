@@ -88,11 +88,11 @@
                             <li><a class="nav-link" href="{% url 'wheelspin' %}">Wheel spin </a></li>
                             <li><a class="nav-link" href="{% url 'profile' %}">reffer friends</a></li>
                             <li class="has-children">
-                              <a href="{% url 'new-post' %}">Social boost </a>
+                              <a href="{% url 'social' %}">Social boost </a>
                               <ul class="dropdown">
-                                <li><a href="#">BOOST FB</a></li>
-                                <li><a href="#">BOOST TWITTER</a></li>
-                                <li><a href="#">BOOST YOUTUBE</a></li>
+                                <li><a href="{% url 'social' %}">BOOST FB</a></li>
+                                <li><a href="{% url 'social' %}">BOOST TWITTER</a></li>
+                                <li><a href="{% url 'social' %}">BOOST YOUTUBE</a></li>
                               </ul>
                             </li>
                           </ul>

@@ -85,6 +85,7 @@ CSRF_TRUSTED_ORIGINS = ['https://c93e-154-159-21-212.ngrok-free.app']
 INSTALLED_APPS =[
     'jet.dashboard',
     'jet',
+    "verify_email.apps.VerifyEmailConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
