@@ -247,6 +247,18 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS =True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+VERIFICATION_SUCCESS_TEMPLATE = None
+"""
+HTML_MESSAGE_TEMPLATE = "path/to/html_template.html"
+
+VERIFICATION_FAILED_TEMPLATE = "path/to/failed.html"
+
+REQUEST_NEW_EMAIL_TEMPLATE = "path/to/email.html"
+
+LINK_EXPIRED_TEMPLATE = 'path/to/expired.html'
+
+NEW_EMAIL_SENT_TEMPLATE  = 'path/to/new_email_sent.html'
+"""
 
 BASE_URL = "http://localhost:8100"
 
