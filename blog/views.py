@@ -75,9 +75,11 @@ class postdetailview(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         likes,dislikes = Postreaction.total_reactions(self.get_object())
+        views= Postreaction.total_views(self.request,self.get_object())
         reactions ={
             "likes":likes,
-            "dislikes":dislikes
+            "dislikes":dislikes,
+            "views": views
         }
         context.update(reactions)
         return context

@@ -23,7 +23,7 @@ class blogpost(models.Model):
     spaces = models.CharField(choices=CATEGORY_CHOICES,max_length=30,null=False,default=None)
     value = models.IntegerField(default=20)
     reaction = models.ManyToManyField(User,through="Postreaction",related_name="blogpost_reactions")
-    
+
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk':self.pk})
 
@@ -42,6 +42,7 @@ class blogpost(models.Model):
 
     def __str__(self):
         return f"{self.title} by {self.author}"
+
     
 class Postreaction(models.Model):
     fan = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -59,8 +60,13 @@ class Postreaction(models.Model):
         return reverse("Postreaction_detail", kwargs={"pk": self.pk})
     
     def can_react(request,post):
-        reactions = Postreaction.objects.filter(post=post,fan=request.user)
+        all_reactions = Postreaction.objects.filter(post=post,fan=request.user)
+        reactions=[]
         #returns alist if the list has more than one reaction return
+        for react in all_reactions:
+            # delete all view reactions, if you dont you cant like/dislike a post you have viewed since it is a reaction
+            if react.reaction != "view":
+                reactions.append(react)
         if len(reactions )< 1 :
             return True
         elif len(reactions)>1:
@@ -76,6 +82,20 @@ class Postreaction(models.Model):
         total_likes = likes.count()
         total_dislikes = dislikes.count()
         return(total_likes,total_dislikes)
+    
+    def total_views(request,post):
+        blog=post
+        views = Postreaction.objects.filter(post=blog,fan=request.user,reaction="view")
+        all_views = Postreaction.objects.filter(post=blog,reaction="view").count()
+        if views:   
+            return all_views
+        else:    
+            Postreaction.objects.create(fan=request.user,post=blog,reaction="view")
+            return all_views
+
+   
+
+
         
 class WheelSpin(models.Model):
     spin_date = models.DateTimeField(auto_now_add=True)
