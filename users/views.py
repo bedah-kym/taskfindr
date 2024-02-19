@@ -90,6 +90,7 @@ def withdrawalrequest(request):
         else:
             messages.warning(request,"sorry, you dont have enough cash GO back and continue earning,also check if ur account is activated")
             return redirect('home')
+    messages.info(request,"your previous withdraw request is pending verification, please wait or reach out to us via email or social media")
     return redirect ('profile')
 
 @login_required
@@ -155,7 +156,8 @@ def admincheckaccounts(request):
                     ctx={
                     "checked":accounts_checked,
                     "reposessed":accounts_reposessed,
-                    "warned":accounts_warned
+                    "warned":accounts_warned,
+                    "totalusers":allusers.count()
                     }
         else:
             messages.warning(request,"your not an authorised mf! ")

@@ -24,7 +24,6 @@ class BlogSerializer(serializers.ModelSerializer):
     def get_likes(self,obj):
         likes = Postreaction.objects.filter(post=obj,reaction="like")
         likes = likes.count()
-        print (likes)
         return likes
     
     def get_dislikes(self,obj):

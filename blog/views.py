@@ -18,7 +18,7 @@ from django.views.generic import (
     DeleteView
 )
 
-from django.utils.safestring import mark_safe
+
 from .forms import CustomPostForm
 from django.shortcuts import redirect
 
@@ -40,7 +40,6 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
     context_object_name='posts'
     ordering=['-date_posted']
     paginate_by=10
-    
 
     def get_context_data(self, **kwargs):
         user = self.request.user
@@ -51,6 +50,7 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
         tasks = account.get_total_tasks(user)
         level = account.get_level_bonus()
         context = super().get_context_data(**kwargs)
+       
         new={
             "reffs":reffs,
             "tasks":tasks,
@@ -59,6 +59,7 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
             "total_users":total_users
         }
         context.update(new) 
+        #print(context["posts"][0].content)
         return context
     
     def test_func(self):
@@ -140,22 +141,20 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
             this_month = timezone.now().month
             posted_month = blog.date_posted.month
             posted_day = blog.date_posted.day
+
             if this_month == posted_month:
                 if today == posted_day:
                     return False
                 else:
                     return True
-            elif this_month > posted_month:
-                return True
-            else:
-                return False
+            return True
         else:
             return True
        
 class postupdateview(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model=post
     template_name= 'blog/post_form.html'
-    fields=['title','content']
+    form_class = CustomPostForm
 
     def form_valid(self,form):
         form.instance.author=self.request.user
@@ -212,7 +211,7 @@ def wheelspinview(request):
             if data['my_data'] in options:
                 WheelSpin.objects.create(spinner=spinuser,spin_date=timezone.now(),value=data['my_data'])
                 messages.warning(request,f"congrats we have added {data['my_data']}/= to your account ") 
-                return redirect('home')
+                
     else:
         messages.warning(request,"sorry you can only spin the wheel once a day !") 
         return redirect('profile')

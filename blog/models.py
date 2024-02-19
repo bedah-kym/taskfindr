@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from tinymce.models import HTMLField 
 from tinymce.views import render
+from django.utils.html import strip_tags
+from django.template.defaultfilters import Truncator
 
 CATEGORY_CHOICES = [
     ("MUSIC AND ART", "Music and Art"),
@@ -18,6 +20,7 @@ CATEGORY_CHOICES = [
 class blogpost(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField(max_length=1000)
+    excerpt = models.TextField(max_length=50)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     spaces = models.CharField(choices=CATEGORY_CHOICES,max_length=30,null=False,default=None)
@@ -39,6 +42,14 @@ class blogpost(models.Model):
             return False
         else:
             return True
+    def save(self, *args, **kwargs):
+        # Automatically generate excerpt from content
+        if not self.excerpt:
+            # Strip HTML tags and truncate to get a sample paragraph
+            plain_text_content = strip_tags(self.content)
+            self.excerpt = Truncator(plain_text_content).words(50)  # Adjust the word count as needed
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} by {self.author}"

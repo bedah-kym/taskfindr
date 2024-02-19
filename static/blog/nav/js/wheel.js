@@ -77,6 +77,8 @@ let myChart = new Chart(wheel, {
   },
 });
 //display value based on the randomAngle
+
+
 const valueGenerator = async (angleValue) => {
   for (let i of rotationValues) {
     //if the angleValue is between min and max then display it
@@ -87,16 +89,26 @@ const valueGenerator = async (angleValue) => {
         credentials: "same-origin",
         headers: {
           Accept: "application/json",
-          "X-Requested-With": "XMLHttpRequest", //Necessary to work with request.is_ajax()
+          "X-Requested-With": "XMLHttpRequest",
           "X-CSRFToken": csrftoken,
         },
-        body: JSON.stringify({ post_data: i.value }), //JavaScript object of data to POST
-      });
+        body: JSON.stringify({ post_data: i.value }),
+      })
+        .then(response => {
+          if (response.ok) {
+            // Redirect after successful spinning
+            window.location.href = '/profile';
+          } else {
+            console.error('Error spinning the wheel:', response.statusText);
+          }
+        })
+        .catch(error => console.error('Error spinning the wheel:', error));
       spinBtn.disabled = false;
       break;
     }
   }
 };
+
 
 //Spinner count
 let count = 0;

@@ -17,12 +17,11 @@ class CustomPostForm(forms.ModelForm):
         label='', widget=forms.Textarea
         (attrs={
             'class': 'form-control',
-            'placeholder': 'Dont overthink it its just an idea or thought your writing about.', 
+            'placeholder': 'Dont overthink it its just an idea or thought your writing about. PS; We recommend you use a laptop to write but a phone works too', 
             'required': 'required', 
             'data-custom-attr': 'custom-value'}
             )
         )
-
     spaces = forms.ChoiceField(
     label="spaces",
     choices=[
