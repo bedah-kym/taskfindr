@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.shortcuts import render,redirect
 from django.urls import reverse
-from templated_email import send_templated_mail
+from verify_email.email_handler import send_verification_email
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import registration_form, updateuser,updateprofile,activationform
@@ -26,7 +26,9 @@ def register_view(request,**kwargs):
                 owner = User.objects.get(username=username)
                 prof=profile.objects.create(user = owner,reffered_by = reff_code,phone_number=phonenumber)
                 prof.save()
-                messages.success(request,f'WELCOME {username} you are now a member.ACTIVATE your account now and PLEASE READ THE SITE GUIDE')
+                messages.warning(request,"make sure you check your EMAIL for a verification link to LOG IN , if you dont find it check your SPAM folder")
+                messages.success(request,f'WELCOME {username} you are now a member. PLEASE READ THE SITE GUIDE')
+                send_verification_email(request, form)
                 return redirect('about')
             else:
                 messages.warning(request,f'Sorry {username} you need a valid refferal link to register,click register to use our default link')
@@ -88,6 +90,7 @@ def withdrawalrequest(request):
         else:
             messages.warning(request,"sorry, you dont have enough cash GO back and continue earning,also check if ur account is activated")
             return redirect('home')
+    messages.info(request,"your previous withdraw request is pending verification, please wait or reach out to us via email or social media")
     return redirect ('profile')
 
 @login_required
@@ -153,7 +156,8 @@ def admincheckaccounts(request):
                     ctx={
                     "checked":accounts_checked,
                     "reposessed":accounts_reposessed,
-                    "warned":accounts_warned
+                    "warned":accounts_warned,
+                    "totalusers":allusers.count()
                     }
         else:
             messages.warning(request,"your not an authorised mf! ")

@@ -1,0 +1,33 @@
+{%extends 'blog/base.html'%} {% load static %} {% block content %}
+<div clas="mx-auto row p-2" style="width: 100%; padding: 2%">
+  <p
+    class="card"
+    style="padding: 10%; font-weight: 500; margin-top: 20%; margin-bottom: 40%"
+  >
+    <img
+      class="card-img-top"
+      src="{% static '\images\icons\coming-soon.gif' %}"
+      style="width: 20%"
+      alt=""
+    />
+    <alert class="alert alert-primary">hi thanks for comming </alert>
+
+    THIS FEATURE WILL LAUNCH AFTER WE REACH 100K USERS SO KEEP REFFERING AND
+    STAY TRUE.
+    <small class="card-body">
+      after he launch we will explain how SOCIAL BOOST works, spoiler alert!
+      this new FEATURE allows you to earn more by incoporating your online
+      hobbies into taskfindr
+    </small>
+    <small class="card-footer" style="color: darkcyan">
+      the more people you get onboard the faster the launch date arrives
+    </small>
+    <img
+      class="card-img-bottom"
+      src="{% static 'images/happy.gif' %}"
+      style="width: 25%"
+      alt=""
+    />
+  </p>
+</div>
+{% endblock %}

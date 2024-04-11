@@ -17,21 +17,22 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from django.conf import settings
+from API.news_api import parse_results
+
+from .forms import CustomPostForm
 from django.shortcuts import redirect
 
 
 def error_404_view(request, exception):
-
-	# we add the path to the 404.html file
-	# here. The name of our HTML file is 404.html
 	return render(request, 'blog/404.html')
 
 def error_403_view(request, exception):
-
-	# we add the path to the 404.html file
-	# here. The name of our HTML file is 404.html
 	return render(request, 'blog/403_csrf.html')
+
+@login_required
+def social_boost(request):
+    return render(request,'blog/social.html')
+
 
 
 class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
@@ -41,7 +42,6 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
     context_object_name='posts'
     ordering=['-date_posted']
     paginate_by=10
-    
 
     def get_context_data(self, **kwargs):
         user = self.request.user
@@ -52,6 +52,7 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
         tasks = account.get_total_tasks(user)
         level = account.get_level_bonus()
         context = super().get_context_data(**kwargs)
+       
         new={
             "reffs":reffs,
             "tasks":tasks,
@@ -60,6 +61,7 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
             "total_users":total_users
         }
         context.update(new) 
+        #print(context["posts"][0].content)
         return context
     
     def test_func(self):
@@ -76,9 +78,11 @@ class postdetailview(LoginRequiredMixin,DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         likes,dislikes = Postreaction.total_reactions(self.get_object())
+        views= Postreaction.total_views(self.request,self.get_object())
         reactions ={
             "likes":likes,
-            "dislikes":dislikes
+            "dislikes":dislikes,
+            "views": views
         }
         context.update(reactions)
         return context
@@ -105,7 +109,7 @@ class categorypostlistview(LoginRequiredMixin,ListView):
 
 class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
     model=post
-    fields=['title','content','spaces']
+    form_class = CustomPostForm
     template_name='blog/post_form.html'
 
     def form_valid(self,form):
@@ -123,9 +127,7 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
             similarity = calculate_similarity(content, singlepost.content)
             if similarity > 0.7:  # Adjust the threshold as needed
                 # Flag the post as potential plagiarism or take appropriate action
-                # You can also provide feedback to the user
-                # For this example, we'll just print a message
-                print(f"Potential plagiarism detected: Similarity with '{singlepost.title}': {similarity}")
+                messages.warning(self.request,f"Potential plagiarism detected: Similarity with '{singlepost.title}': {similarity}")
                 return False
         return True
         
@@ -135,28 +137,28 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         if the date is the same as current date then return false
         """
         user = self.request.user
+        if user.is_superuser:
+            return True
         blog = post.objects.filter(author=user).last()   
         if blog:
             today = timezone.now().day
             this_month = timezone.now().month
             posted_month = blog.date_posted.month
             posted_day = blog.date_posted.day
+
             if this_month == posted_month:
                 if today == posted_day:
                     return False
                 else:
                     return True
-            elif this_month > posted_month:
-                return True
-            else:
-                return False
+            return True
         else:
             return True
        
 class postupdateview(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model=post
     template_name= 'blog/post_form.html'
-    fields=['title','content']
+    form_class = CustomPostForm
 
     def form_valid(self,form):
         form.instance.author=self.request.user
@@ -177,6 +179,23 @@ class postdeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+def get_news(request,**kwargs):
+    all_posts_info = parse_results(kwargs['category'])
+    # each post_info dictionary represents a single post
+    for post_info in all_posts_info:
+        post.objects.create(
+            title=post_info['title'],
+            content=post_info['content'],
+            date_posted=timezone.now(),
+            author=User.objects.get(username='blogadmin'),
+            spaces=post_info['space'],
+            image=post_info['images'],
+            ext_url=post_info['mainlink'],
+            value=20
+        )
+
+    return redirect('profile')
     
 @login_required  
 def likepost(request,pk):
@@ -213,7 +232,7 @@ def wheelspinview(request):
             if data['my_data'] in options:
                 WheelSpin.objects.create(spinner=spinuser,spin_date=timezone.now(),value=data['my_data'])
                 messages.warning(request,f"congrats we have added {data['my_data']}/= to your account ") 
-                return redirect('home')
+                
     else:
         messages.warning(request,"sorry you can only spin the wheel once a day !") 
         return redirect('profile')

@@ -10,7 +10,7 @@ def send_info_email(instance,event):
     username = instance.owner.username
     print(f'sending {event}email to',to_email)
     if event == "created":
-        content=f"hello {username} we are pleased to have you in our community please open a cash account and start earning.Also tell a friend."
+        content=f"hello {username} we are pleased to have you in our community please open a cash account by depositing a minimum of a hundred shilings to paybill 1234 ac no: 4568135154 and start earning .Also tell a friend."
     elif event == "success":
         content = f'Hi,{username} your withdrawal request is successfull, we will send you the amount on your phone number shortly.'  
     elif event == "failed":

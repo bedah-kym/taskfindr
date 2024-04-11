@@ -78,11 +78,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://c93e-154-159-21-212.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ['https://d3d9-105-160-97-114.ngrok-free.app ']
 
 # Application definition
 
 INSTALLED_APPS =[
+    'jet.dashboard',
+    'jet',
+    "verify_email.apps.VerifyEmailConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -95,7 +98,47 @@ INSTALLED_APPS =[
     'PAYMENT',
     'django_daraja',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'django_feedparser',
+    
+]
+
+
+JET_SIDE_MENU_COMPACT = False
+JET_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultIndexDashboard'
+JET_CHANGE_FORM_SIBLING_LINKS = True
+
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'green',
+        'color': '#44b78b',
+        'title': 'Green'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#2faa60',
+        'title': 'Light Green'
+    },
+    {
+        'theme': 'light-violet',
+        'color': '#a464c4',
+        'title': 'Light Violet'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#5EADDE',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
 ]
 
 REST_FRAMEWORK = {
@@ -204,6 +247,18 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS =True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+VERIFICATION_SUCCESS_TEMPLATE = None
+"""
+HTML_MESSAGE_TEMPLATE = "path/to/html_template.html"
+
+VERIFICATION_FAILED_TEMPLATE = "path/to/failed.html"
+
+REQUEST_NEW_EMAIL_TEMPLATE = "path/to/email.html"
+
+LINK_EXPIRED_TEMPLATE = 'path/to/expired.html'
+
+NEW_EMAIL_SENT_TEMPLATE  = 'path/to/new_email_sent.html'
+"""
 
 BASE_URL = "http://localhost:8100"
 

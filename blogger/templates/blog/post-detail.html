@@ -51,13 +51,25 @@
         </div>
       </div>
       <div class="card-body">
-        <p class="card-text">{{ post.content}}</p>
+        {% if post.image.url is not None %}
+          <div>
+            <img style="width: 100%" src="{{post.image.url}}">
+          </div>
+        {% endif %}
+        <p class="card-text">{{post.content|linebreaks}}</p>
+        {% if post.ext_url is not None%}
+          <p class="card-text">Read the main story here since we are not authorised to display the whole story just headlines
+            <a href="{{post.ext_url}}">MAIN STORY SITE </a>
+          </p>
+          </p>
+        {% endif %}
       </div>
+
       <div style="font-size: small" class="card-footer bg-light">
         <p>{{ post.date_posted}}</p>
         <p>
-          <a href="{% url 'like' post.id %}"
-            ><span class="material-symbols-outlined"> add_reaction </span>
+          <a href="{% url 'like' post.id %}">
+            <span class="material-symbols-outlined"> add_reaction </span>
           </a>
           {{likes}}
           <a href="{% url 'dislike' post.id %}">
@@ -66,6 +78,12 @@
             </span>
           </a>
           {{dislikes}}
+          <span
+            ><img
+              style="width: 10%"
+              src="{% static '\images\icons\view.gif'%}"
+            />{{views}}views
+          </span>
         </p>
       </div>
     </div>
