@@ -1,14 +1,17 @@
 from django.db import models
+import requests
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
-from tinymce.models import HTMLField 
-from tinymce.views import render
+from PIL import Image
+from io import BytesIO
+from django.core.files.base import ContentFile
+from django.core.files import File
 from django.utils.html import strip_tags
 from django.template.defaultfilters import Truncator
-
+from django.core.validators import FileExtensionValidator
 CATEGORY_CHOICES = [
     ("MUSIC AND ART", "Music and Art"),
     ("CYBER-SECURITY", "Ethical Hacking"),
@@ -18,9 +21,14 @@ CATEGORY_CHOICES = [
 ]
 
 class blogpost(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=200)
     content = models.TextField(max_length=1000)
-    excerpt = models.TextField(max_length=50)
+    excerpt = models.TextField(max_length=300)
+    image = models.ImageField(
+        upload_to='blog_images/', 
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
+        null=True, blank=True)
+    ext_url= models.URLField(null=True,default=None)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     spaces = models.CharField(choices=CATEGORY_CHOICES,max_length=30,null=False,default=None)
@@ -43,7 +51,19 @@ class blogpost(models.Model):
         else:
             return True
     def save(self, *args, **kwargs):
-        # Automatically generate excerpt from content
+        if self.image is not None:
+            response = requests.get(self.image)
+            if response.status_code == 200:
+                # Open the image using Pillow for additional processing if needed
+                 # Convert the binary data to a file-like object
+                img = BytesIO(response.content)
+                
+                # Optionally perform image processing or resizing
+                # img = img.resize((width, height), Image.ANTIALIAS)
+
+                # Save the image to the model's ImageField
+                self.image.save(f"{self.title}_image.jpg", File(img), save=False)
+            # Automatically generate excerpt from content
         if not self.excerpt:
             # Strip HTML tags and truncate to get a sample paragraph
             plain_text_content = strip_tags(self.content)

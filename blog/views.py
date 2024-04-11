@@ -17,7 +17,7 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-
+from API.news_api import parse_results
 
 from .forms import CustomPostForm
 from django.shortcuts import redirect
@@ -32,6 +32,8 @@ def error_403_view(request, exception):
 @login_required
 def social_boost(request):
     return render(request,'blog/social.html')
+
+
 
 class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
    
@@ -135,6 +137,8 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         if the date is the same as current date then return false
         """
         user = self.request.user
+        if user.is_superuser:
+            return True
         blog = post.objects.filter(author=user).last()   
         if blog:
             today = timezone.now().day
@@ -175,6 +179,23 @@ class postdeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+def get_news(request,**kwargs):
+    all_posts_info = parse_results(kwargs['category'])
+    # each post_info dictionary represents a single post
+    for post_info in all_posts_info:
+        post.objects.create(
+            title=post_info['title'],
+            content=post_info['content'],
+            date_posted=timezone.now(),
+            author=User.objects.get(username='blogadmin'),
+            spaces=post_info['space'],
+            image=post_info['images'],
+            ext_url=post_info['mainlink'],
+            value=20
+        )
+
+    return redirect('profile')
     
 @login_required  
 def likepost(request,pk):
