@@ -1,7 +1,7 @@
 {% extends "blog/base.html"%} {% load static %} {% block content %}
 
-<div class="col-lg 10 col-md-10 col-sm-12"> 
-  <form class="col-lg-12 col-sm-6 mb-10" method="POST" style="height: 500px">
+<div class="col-lg 10 col-md-10 col-sm-12">
+  <form class="col-lg-12 col-sm-6 mb-10" method="POST" enctype="multipart/form-data" style="height: 500px">
     {% csrf_token %}
     <div class="shadow mt-4 p-2 mt-4 bg-success rounded 10"></div>
     <div class="card">
@@ -10,7 +10,8 @@
 
         <ol>
           <li> <b>You are allowed only one blog post a day ! </b></li>
-          <li>blogs need to be short, not more than 500 words. As for headings keep them below 50 words so they are eye catching and straight foward.</li>
+          <li>blogs need to be short, not more than 500 words. As for headings keep them below 50 words so they are eye
+            catching and straight foward.</li>
           <li>
             write about breaking news, gossip , facts , or even what you do on a
             daily basis,teach a concept or just tell a story.have fun!
@@ -22,8 +23,10 @@
             NO pictures,NO videos these features will be unlocked in phase 2 of
             taskfindr.
           </li>
-          <li><b>SEXUAL CONTENT, WEAK OR COPIED CONTENT WILL BE FLAGGED BY OUR AI AND LEAD TO YOUR POST BEING DELETED AND MONEY GAINED FROM IT LOST AS WELL AS A PENALTY OF KSHS 100/= </b></li>
-          <li>If you want to write alot of content on a subject divide it into threads then post a single thread(blog) a day.</li>
+          <li><b>SEXUAL CONTENT, WEAK OR COPIED CONTENT WILL BE FLAGGED BY OUR AI AND LEAD TO YOUR POST BEING DELETED
+              AND MONEY GAINED FROM IT LOST AS WELL AS A PENALTY OF KSHS 100/= </b></li>
+          <li>If you want to write alot of content on a subject divide it into threads then post a single thread(blog) a
+            day.</li>
 
         </ol>
       </div>
@@ -34,23 +37,31 @@
         </div>
         <div style="width: 100%" class="form-group mb-4 p-4 bg-light">
           <span>content</span>
-            {{form.content}}
-          
+          {{form.content}}
+
+        </div>
+        <div class="form-group  mb-4 p-4 bg-light">
+          <span>work preview image</span>
+          {{form.image}}
+        </div>
+        <div class="form-group  mb-4 p-4 bg-light">
+          <span>price offer</span>
+          {{form.value}}
         </div>
         <div class="form-group  mb-4 p-4 bg-light">
           <span>category</span>
           {{form.spaces}}
         </div>
-    
+        {{form.errors}}
         <button type="submit" class="btn shadow mb-8 btn-outline-success">
           post
         </button>
-      </form>
-    </div>
-    
-      </div>
-  
+  </form>
+</div>
 
-    </div>
-    
+</div>
+
+
+</div>
+
 {% endblock %}

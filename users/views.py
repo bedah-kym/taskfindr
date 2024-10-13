@@ -34,7 +34,7 @@ def register_view(request,**kwargs):
                 messages.warning(request,f'Sorry {username} you need a valid refferal link to register,click register to use our default link')
                 return redirect(reverse("register",kwargs={"code":code}))
         else:
-            pass
+            messages.info(request,f"sorry !! {form.errors}")
     else:
         form = registration_form()
     return render(request,'blog/register.html',{'form':form})

@@ -2,134 +2,157 @@
 {% load static %}
 {% block content %}
 <title>Home</title>
-  
-  <body class='container bg-success col-lg-12 col-md-12 col-sm-12 m-10 p-1'>
-         <!--notice board-->
-            <div class=" col-lg-1 col-sm-2 col-md-1 col-sm-10 m-2 p-2">
-            </div>
-            <div class=" wow fadeInRight side-bar bg-success col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
-                <div class='col p-2 m-2'>
-                  <p class="mx-auto">tasks done <span style="color:floralwhite;font-family:math;">
-                    <img src="static\images\icons\planning.png" style="width:20%" alt=" ">
-                     {%for key,value in tasks.items %}
-                      <p style="color:floralwhite;font-family:math;">{{key}}:{{value}}</p>
-                     {%endfor %}
-                    </span>
-                  </p>
-                </div>
-            </div>
-            <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
-                <div class='col p-2 m-2'>
-                  <p>Your Refferals : 
-                    <span style="color:floralwhite;font-family:math;">
-                      <img src="static\images\icons\referral.png" style="width:20%" alt=" ">
-                      {{reffs}}
-                    </span>
-                  </p>
-                  <span style="left:20px;top:10px;"class="btn btn-group btn-outline-success shadow-sm"> Thank you! we are currently at {{total_users}} users ! </span>
-                  
-                </div>
-            </div>
 
-            <div class=" wow fadeInRight side-bar bg-info col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
-                <div class='col p-2 m-2'>
-                  <p>level bonus: <span style="color:floralwhite;font-family:math;">
-                    <img src="static\images\icons\level-up.png" style="width:20%" alt=" ">
-                    {{level}}</span></p>
-                </div>
-                <a href="{% url 'level_up' %}"style="left:20px;bottom:10px;"class="btn btn-group btn-outline-dark shadow-sm"> level up and increase your level bonus</a>
-            </div>
-            <div class=" wow fadeInRight side-bar bg-danger col-lg-2 col-sm-8 col-md-12 col-sm-10 m-3 p-2 shadow rounded-lg"data-wow-delay="0.1s">
-                <div class='col p-2 m-2'>
-                  <p>account: ksh<span style="color:floralwhite;font-family:math;">
-                    <img src="static\images\icons\wallet.png" style="width:20%" alt=" ">
-                    {{cash}}
-                    {%if cash >= 100 %}
-                      <a href="{% url 'withdrawal_request'%}" style="color:floralwhite;font-family:math;"><button style="margin-top:20px;"class="btn btn-outline-warning">withdraw</button></a>
-                    {% endif %}
-                  </span></p>
-                </div>
-            </div>
-  
-            <!-- body-->
-        {% for post in posts %}
-            <div class='wow fadeInLeft container bg-light col-lg-12 col-md-12 col-sm-12'style="padding-left:unset"data-wow-delay="0.1s">
-                <div class="container bg-light mt-3 pb-20 col-lg-8 col-md-12 col-sm-12" id='home' style="height:50%">
-                      <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-6">
-                        <div class=" card-header bg-info col-lg-6 col-sm-6 col-md-12 m-3 p-2 shadow-sm rounded-lg">
-                          <div class='row p-2 m-2'>
-                            <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="width:20%" alt="pic">
-                            <h2 class="mx-auto card-text row"> <a  href="{% url 'user_post' post.author.username %}"><span style="font-size:large;font-family:cursive;color:aliceblue">by {{post.author}}</span></h2>
-                          </div>
-                          <div class=' row bg-light rounded-lg p-2 m-3 col-sm-12 ' style="">
-                            <a href="{% url 'post_detail' post.id %}"style="text-decoration:none;color:black;" class='mx-auto p-1 m-1'><strong>{{post.title|upper}}</strong></a>
-                          </div>
-                        </div>
-                        <div style="font-size:medium"class="card-body">
-                          <p class="card-text">{{post.excerpt|safe}} </p>
-                          <div class="clearfix">
-                            <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-info float-sm-right" style="margin-bottom:15px;">
-                              read more ..
-                            </a>
-                          </div>
-                          <p>
-                            <a href="{% url 'like' post.id %}"
-                              ><span class="material-symbols-outlined"> add_reaction </span>
-                            </a>
-                            {{likes}} <span style="font-family:monospace;">like<span/>
-                            <a href="{% url 'dislike' post.id %}">
-                              <span class="material-symbols-outlined">
-                                sentiment_very_dissatisfied
-                              </span>
-                            </a>
-                            {{dislikes}} <span style="font-family:monospace;">dislike<span/>
-                          </p>
-                        </div>
-                        <div style="font-size:small;@mediaquery(min)"class="card-footer bg-light">
-                          <p>{{ post.date_posted}}</p> <p><a href="{% url 'spaces_list' post.spaces %}" style="text-decoration:none;color:black"class='mx-auto p-1 m-1'><b>{{post.spaces}}</b></a>
-                            {%if post.spaces == "MUSIC AND ART" %}
-                              <img class="funimage" src="static\images\icons\hobby.png" style="width:15%" alt=" "/>
-                            {% elif post.spaces == "CYBER-SECURITY" %}
-                              <img class="funimage"src="static\images\icons\hacker.png" style="width:15%" alt=" "/>
-                            {% elif post.spaces == "FOOD AND LIFESTYLE" %}
-                              <img class="funimage"src="static\images\icons\health.png" style="width:15%" alt=" "/>
-                            {% elif post.spaces == "LIFE HACKS AND JOBS" %}
-                              <img class="funimage" src="static\images\icons\job.png" style="width:15%" alt=" "/>
-                            {% elif post.spaces == "PROGRAMMING AND DATA SCIENCE" %}
-                              <img class="funimage"src="static\images\icons\web-programming.png" style="width:15%" alt=" "/>
-                            {% endif %}
-                          </p>
-                        </div>
-                     </div>
-                </div>
-            </div>
+<body class='container bg-success col-lg-12 col-md-12 col-sm-12 m-10 p-1'>
+  <!--notice board-->
+  <div class=" col-lg-1 col-md-1 col-sm-10 m-2 p-2">
+  </div>
+  <div class=" wow fadeInRight side-bar bg-success col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+    data-wow-delay="0.1s">
+    <div class='col p-2 m-2'>
+      <p class="mx-auto">tasks done <span style="color:floralwhite;font-family:math;">
+          <img src="static\images\icons\planning.png" style="width:20%" alt=" ">
+          {%for key,value in tasks.items %}
+          <p style="color:floralwhite;font-family:math;">{{key}}:{{value}}</p>
+          {%endfor %}
+        </span>
+      </p>
+    </div>
+  </div>
+  <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+    data-wow-delay="0.1s">
+    <div class='col p-2 m-2'>
+      <p>Your Refferals :
+        <span style="color:floralwhite;font-family:math;">
+          <img src="static\images\icons\referral.png" style="width:20%" alt=" ">
+          {{reffs}}
+        </span>
+      </p>
+      <span style="left:20px;top:10px;" class="btn btn-group btn-outline-success shadow-sm"> Thank you! we are currently
+        at {{total_users}} users ! </span>
 
-        {% endfor %}
-        <div class="mx-auto m-2 p-1">
-          {% if is_paginated %}
-                {% if page_obj.has_previous %}
-                  <a class="btn btn-outline-warning m-1" href="?page = 1">first</a>
-                  <a class="btn btn-outline-primary m-1" href="?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
+    </div>
+  </div>
 
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                      <a class="btn btn-success m-1" href="?page={{num}}">{{num}}</a>
-                    {% elif num > page_obj.number|add:'-3' and num <= page_obj.number|add:'3' %}
-                        <a class="btn btn-outline-info m-1" href="?page={{num}}">{{num}}</a>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                  <a class="btn btn-outline-info m-1" href="?page={{ page_obj.next_page_number }}">next</a>
-                  <a class="btn btn-outline-warning m-1" href="?page={{ page_obj.paginator.num_pages}}">last</a>
-                {% endif %}
-
+  <div class=" wow fadeInRight side-bar bg-info col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+    data-wow-delay="0.1s">
+    <div class='col p-2 m-2'>
+      <p>level bonus: <span style="color:floralwhite;font-family:math;">
+          <img src="static\images\icons\level-up.png" style="width:20%" alt=" ">
+          {{level}}</span></p>
+    </div>
+    <a href="{% url 'level_up' %}" style="left:20px;bottom:10px;" class="btn btn-group btn-outline-dark shadow-sm">
+      level up and increase your level bonus</a>
+  </div>
+  <div class=" wow fadeInRight side-bar bg-danger col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+    data-wow-delay="0.1s">
+    <div class='col p-2 m-2'>
+      <p>account: ksh<span style="color:floralwhite;font-family:math;">
+          <img src="static\images\icons\wallet.png" style="width:20%" alt=" ">
+          {{cash}}
+          {%if cash >= 100 %}
+          <a href="{% url 'withdrawal_request'%}" style="color:floralwhite;font-family:math;"><button
+              style="margin-top:20px;" class="btn btn-outline-warning">withdraw</button></a>
           {% endif %}
-        </div>
+        </span></p>
+    </div>
+  </div>
 
-    </body>
-    
+  <!-- body-->
+  <div class="row pt-2">
+    {% for post in posts %}
+    <div class="col-lg-3 col-md-6 col-sm-12 mb-4 d-flex">
+      <div class="card bg-light rounded-lg shadow-lg w-100 h-80 d-flex flex-column">
+        <div class="card-header bg-info m-1 p-1 shadow-sm rounded-lg">
+          <div class="row p-2 m-2">
+            <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="max-width:25%" alt="pic">
+
+            <h2 class="mx-auto card-text row">
+              <a href="{% url 'user_post' post.author.username %}">
+                <span style="font-size:large;font-family:cursive;color:aliceblue">{{post.author}}</span>
+              </a>
+              <span class="p-2" style="color:snow;"><i class="bi bi-patch-check-fill"></i></span>
+            </h2>
+          </div>
+          <div class="row bg-light rounded-lg p-2 m-3 col-sm-12">
+            <a href="{% url 'post_detail' post.id %}" style="text-decoration:none;color:black;" class="mx-auto p-1 m-1">
+              <strong style="font-size:small">{{post.title|upper}}</strong>
+            </a>
+          </div>
+        </div>
+        <div class="card-body d-flex flex-grow-1 flex-column">
+          <p class="card-text">{{post.excerpt|safe}}</p>
+          <div class="mt-auto clearfix">
+            <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-info float-sm-left"
+              style="margin-bottom:10px;">
+              <i class="bi bi-eyeglasses fs-4">view</i>
+            </a>
+          </div>
+          <div style="font-size: x-small;">
+            <a href="{% url 'like' post.id %}">
+              <span class="material-symbols-outlined"> add_reaction </span>
+            </a>
+            {{likes}} <span style="font-family:monospace;">like</span>
+            <a href="{% url 'dislike' post.id %}">
+              <span class="material-symbols-outlined"> sentiment_very_dissatisfied </span>
+            </a>
+            {{dislikes}} <span style="font-family:monospace;">dislike</span>
+          </div>
+        </div>
+        <div class="card-footer bg-light ">
+          <p>{{ post.date_posted }} <button class="btn btn-primary">
+              <span>
+                <i class="bi bi-cash-coin fs-2 pr-2"></i>{{post.value}}
+              </span>
+            </button></p>
+          <p style="max-width: 88%;">
+            <a href="{% url 'spaces_list' post.spaces %}" style="text-decoration:none;color:black"
+              class="mx-auto p-1 m-1">
+              <b>{{post.spaces}}</b>
+            </a>
+            {% if post.spaces == "MUSIC AND ART" %}
+            <img class="funimage" src="static/images/icons/hobby.png" style="max-width:10%" alt=" " />
+            {% elif post.spaces == "CYBER-SECURITY" %}
+            <img class="funimage" src="static/images/icons/hacker.png" style="width:10%" alt=" " />
+            {% elif post.spaces == "FOOD AND LIFESTYLE" %}
+            <img class="funimage" src="static/images/icons/health.png" style="width:10%" alt=" " />
+            {% elif post.spaces == "LIFE HACKS AND JOBS" %}
+            <img class="funimage" src="static/images/icons/job.png" style="width:10%" alt=" " />
+            {% elif post.spaces == "PROGRAMMING AND DATA SCIENCE" %}
+            <img class="funimage" src="static/images/icons/web-programming.png" style="width:10%" alt=" " />
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="mx-auto m-2 p-1">
+    {% if is_paginated %}
+    {% if page_obj.has_previous %}
+    <a class="btn btn-outline-warning m-1" href="?page = 1">first</a>
+    <a class="btn btn-outline-primary m-1" href="?page={{ page_obj.previous_page_number }}">previous</a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+    <a class="btn btn-success m-1" href="?page={{num}}">{{num}}</a>
+    {% elif num > page_obj.number|add:'-3' and num <= page_obj.number|add:'3' %} <a class="btn btn-outline-info m-1"
+      href="?page={{num}}">{{num}}</a>
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <a class="btn btn-outline-info m-1" href="?page={{ page_obj.next_page_number }}">next</a>
+      <a class="btn btn-outline-warning m-1" href="?page={{ page_obj.paginator.num_pages}}">last</a>
+      {% endif %}
+
+      {% endif %}
+  </div>
+
+</body>
+
 
 
 {% endblock %}

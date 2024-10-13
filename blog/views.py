@@ -4,7 +4,7 @@ from django.urls import reverse
 import json
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import blogpost as post,Postreaction ,WheelSpin
+from .models import blogpost as post,Postreaction ,WheelSpin,JobRating
 from django.contrib.auth.models import User
 from users.models import Cashaccount
 from django.utils import timezone
@@ -17,9 +17,8 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from API.news_api import parse_results
 
-from .forms import CustomPostForm
+from .forms import CustomPostForm,RatingForm
 from django.shortcuts import redirect
 
 
@@ -41,7 +40,7 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
     template_name='blog/home.html'
     context_object_name='posts'
     ordering=['-date_posted']
-    paginate_by=10
+    paginate_by=8
 
     def get_context_data(self, **kwargs):
         user = self.request.user
@@ -74,18 +73,40 @@ class postdetailview(LoginRequiredMixin,DetailView):
     model=post
     template_name='blog/post-detail.html'
     context_object_name= 'post'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        likes,dislikes = Postreaction.total_reactions(self.get_object())
-        views= Postreaction.total_views(self.request,self.get_object())
-        reactions ={
-            "likes":likes,
-            "dislikes":dislikes,
-            "views": views
-        }
-        context.update(reactions)
+        context['form'] = RatingForm()  # Add the form to the context
         return context
+   
+    def post(self, request, *args, **kwargs):
+        # Handle the form submission
+        self.object = self.get_object()
+        form = RatingForm(request.POST)
+        worker = request.user
+        job = self.object
+        
+        existing_rating = JobRating.objects.filter(user=worker,job=job).first()
+        # Ensure user is verified and has worked on the job
+        if worker.profile.is_verified:
+            if job in worker.profile.work_done.all() and not existing_rating:
+                if form.is_valid():
+                    print(form)
+                    # Save the rating
+                    rating = form.save(commit=False)
+                    rating.user = worker
+                    rating.job = job
+                    rating.save()
+                    messages.success(request, f'Thanks {worker} for the review!')
+                else:
+                    messages.warning(request, f"There was an error with your rating.")
+            else:
+                messages.warning(request, f"sorry, you can only rate jobs you have done! and cannot rate twice")
+        else:
+            messages.warning(request, f"Please make sure your profile is verified")
+        
+        # Redirect to the same page after form submission
+        return redirect(reverse('post_detail', kwargs={"pk": job.id}))
         
 class userpostlistview(LoginRequiredMixin,ListView):
     model= post
@@ -148,6 +169,7 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
 
             if this_month == posted_month:
                 if today == posted_day:
+                    messages.warning(self.request,"sorry you have to be verified to post more than one job per day :,)")
                     return False
                 else:
                     return True
@@ -180,22 +202,6 @@ class postdeleteview(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
             return True
         return False
 
-def get_news(request,**kwargs):
-    all_posts_info = parse_results(kwargs['category'])
-    # each post_info dictionary represents a single post
-    for post_info in all_posts_info:
-        post.objects.create(
-            title=post_info['title'],
-            content=post_info['content'],
-            date_posted=timezone.now(),
-            author=User.objects.get(username='blogadmin'),
-            spaces=post_info['space'],
-            image=post_info['images'],
-            ext_url=post_info['mainlink'],
-            value=20
-        )
-
-    return redirect('profile')
     
 @login_required  
 def likepost(request,pk):

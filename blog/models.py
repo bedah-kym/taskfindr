@@ -1,14 +1,8 @@
 from django.db import models
-import requests
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
-from PIL import Image
-from io import BytesIO
-from django.core.files.base import ContentFile
-from django.core.files import File
 from django.utils.html import strip_tags
 from django.template.defaultfilters import Truncator
 from django.core.validators import FileExtensionValidator
@@ -28,41 +22,21 @@ class blogpost(models.Model):
         upload_to='blog_images/', 
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])],
         null=True, blank=True)
-    ext_url= models.URLField(null=True,default=None)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     spaces = models.CharField(choices=CATEGORY_CHOICES,max_length=30,null=False,default=None)
-    value = models.IntegerField(default=20)
+    value = models.IntegerField(default=0)
     reaction = models.ManyToManyField(User,through="Postreaction",related_name="blogpost_reactions")
+    rating = models.ManyToManyField(User,through="JobRating",related_name="usersjob_rating")
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk':self.pk})
 
-    def is_task_valid(self):
-        """ check the current time aginist the time of the last post by the user
-        if the time is the same as current time then return false
-        """
-        user = self.request.user
-        last_blog = blogpost.objects.get(author=user)
-        now = timezone.now().day
-        last = last_blog.date_posted.day
-        if now == last:
-            return False
-        else:
-            return True
+    
     def save(self, *args, **kwargs):
-        if self.image is not None:
-            response = requests.get(self.image)
-            if response.status_code == 200:
-                # Open the image using Pillow for additional processing if needed
-                 # Convert the binary data to a file-like object
-                img = BytesIO(response.content)
-                
-                # Optionally perform image processing or resizing
-                # img = img.resize((width, height), Image.ANTIALIAS)
-
-                # Save the image to the model's ImageField
-                self.image.save(f"{self.title}_image.jpg", File(img), save=False)
+        #if self.image is not None:
+            # Save the image to the model's ImageField
+            #self.image.save(f"{self.title}_image.jpg", File(self.image), save=False)
             # Automatically generate excerpt from content
         if not self.excerpt:
             # Strip HTML tags and truncate to get a sample paragraph
@@ -74,7 +48,24 @@ class blogpost(models.Model):
     def __str__(self):
         return f"{self.title} by {self.author}"
 
+class JobRating(models.Model):
+    class StarRating(models.IntegerChoices):
+        ONE=1, '1 Star'
+        TWO=2, '2 Stars'
+        THREE=3, '3 Stars'
+        FOUR=4, '4 Stars'
+        FIVE=5, '5 Stars'
+    user = models.ForeignKey(User,on_delete=models.SET_DEFAULT,default=1)
+    job = models.ForeignKey(blogpost,on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=StarRating.choices)
+    comment = models.TextField(max_length=200)
     
+    class Meta:
+        unique_together = ('user', 'job')
+    
+    def __str__(self):
+        return f"{self.user} rated {self.job} --> {self.rating}"
+        
 class Postreaction(models.Model):
     fan = models.ForeignKey(User,on_delete=models.CASCADE)
     post = models.ForeignKey(blogpost,on_delete=models.CASCADE)
