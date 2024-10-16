@@ -71,7 +71,7 @@ class Cashaccount(models.Model):
             spincash += spin.value
         total=0
         for post in posts:
-            cash=post.value
+            cash=post.price_offer
             total+=cash
         taskcash=self.get_refferal_cash()
         total+=taskcash

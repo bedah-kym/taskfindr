@@ -40,9 +40,19 @@ class CustomPostForm(forms.ModelForm):
         )
     )
     image=forms.ImageField()
+    price_offer=forms.IntegerField(
+        label='price offer',widget=forms.NumberInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'please input numbers only !',
+                'aria-describedby':"inputGroup"
+                
+            }
+        )
+    )
     class Meta:
         model=blogpost
-        fields=['title','content','spaces','image','value']
+        fields=['title','content','spaces','image','price_offer']
         
 class RatingForm(forms.ModelForm):
     comment = forms.CharField(

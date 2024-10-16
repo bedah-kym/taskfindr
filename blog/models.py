@@ -25,9 +25,11 @@ class blogpost(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     spaces = models.CharField(choices=CATEGORY_CHOICES,max_length=30,null=False,default=None)
-    value = models.IntegerField(default=0)
+    price_offer = models.IntegerField(default=100)
     reaction = models.ManyToManyField(User,through="Postreaction",related_name="blogpost_reactions")
     rating = models.ManyToManyField(User,through="JobRating",related_name="usersjob_rating")
+    assigned_to = models.ForeignKey(User,on_delete=models.SET_DEFAULT,default=1,related_name="blogpost_assignedto")
+    is_closed = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'pk':self.pk})

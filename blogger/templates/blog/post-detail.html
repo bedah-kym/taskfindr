@@ -1,8 +1,8 @@
 {%extends 'blog/base.html'%} {% load static %} {% block content %}
-<div class="row bg-light col-lg-12 col-md-12 col-sm-12" style="margin-top: 10%; padding-left: unset">
+<div class="row bg-light col-lg-12 col-md-12 col-sm-12" style="margin-top: 5%;width: 100%;">
 
-  <div class="bg-light mt-3 pb-20 col-lg-6 col-md-6 col-sm-12" id="home" style="height: 50%">
-    <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10">
+  <div class="bg-light mt-3 pb-20 col-lg-6 col-md-6 col-sm-12" id="home" style="">
+    <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10 ">
       <div class="card-header bg-info col-lg-6 col-sm-10 col-md-12 m-3 p-2 shadow-sm rounded-lg">
         <div class="row p- m-1">
           <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="width: 20%" alt="pic" />
@@ -59,56 +59,67 @@
       </div>
     </div>
   </div>
-  <div class="bg-light mt-3 pb-20 col-lg-6 col-md-6 col-sm-12">
-    <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10">
-      <div class="card-header bg-info col-lg-6 col-sm-10 col-md-12 m-3 p-2 shadow-sm rounded-lg">
+  <div class="bg-light mt-3 pb-20 col-lg-6 col-md-6 col-sm-12 d-flex">
+    <div class="card bg-light rounded-lg shadow-lg w-100 h-80 d-flex flex-column">
+      <div class="card-header bg-warning  m-3 p-2 shadow-sm rounded-lg">
         <div class="row p- m-1">
           <h2 style="font-size: large" class="mx-auto card-text row">
-             JOB OFFER AND INSTRUCTION
+             JOB OFFER AND INSTRUCTIONS FOR WORK 
           </h2>
         </div>
         <div class="bg-light rounded-lg p-2 m-3 col-sm-12" style="">
           <p>
-            <strong class="mx-auto p-1 m-1" style="font-size: large">{{ post.title|upper }}</strong>
+            <strong class="mx-auto p-1 m-1" style="font-size: large">expiry date</strong>
           </p>
           {% if user != post.author %}
-          <div>
+          <div class="p-2">
             <a style="font-size: xx-small" class="btn btn-outline-info m-1"
-              href="{% url 'post_update' post.id %}">accept</a>
+              href="{% url 'post_update' post.id %}">accept job</a>
             <a style="font-size: xx-small" class="btn btn-outline-danger m-1"
-              href="{% url 'post_delete' post.id %}">stop</a>
+              href="{% url 'post_delete' post.id %}">stop job</a>
           </div>
           {% endif %}
         </div>
       </div>
-      <div class="card-body">
+      <div class="card-body bg-secondary">
         
-        <p class="card-text">{{post.content|linebreaks}}</p>
-        {% if post.ext_url is not None%}
-        <p class="card-text">Read the main story here since we are not authorised to display the whole story just
-          headlines
-          <a href="{{post.ext_url}}">MAIN STORY SITE </a>
+        <p class="card-text">
+          <h3 style="justify-content: center;">MILESTONES</h3>
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start ">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small>3 days ago</small>
+                <span class="p-2 badge badge-danger badge-pill">required</span>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small>Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small class="text-muted">3 days ago</small>
+                <span class="p-2 badge badge-info badge-pill"> not required</span>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading</h5>
+                <small class="text-muted">EXTRA CASH <b>100/=</b></small>
+                <span class="p-2 badge badge-warning badge-pill">suggestion</span>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+          </div>
         </p>
-        </p>
-        {% endif %}
+        
       </div>
 
       <div style="font-size: small" class="card-footer bg-light">
         <p>{{ post.date_posted}}</p>
-        <p>
-          <a href="{% url 'like' post.id %}">
-            <span class="material-symbols-outlined"> add_reaction </span>
-          </a>
-          {{likes}}
-          <a href="{% url 'dislike' post.id %}">
-            <span class="material-symbols-outlined">
-              sentiment_very_dissatisfied
-            </span>
-          </a>
-          {{dislikes}}
-          <span><img style="width: 10%" src="{% static '\images\icons\view.gif'%}" />{{views}}views
-          </span>
-        </p>
       </div>
     </div>
   </div>
@@ -117,7 +128,8 @@
   <div>
     {{form.errors}}
   </div>
-  {% if request.user.profile.is_verified%}
+  <!--the rating form should only be seen by the worker assigned to the job-->
+  {% if request.user.profile.is_verified and request.user != post.author %} 
     <form class="p-2" method="POST">
       {% csrf_token %}
       <div class="form-group">
