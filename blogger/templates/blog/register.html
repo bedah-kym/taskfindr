@@ -1,51 +1,113 @@
-{% extends "blog/base.html"%}
+{% extends "blog/base.html" %}
 {% load static %}
 {% block content %}
 
-    <div class="container col-lg-4 shadow-lg p-4 mb-4 mt-2 border border-warning rounded-lg "style="font-size: smaller;font-family: cursive;">
-      <div style="margin:4px;"class="row">
-        <form class="col-lg-12 col-sm-12 mb-2"  method="POST" style=""> {% csrf_token %}
+<div class="container col-lg-6 col-md-10- col-sm-10 shadow-lg p-4 mb-4 mt-5 bg-white rounded-lg">
+  <h2 class="text-center mb-4" style="font-family: cursive;">
+    <i class="bi bi-door-open"></i>Register Today
+  </h2>
 
-            <div class="form-group shadow mb-4 p-4 mt-4 bg-success rounded 10">
-              <label for="name"style="font-family: ui-monospace;font-style: oblique;">
-                <h2 style="font-family:small">Register Today</h2></label>
-            </div>
-            {% if form.errors %}
-              <div class="bg-danger form-group shadow mb-4 p-4">
-                <span> ERROR </span>
-                <ul class="errorlist  m-1 p-1" style="text-align:left">
-                  {{form.errors}}
-                </ul>
-              </div>
-            {% endif %}
-            <div style=""class="form-group shadow mb-4 mt-2 p-4 mt-5">
-              <label for="username">Username</label>
-                {{form.username}}
-            </div>
-      
-            <div class="form-group shadow mb-4 p-4">
-              <label for="email">email</label>
-                {{form.email}}
-            </div>
-            <div class="form-group shadow mb-4 p-4">
-              <label for="reff_code">phone number</label>
-                {{form.phone}}
-            </div>
-            <div class="form-group shadow mb-4 p-4">
-              <label for="password1">new password</label>
-                {{form.password1}}
-            </div>
-            <div class="form-group shadow mb-4 p-4">
-              <label for="password2">password verification</label>
-                {{form.password2}}
-            </div>
-            
-            <span style="font-size:small;">by clicking submit you accept our <a href="{%url 'terms' %}">Terms and conditions</a> </span>
-            <button type="submit" class="btn shadow mb-4 btn-outline-success">submit</button>
-            <a class="nav-link mt-2"  href="{% url 'login' %}">already have an account ?</a>
-        </form>
+  <form method="POST" class="needs-validation" novalidate id="registrationForm">
+    {% csrf_token %}
 
-     </div>
-   </div>
+    <!-- Error Handling -->
+    {% if form.errors %}
+    <div class="alert alert-danger">
+      <strong>Error:</strong> Please correct the following errors.
+      <ul class="mb-0">
+        {{ form.errors }}
+      </ul>
+    </div>
+    {% endif %}
+
+    <!-- Username Field -->
+    <div class="form-group mb-3">
+      <label for="username">Username</label>
+      {{ form.username }}
+    </div>
+
+    <!-- Email Field -->
+    <div class="form-group mb-3">
+      <label for="email">Email</label>
+      {{ form.email }}
+    </div>
+
+    <!-- Phone Number Field -->
+    <div class="form-group mb-3">
+      <label for="phone">Phone Number</label>
+      {{ form.phone }}
+    </div>
+
+    <!-- New Password Field -->
+    <div class="form-group mb-3 position-relative">
+      <label for="password1">New Password</label>
+      {{ form.password1 }}
+      <span class="password-toggle position-absolute" onclick="togglePassword('id_password1')"
+        style="right: 10px; top: 38px; cursor: pointer;">
+        <i class="fas fa-eye"></i>
+      </span>
+    </div>
+
+    <!-- Confirm Password Field -->
+    <div class="form-group mb-3 position-relative">
+      <label for="password2">Confirm Password</label>
+      {{ form.password2 }}
+      <span class="password-toggle position-absolute" onclick="togglePassword('id_password2')"
+        style="right: 10px; top: 38px; cursor: pointer;">
+        <i class="fas fa-eye"></i>
+      </span>
+    </div>
+
+    <!-- Password Match Error -->
+    <div id="passwordError" class="text-danger mb-3" style="display: none;">
+      <strong>Passwords do not match!</strong>
+    </div>
+
+    <!-- Terms and Submit Button -->
+    <div class="form-group mt-4">
+      <span class="form-text">By clicking submit, you accept our
+        <a href="{% url 'terms' %}" class="text-success">Terms and Conditions</a>
+      </span>
+      <button type="submit" class="btn btn-success btn-block mt-3">Submit</button>
+    </div>
+
+    <!-- Login Link -->
+    <div class="text-center mt-3">
+      <a href="{% url 'login' %}" class="text-primary">Already have an account?</a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  // Toggle password visibility
+  function togglePassword(fieldId) {
+    var field = document.getElementById(fieldId);
+    var icon = field.nextElementSibling.querySelector('i');
+    if (field.type === 'password') {
+      field.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      field.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
+
+  // Check if passwords match before form submission
+  document.getElementById('registrationForm').addEventListener('submit', function (e) {
+    var password1 = document.getElementById('id_password1').value;
+    var password2 = document.getElementById('id_password2').value;
+    var passwordError = document.getElementById('passwordError');
+
+    if (password1 !== password2) {
+      e.preventDefault();  // Prevent form submission
+      passwordError.style.display = 'block';  // Show error
+    } else {
+      passwordError.style.display = 'none';  // Hide error
+    }
+  });
+</script>
 
 {% endblock %}

@@ -88,15 +88,8 @@
               <i class="bi bi-eyeglasses fs-4">view</i>
             </a>
           </div>
-          <div style="font-size: x-small;">
-            <a href="{% url 'like' post.id %}">
-              <span class="material-symbols-outlined"> add_reaction </span>
-            </a>
-            {{likes}} <span style="font-family:monospace;">like</span>
-            <a href="{% url 'dislike' post.id %}">
-              <span class="material-symbols-outlined"> sentiment_very_dissatisfied </span>
-            </a>
-            {{dislikes}} <span style="font-family:monospace;">dislike</span>
+          <div style="font-size:small;">
+            {{post.job_offer}}
           </div>
         </div>
         <div class="card-footer bg-light ">

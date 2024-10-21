@@ -10,6 +10,7 @@ from users.models import Cashaccount
 from django.utils import timezone
 from .plagiarism_detection import calculate_similarity
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from taskmanager.models import JobOffer,OfferMilestones
 from django.views.generic import (
     ListView,
     DetailView,
@@ -60,7 +61,6 @@ class postlistview(LoginRequiredMixin,UserPassesTestMixin, ListView):
             "total_users":total_users
         }
         context.update(new) 
-        #print(context["posts"][0].content)
         return context
     
     def test_func(self):
@@ -75,12 +75,15 @@ class postdetailview(LoginRequiredMixin,DetailView):
     context_object_name= 'post'
     
     def get_context_data(self, **kwargs):
+        joboffer = JobOffer.objects.get(job=self.object)
+        milestone= joboffer.milestones.all()
         context = super().get_context_data(**kwargs)
         context['form'] = RatingForm()  # Add the form to the context
+        context['task']=joboffer
+        context['milestones']=milestone
         return context
    
     def post(self, request, *args, **kwargs):
-        # Handle the form submission
         self.object = self.get_object()
         form = RatingForm(request.POST)
         worker = request.user
@@ -132,12 +135,16 @@ class postcreateview(LoginRequiredMixin,UserPassesTestMixin, CreateView):
     model=post
     form_class = CustomPostForm
     template_name='blog/post_form.html'
+    
 
     def form_valid(self,form):
         form.instance.author=self.request.user
         content = form.instance.content
+            
         if self.is_unique(content): 
-            return super().form_valid(form)
+            self.object= form.save()
+            if 'save' in self.request.POST:
+                return redirect('new-joboffer',pk=self.object.pk)
         else:
             return HttpResponse('YOUR CONTENT IS NOT ORIGINAL, PLEASE REVISE YOUR CONTENT AND REPOST')
     

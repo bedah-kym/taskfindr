@@ -2,99 +2,268 @@
 {% load static %}
 {% block content %}
 
-    <body>
-      <div class=" container-fluid row shadow m-1 p-2 mb-4 bg-light border border-danger " style="height:100% width:100%">
-        <!-- profile container -->
-              <div class="wow fadeInDown col-lg-5 shadow-lg p-2 mb-4"data-wow-delay="0.1s">
-                    <div style="color:yellow;background: repeating-linear-gradient(45deg, black, transparent 50px);"class="col bg-danger rounded-sm mt-4 p-4">
-                      <img class="rounded-circle" src="{{user.profile.image.url}}" style="height:200px" alt="jpg">
-                      <p style="color:aliceblue"class="mx-auto"><b>{{user.username|upper}}</b> 
-                        <img src="\static\images\icons\level-up.png" style="width:20%" alt=" ">LEVEL {{request.user.profile.level}}
-                        <div class="form-group shadow  m-1 p-2 "style="color:aliceblue">
-                          <span ="profile pic"><strong style="color:aqua;font-size:large;">Reffered by :</strong> {{my_profile.reffered_by}}</span><br>
-                          <span ="profile pic"> <strong style="color:aqua;font-size:large;">My contact:</strong> +254{{my_profile.phone_number}}</span><br>
-                          {% if my_account.is_valid == True %}
-                          <span style="font-family:auto;color:aliceblue;font-size:smaller;"class="shadow ">
-                             <strong style="color:aqua;font-size:large;">My link :</strong> <br> 
-                              http://127.0.0.1:8100/register/{{my_profile.user.username}}/ 
-                          </span>
-                          {%else%}
-                          <span style="font-family:auto;color:midnightblue;font-size:smaller;" ="profile pic">
-                            <b style="color:midnightblue;font-size:medium;">activate account to get link</b> <br>    
-                          </span>
-                          {% endif %}
-                        </div>
-                      </p>
-                      <form class="mb-4 bg-danger" enctype="multipart/form-data" method="POST" style="color:white;font-size:smaller;"> {% csrf_token %}
-                        <div class="form-group shadow  m-2 p-2 "style="">
-                          <label style="font-size:smaller;"for="profile pic">Phone number {{p_form.phone_number}}</label>
-                          <label style="font-size:smaller;"for="profile pic">Profile {{p_form.image}}</label>
-                      </div>
-                        <button type="submit" class="btn shadow mt-2 bg-success">update profile info</button>
-                        {% if p_form.errors %}
-                            <ul class="errorlist bg-warning m-1 p-1" style="text-align:left">
-                              {{p_form.errors}}
-                            </ul>
-                        {% endif %}
-                      </form>
-                      
-                    </div>
-                    <div class="mt-5 col-lg-12 bg-dark">
-                      {% if my_account.is_valid == False%}
-                        <div class="row p-2 m-2 ">
-                          <button class="btn btn-outline-success"><a style="color:aliceblue;font-size:small;text-decoration:none;" href="{% url 'activation' my_account.id %}">Activate Account</a></button>
-                          <img src="\static\images\icons\wallet.png" style="width:18%">
-                        <div style="color:aliceblue">
-                      
-                          </div>
-                        </div>
-                      {% else %}
-                        <div class="row p-4 m-2 ">
-                          <button class="btn btn-outline-danger"><a style="color:aliceblue;font-size:small;text-decoration:none;" href="{% url 'delete_account' my_account.id %}">Delete account </a></button>
-                          <img src="\static\images\icons\wallet.png" style="width:15%">
-                        </div>
-      
-                        {% endif %}
-                        <div class="form-group bg-secondary shadow  m-1 p-4 "style="color:aliceblue">
-                          <span ="profile pic"><span style="color:black;">Level Bouns $:</span> {{my_account.get_level_bonus}}/=<br>
-                          <a href="{% url 'level_up' %}"><button class="btn bg-primary">Level Up</button></a>
-                          <hr style="background-color: chartreuse;">
-                          <span ="profile pic"><span style="color:black;">Status : </span>{% if my_account.is_valid == True %} Account is Active{%else%}Account inactive{% endif %}<br>
-                          <hr style="background-color: chartreuse;">
-                          <span ="profile pic"><span style="color:black;">People you brought in :<span style="color:aquamarine">{{total_reffs}}</span>
-                            <div style="overflow-x: scroll;display:flex;">
-                              {% for reff in reffs %}
-                                <ol>{{reff.user.username}}</ol>
-                              {% endfor %}
-                            </div>
-                          </span>
-                          <hr style="background-color: chartreuse;">
-                        </div>
-                    </div>
-  
-        
-                    
-                    
-              </div>
-              <!-- user update form -->
-              <div class="col-lg-5 m-2 p-2">
-                <div class="mx-auto bg-info m-4 p-2">
-                  <p><h3>profile update</h3></p>
-                </div>
+<body>
+  <div class=" container-fluid row shadow m-1 p-2 mb-4 bg-light border border-danger">
+    <section class="col-lg-12" style="background-color: #eee;">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col">
+            <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">User</a></li>
+                <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
 
-                <form class="p-2 bg-light" enctype="multipart/form-data" method="POST" style="font-size:larger;background: repeating-linear-gradient(45deg, gray , transparent 50px);"> {% csrf_token %}
-                  
-                  <div class="form-group shadow mb-2 mt-2 p-3 mt-4">
-                     <label for="email">email {{u_form.email}}</label>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-body text-center">
+                <img src="{{user.profile.image.url}}" alt="avatar" class="rounded-circle img-fluid"
+                  style="width: 150px;">
+                <h5 class="my-3">{{user.username|upper}}</h5>
+                <p class="text-muted mb-1">Full Stack Developer</p>
+                <p class="text-muted mb-4">LEVEL {{request.user.profile.level}}</p>
+                <div class="d-flex justify-content-center mb-2">
+                  <button type="button mr-2" data-mdb-button-init data-mdb-ripple-init
+                    class="btn btn-primary">Follow</button>
+                  <button type="button" data-mdb-button-init data-mdb-ripple-init
+                    class="btn btn-outline-primary ms-1">Message</button>
+                </div>
+              </div>
+            </div>
+            <div class="card mb-4 mb-lg-0">
+              <div class="card-body p-0 h-50">
+                <form class="form-group" method="post">
+                  {% csrf_token %}
+                  <div class="shadow mt-4 p-2 mt-4 bg-warning rounded 10"></div>
+                  <div class="">
+                    <div class="card-header">PROFILE UPDATE FORM </div>
+                    <div class="card-body">
+                      <div class="form-group mb-4 mt-2 p-2 mt-5 bg-light">
+                        <span>Phone number</span>
+                        {{p_form.phone_number}}
+                      </div>
+                      <div class="form-group  mb-4 p-2 bg-light">
+                        <span>Profile Pic</span>
+                        {{p_form.image}}
+                      </div>
+                      <div class="form-group  mb-4 p-2 bg-light">
+                        <span class="form-label">Username</span>
+                        {{u_form.username}}
+                      </div>
+                      <div class="form-group  mb-4 p-2 bg-light">
+                        <span>Email</span>
+                        {{u_form.email}}
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <button type="submit" class="btn shadow mb-8 btn-outline-success">
+                        Update User
+                      </button>
+                    </div>
                   </div>
-                  <div class="form-group shadow mb-2 mt-2 p-3 mt-4">
-                    <label for="username">username {{u_form.username}}</label>
-                  </div>
-                  <button type="submit" class="btn shadow mt-2 btn-outline-success">update user info </button>
                 </form>
               </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Full Name</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{user.username}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Email</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{user.email}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Phone</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"> +254{{my_profile.phone_number}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Address</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card mb-4 mb-md-0">
+                  <div class="card-body">
+                    <p class="mb-4"><span class="text-primary font-italic me-1">assigned</span> Jobs Status
+                    </p>
+                    <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
+                    <div class="progress rounded mb-2" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="card mb-4 mb-md-0">
+                  <div class="card-body">
+                    <p class="mb-4"><span class="text-primary font-italic me-1">assigment</span> Project Status
+                    </p>
+                    <p class="mb-1" style="font-size: .77rem;">Web Design</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Website Markup</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 72%" aria-valuenow="72"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">One Page</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 89%" aria-valuenow="89"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Mobile Template</p>
+                    <div class="progress rounded" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Backend API</p>
+                    <div class="progress rounded mb-2" style="height: 5px;">
+                      <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="66"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
       </div>
-    </body>
+    </section>
+    {%comment%}
+    <div class="wow fadeInDown col-lg-5 shadow-lg p-2 mb-4" data-wow-delay="0.1s">
+      <div class="mt-5 col-lg-12 bg-dark">
+        {% if my_account.is_valid == False%}
+        <div class="row p-2 m-2 ">
+          <button class="btn btn-outline-success"><a style="color:aliceblue;font-size:small;text-decoration:none;"
+              href="{% url 'activation' my_account.id %}">Activate Account</a></button>
+          <img src="\static\images\icons\wallet.png" style="width:18%">
+          <div style="color:aliceblue">
+
+          </div>
+        </div>
+        {% else %}
+        <div class="row p-4 m-2 ">
+          <button class="btn btn-outline-danger"><a style="color:aliceblue;font-size:small;text-decoration:none;"
+              href="{% url 'delete_account' my_account.id %}">Delete account </a></button>
+          <img src="\static\images\icons\wallet.png" style="width:15%">
+        </div>
+
+        {% endif %}
+        <div class="form-group bg-secondary shadow  m-1 p-4 " style="color:aliceblue">
+          <span="profile pic"><span style="color:black;">Level Bouns $:</span> {{my_account.get_level_bonus}}/=<br>
+            <a href="{% url 'level_up' %}"><button class="btn bg-primary">Level Up</button></a>
+            <hr style="background-color: chartreuse;">
+            <span="profile pic"><span style="color:black;">Status : </span>{% if my_account.is_valid == True %} Account
+              is Active{%else%}Account inactive{% endif %}<br>
+              <hr style="background-color: chartreuse;">
+              <span="profile pic"><span style="color:black;">People you brought in :<span
+                    style="color:aquamarine">{{total_reffs}}</span>
+                  <div style="overflow-x: scroll;display:flex;">
+                    {% for reff in reffs %}
+                    <ol>{{reff.user.username}}</ol>
+                    {% endfor %}
+                  </div>
+                </span>
+                <hr style="background-color: chartreuse;">
+        </div>
+      </div>
+
+
+
+
+    </div>
+    {%endcomment%}
+    <table class="table table-striped">
+      <caption class="font-weight-bold">JOB PROGRESS TRACKER</caption>
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">JOB</th>
+          <th scope="col">STATUS</th>
+          <th scope="col">ASSIGNED TO </th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Math</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>IN PROGRESS</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>NONE</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
 
 
 
