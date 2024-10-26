@@ -8,6 +8,6 @@ from .views import (
 
 urlpatterns=[
     path('joboffer/<int:pk>',CreateJobOffer.as_view(),name='new-joboffer'),
-    path('deleteoffer/<int:pk>',JobOfferDelete.as_view(),name='delete-offer'),
-    path('updateoffer/<int:pk>',JobOfferUpdate.as_view(),name='update-offer'),
+    path('deleteoffer/<int:pk>/',JobOfferDelete.as_view(),name='delete-offer'),
+    path('updateoffer/<int:pk>/',JobOfferUpdate.as_view(),name='update-offer'),
 ]

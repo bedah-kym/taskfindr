@@ -11,6 +11,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.views.generic import UpdateView,DeleteView
 from.validators import Reffcodevalidator
 from .emails import warning_email
+from taskmanager.models import JobOffer
+from blog.models import blogpost
 
 def register_view(request,**kwargs):
 
@@ -43,6 +45,8 @@ def register_view(request,**kwargs):
 def profile_view(request):
     account = Cashaccount.objects.get(owner=request.user)
     myprofile = profile.objects.get(user=request.user)
+    myposts = blogpost.objects.filter(author=request.user).prefetch_related('job_offer')
+    
     if request.method == "POST":
         u_form = updateuser(request.POST, instance=request.user)
         p_form = updateprofile(request.POST, request.FILES, instance= request.user.profile)
@@ -70,7 +74,8 @@ def profile_view(request):
     'my_account':account,
     'reffs':account.refferals.all(),
     'total_reffs':account.refferals.count(),
-    'my_profile':myprofile
+    'my_profile':myprofile,
+    "tasks":myposts
     }
 
     return render(request,'blog/profile.html',context)

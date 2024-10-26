@@ -31,8 +31,6 @@ class CreateJobOffer(LoginRequiredMixin,UserPassesTestMixin, CreateView):
         return form
     
     def get_context_data(self, **kwargs):
-        postid= self.kwargs.get('pk')
-        userpost =blogpost.objects.get(pk=postid)
         context = super().get_context_data(**kwargs)
         context['offerform'] = self.get_form(self.get_form_class()) 
         return context
@@ -68,8 +66,6 @@ class JobOfferUpdate(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
         form.fields['job'].queryset = blogpost.objects.filter(pk=joboffer.job.pk)
         return form
     def get_context_data(self, **kwargs):
-        postid= self.kwargs.get('pk')
-        userpost =blogpost.objects.get(pk=postid)
         context = super().get_context_data(**kwargs)
         context['offerform'] = self.get_form(self.get_form_class()) 
         return context

@@ -1,6 +1,6 @@
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
-from blog.models import blogpost as jobpost
+from blog.models import blogpost 
 from users.models import profile
 from django.utils import timezone
 from datetime import timedelta
@@ -16,7 +16,7 @@ class JobOffer(DirtyFieldsMixin,models.Model):
         ("COMPLETED", "complete"),
         ("REVIEW", "review"),     
     ]
-    job = models.ForeignKey(jobpost, on_delete=models.CASCADE,related_name='job_offer')
+    job = models.ForeignKey(blogpost,on_delete=models.CASCADE,related_name='job_offer')
     milestones = models.ManyToManyField('OfferMilestones', related_name="job_milestones",blank=True)
     bids = models.ManyToManyField('OfferBids', related_name="job_bids",blank=True)
     time_limit = models.DurationField()
