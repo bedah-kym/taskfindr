@@ -22,23 +22,27 @@ class JobOfferForm(forms.ModelForm):
 class OfferBidsForm(forms.ModelForm):
     class Meta:
         model = OfferBids
-        fields = ['cashbid', 'bidder']
+        fields = ['joboffer','cashbid']
         widgets = {
+            'joboffer': forms.Select(attrs={
+                'class': 'form-control',
+            }),
             'cashbid': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Enter cash bid amount',
             }),
-            'bidder': forms.Select(attrs={
-                'class': 'form-control',
-            }),
+            
         }
 
 
 class OfferMilestonesForm(forms.ModelForm):
     class Meta:
         model = OfferMilestones
-        fields = ['heading','content', 'tags', 'extra_cash']
+        fields = ['joboffer','heading','content', 'tags', 'extra_cash']
         widgets = {
+            'joboffer': forms.Select(attrs={
+                'class': 'form-control',
+            }),
             'heading':forms.TextInput(attrs={
                 'class':'form-control',
                 'placeholder':'milestone heading'

@@ -64,7 +64,7 @@
       <div class="card-header bg-warning  m-3 p-2 shadow-sm rounded-lg">
         <div class="row p- m-1">
           <h2 style="font-size: large" class="mx-auto card-text row">
-            JOB OFFER AND INSTRUCTIONS {{post.job_offer}}
+            JOB OFFER AND INSTRUCTIONS 
           </h2>
         </div>
         <div class="bg-light rounded-lg p-2 m-3 col-sm-12" style="">
@@ -85,12 +85,10 @@
               </strong>
             </bold>
           </p>
-          {% if request.user != post.author and task.job_status == 'open' %}
+          {% if request.user != post.author %}
           <div class="p-2">
             <a style="font-size: xx-small" class="btn btn-outline-info m-1"
-              href="{% url 'post_update' post.id %}">Take job</a>
-            <a style="font-size: xx-small" class="btn btn-outline-danger m-1"
-              href="{% url 'post_delete' post.id %}">stop job</a>
+              href="{% url 'new-bid' task.id %}">BID JOB </a>
           </div>
           {% endif %}
         </div>
@@ -116,6 +114,14 @@
                 </span>
               </div>
               <p class="mb-1">{{milestone.content}}.</small>
+                {% if request.user == post.author %}
+                  <span style="display: flex;font-size: medium;"> 
+                    <a class="p-2" href="{% url 'milestone_update' task.id milestone.id  %}"><button class="btn btn-success">update
+                      </button></a>
+                    <a class="p-2" href="{% url 'milestone_delete' task.id milestone.id %}"><button class="btn btn-danger">delete
+                    </button></a>
+                  </span>
+                {% endif %}
               </div>
             {%endfor%}
           {%else%}
@@ -123,10 +129,10 @@
           {% endif %}
         </div>
         {% if request.user == post.author%}
-          <div class="p-2 bg-light">
-            <a style="font-size: xx-small" class="btn btn-outline-info m-1"
+          <div style="position: absolute;bottom:8%;" class="p-2 bg-light">
+            <a style="font-size: small" class="btn btn-outline-info m-1"
               href="{% url 'update-offer' task.id %}">update offer</a>
-            <a style="font-size: xx-small" class="btn btn-outline-danger m-1"
+            <a style="font-size: small" class="btn btn-outline-danger m-1"
               href="{% url 'delete-offer' task.id %}">delete offfer</a>
           </div>
         {% endif %}

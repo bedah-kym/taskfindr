@@ -9,10 +9,9 @@
         <div class="row">
           <div class="col">
             <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+              <h2> JOB TRACKING BOARD</h2>
               <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">User</a></li>
-                <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                <li class="breadcrumb-item"><a href="#">MY CASH ACCOUNT</a></li>
               </ol>
             </nav>
           </div>
@@ -109,6 +108,7 @@
                 </div>
               </div>
             </div>
+            {% if tasks%}
             <h4>MY JOBS </h4>
             <div class="row">
               {%for task in tasks %}
@@ -119,14 +119,14 @@
                     <p class="mb-4 font-weight-bold"><span class="text-primary font-italic me-1">assigned</span> Jobs
                       Status
                     </p>
-                    <p class="mb-1" style="font-size: .77rem;">JOB TITLE</p>
+                    <p class="mb-1" style="font-size: .77rem;"><a style="font-size: medium;font-weight: bold;"
+                        href="{% url 'post_detail' offer.job.id %}"> TITLE</a></p>
                     {{offer.job}}
                     <hr>
                     <p class="mt-4 mb-1" style="font-size: .77rem;">JOB STATUS</p>
                     <span class="badge badge-pill badge-info p-2 mr-2">{{offer.job_status}}</span>
                     <a class="p-2" href="{% url 'update-offer' offer.id %}"><button class="btn btn-warning">update
                         Job </button></a>
-                    <hr>
                     {% if offer.created_at != None %}
                     <p class="mt-4 mb-1" style="font-size: .77rem;font-weight:500;" id="time-remaining"
                       data-expiration="{{ offer.created_at|add:offer.time_limit|date:'c' }}"></p>
@@ -134,21 +134,50 @@
                     <p class="mt-4 mb-1" style="font-size: .77rem;">No Time Limit
                     </p>
                     {% endif %}
-
                     <hr>
-
                     <p class="mt-4 mb-1" style="font-size: .77rem;">ASSIGNED TO </p>
                     {{task.assigned_to}}
-
                   </div>
                 </div>
               </div>
               {%endfor%}
               {%endfor%}
             </div>
+            {% endif %}
+            {% if bids %}
+            <h4 class="mt-2">MY BIDS</h4>
+            <div class="row">
+              {%for bid in bids %}
+              <div class="col-md-6 mt-2 ">
+                <div style="background: antiquewhite;" class="card mb-4 mb-md-0">
+                  <div class="card-body">
+                    <p class="mb-4 font-weight-bold"><span class="text-primary font-italic me-1">Sent</span> Bids
+                      Status
+                    </p>
+                    <p class="mb-1" style="font-size: .77rem;"><a style="font-size: medium;font-weight: bold;"
+                        href="{% url 'post_detail' bid.joboffer.job.id %}"> TITLE</a></p>
+                    {{bid.joboffer.job}}
+                    <hr>
+                    <p style="font-size: medium; display: flex;" class="mt-4 mb-1 p-2" style="font-size: .77rem;">CASH BID
+                    <span class="badge badge-pill badge-info p-2 ml-2">{{bid.cashbid}}</span></p>
+                    <div class="justify-content-between" style="display:flex">
+                      <a class="p-2" href="{% url 'bid_update' bid.joboffer.id bid.id %}"><button
+                          class="btn btn-success">update
+                          bid </button></a>
+                      <a class="p-2" name="delete" href="{% url 'bid_delete' bid.joboffer.id bid.id %}"><button
+                          class="btn btn-warning">delete
+                          bid </button></a>
+                    </div>
+                    <hr>
+                    <p class="mt-4 mb-1" style="font-size: .77rem;">Bid status </p>
+                    <code>fix here</code>
+                  </div>
+                </div>
+              </div>
+              {%endfor%}
+            </div>
+            {%endif%}
           </div>
-
-
         </div>
       </div>
     </section>
