@@ -158,8 +158,10 @@
                         href="{% url 'post_detail' bid.joboffer.job.id %}"> TITLE</a></p>
                     {{bid.joboffer.job}}
                     <hr>
-                    <p style="font-size: medium; display: flex;" class="mt-4 mb-1 p-2" style="font-size: .77rem;">CASH BID
-                    <span class="badge badge-pill badge-info p-2 ml-2">{{bid.cashbid}}</span></p>
+                    <p style="font-size: medium; display: flex;" class="mt-4 mb-1 p-2" style="font-size: .77rem;">CASH
+                      BID
+                      <span class="badge badge-pill badge-info p-2 ml-2">{{bid.cashbid}}</span>
+                    </p>
                     <div class="justify-content-between" style="display:flex">
                       <a class="p-2" href="{% url 'bid_update' bid.joboffer.id bid.id %}"><button
                           class="btn btn-success">update
@@ -230,31 +232,28 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">JOB</th>
-          <th scope="col">STATUS</th>
-          <th scope="col">ASSIGNED TO </th>
+          <th scope="col"> BIDDER</th>
+          <th scope="col">JOB OFFER </th>
+          <th scope="col">CASH BID</th>
+          <th scope="col"> RESPONSE </th>
 
         </tr>
       </thead>
       <tbody>
+        {% for task in tasks %}
+        {% for offer in task.job_offer.all %}
+        {% for bid in offer.bids.all %}
         <tr>
           <th scope="row">1</th>
-          <td>Math</td>
-          <td>Otto</td>
-          <td>@mdo</td>
+          <td>{{bid.bidder}}</td>
+          <td>{{bid.joboffer}}</td>
+          <td>{{bid.cashbid}}</td>
+          <td> <button class="mr-2 btn btn-outline-success">accept</button> <button
+              class=" ml-2 btn btn-outline-danger ">decline</button></td>
         </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>IN PROGRESS</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>NONE</td>
-          <td>@twitter</td>
-        </tr>
+        {%endfor%}
+        {% endfor %}
+        {%endfor%}
       </tbody>
     </table>
   </div>

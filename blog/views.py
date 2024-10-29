@@ -76,11 +76,13 @@ class postdetailview(LoginRequiredMixin,DetailView):
     
     def get_context_data(self, **kwargs):
         joboffer = JobOffer.objects.get(job=self.object)
+        bidexists = joboffer.bids.filter(bidder = self.request.user.profile)
         milestone= joboffer.milestones.all()
         context = super().get_context_data(**kwargs)
         context['form'] = RatingForm()  # Add the form to the context
         context['task']=joboffer
         context['milestones']=milestone
+        context['bidexists'] = bidexists
         return context
    
     def post(self, request, *args, **kwargs):

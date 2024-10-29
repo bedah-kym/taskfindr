@@ -138,7 +138,7 @@ class MilestoneCRUDView(LoginRequiredMixin, View):
             form = self.form_class(request.POST)
 
         form.fields['joboffer'].queryset = JobOffer.objects.filter(pk=offer_id)
-
+        
         if form.is_valid():
             milestone = form.save(commit=False)
             milestone.joboffer = joboffer
@@ -199,14 +199,19 @@ class BidCRUDView(LoginRequiredMixin,View):
             form = self.form_class(request.POST)
 
         form.fields['joboffer'].queryset = JobOffer.objects.filter(pk=offer_id)
+        
+        bidexists = OfferBids.objects.filter(joboffer=joboffer,bidder=request.user.profile).exists()
+        if bidexists == False:
+            if form.is_valid():
+                offerbid = form.save(commit=False)
+                offerbid.bidder = request.user.profile
+                offerbid.joboffer = joboffer 
+                offerbid.save()
+                joboffer.bids.add(offerbid)
+                return HttpResponseRedirect(self.success_url)
 
-        if form.is_valid():
-            offerbid = form.save(commit=False)
-            offerbid.bidder = request.user.profile
-            offerbid.joboffer = joboffer 
-            offerbid.save()
-            joboffer.bids.add(offerbid)
-            return HttpResponseRedirect(self.success_url)
-
-        context = {'bidform': form}  
-        return render(request, self.template_name, context)
+            context = {'bidform': form}  
+            return render(request, self.template_name, context)
+        else:
+            messages.warning(request,"you have already bid for this job")
+            return redirect(self.success_url)

@@ -87,8 +87,13 @@
           </p>
           {% if request.user != post.author %}
           <div class="p-2">
+            {% if bidexists != None %}
+            <a style="font-size: xx-small" name="delete"class="btn btn-outline-info m-1"
+              href="{% url 'bid_delete' task.id bidexists.first.id  %}">CANCEL BID </a>
+            {%else%}
             <a style="font-size: xx-small" class="btn btn-outline-info m-1"
-              href="{% url 'new-bid' task.id %}">BID JOB </a>
+              href="{% url 'new-bid' task.id %}">BID JOB </a> 
+            {% endif %}
           </div>
           {% endif %}
         </div>
@@ -133,7 +138,7 @@
             <a style="font-size: small" class="btn btn-outline-info m-1"
               href="{% url 'update-offer' task.id %}">update offer</a>
             <a style="font-size: small" class="btn btn-outline-danger m-1"
-              href="{% url 'delete-offer' task.id %}">delete offfer</a>
+              href="{% url 'delete-offer' task.id %}">delete offer</a>
           </div>
         {% endif %}
         </p>
