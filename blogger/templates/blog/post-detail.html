@@ -87,7 +87,7 @@
           </p>
           {% if request.user != post.author %}
           <div style="font-size:x-small"class="p-2">
-            {% if bidexists != None %}
+            {% if bidexists  %}
             <form action="{% url 'bid_delete' task.id bidexists.first.id  %}" method="post" class="p-2">
               {% csrf_token %}
               <button type="submit" name="delete" class="btn btn-danger">Delete Bid</button>
@@ -143,8 +143,6 @@
           <div style="position: absolute;bottom:5%;" class="p-2 bg-light">
             <a style="font-size: small" class="btn btn-outline-info m-1"
               href="{% url 'update-offer' task.id %}">update offer</a>
-            <a style="font-size: small" class="btn btn-outline-danger m-1"
-              href="{% url 'delete-offer' task.id %}">delete offer</a>
           </div>
         {% endif %}
         </p>

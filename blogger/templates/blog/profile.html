@@ -12,6 +12,7 @@
               <h2> JOB TRACKING BOARD</h2>
               <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item"><a href="#">MY CASH ACCOUNT</a></li>
+                <li class="breadcrumb-item"><a href="#">MY WORKING AREA</a></li>
               </ol>
             </nav>
           </div>
@@ -109,7 +110,7 @@
               </div>
             </div>
             {% if tasks%}
-            <h4>MY JOBS </h4>
+            <h4>MY CONTRACTS </h4>
             <div class="row">
               {%for task in tasks %}
               {%for offer in task.job_offer.all%}
@@ -172,8 +173,17 @@
                       </form>
                     </div>
                     <hr>
-                    <p class="mt-4 mb-1" style="font-size: .77rem;">Bid status </p>
-                    <code>fix here</code>
+                    <p class="mt-4 mb-1" style="font-size: .97rem;">Bid Status </p>
+                    <code>{{bid.bid_status}}</code>
+                    <div>
+                      {% if bid.bid_status == 'ACCEPTED' or bid.bid_status == 'DECLINED' %}
+                        <small style="display: flex;justify-content: end; font-family: monospace;">you can delete this bid, </small>
+                      {% endif %}
+                      {% if bid.joboffer.job_status != "OPEN"%}
+                      <small style="display: flex;justify-content: end; font-family: monospace;">this job isnt open anymore </small>
+                      {% endif %}
+                    </div>
+                      
                   </div>
                 </div>
               </div>
@@ -236,6 +246,7 @@
           <th scope="col"> BIDDER</th>
           <th scope="col">JOB OFFER </th>
           <th scope="col">CASH BID</th>
+          <th scope="col">BID STATUS</th>
           <th scope="col"> RESPONSE </th>
 
         </tr>
@@ -247,10 +258,16 @@
         <tr>
           <th scope="row">1</th>
           <td>{{bid.bidder}}</td>
-          <td>{{bid.joboffer}}</td>
-          <td>{{bid.cashbid}}</td>
-          <td> <button class="mr-2 btn btn-outline-success">accept</button> <button
-              class=" ml-2 btn btn-outline-danger ">decline</button></td>
+          <td style="font-family: 'Courier New', Courier, monospace;">{{bid.joboffer}}</td>
+          <td style="font-family: 'Courier New', Courier, monospace;">{{bid.cashbid}}</td>
+          <td style="color: darkgoldenrod;">{{bid.bid_status}}</td>
+
+          <td>
+            <button class="mr-2 btn btn-outline-success"><a href="{% url 'bid_response' bid.id 'Accept' %}">Accept
+              </a></button>
+            <button class=" ml-2 btn btn-outline-danger "><a href="{% url 'bid_response' bid.id 'Decline' %}">Decline
+              </a>
+          </td>
         </tr>
         {%endfor%}
         {% endfor %}

@@ -105,7 +105,6 @@ class Cashaccount(models.Model):
     def __str__ (self):
         return f'{self.owner} with ksh {self.get_total_cash(self.owner)} has {self.refferals.count()} refferal(s)'
 
-
 class Withdrawrequest(models.Model):
     account = models.ForeignKey(Cashaccount, on_delete=models.CASCADE)
     request_date = models.DateTimeField(auto_now_add=True)

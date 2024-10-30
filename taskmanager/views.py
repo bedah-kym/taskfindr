@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .forms import JobOfferForm, OfferMilestonesForm, OfferBidsForm
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     View,
     CreateView,
@@ -76,16 +77,6 @@ class JobOfferUpdate(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
             return True
         return False  
     
-class JobOfferDelete(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
-    model=JobOffer
-    template_name = 'blog/offerdelete.html'
-    success_url = '/'
-
-    def test_func(self):
-        offer = self.get_object()
-        if self.request.user == offer.job.author:
-            return True
-        return False    
 
 class MilestoneCRUDView(LoginRequiredMixin, View):
     model = OfferMilestones
@@ -216,3 +207,35 @@ class BidCRUDView(LoginRequiredMixin,View):
         else:
             messages.warning(request,"you have already bid for this job")
             return redirect(self.success_url)
+        
+@login_required
+def AcceptOrDeclineBidView(request,bid_id,response):
+    bid = OfferBids.objects.get(pk=bid_id)
+    if bid.joboffer.job.author == request.user:
+        if response == "Accept":
+            if bid.bid_status == "WAITING" or bid.bid_status == "waiting":
+                bid.bid_status = 'ACCEPTED'
+                bid.save()
+                contract = bid.joboffer.job
+                contract.assigned_to = bid.bidder.user
+                contract.save()
+                offer = bid.joboffer
+                offer.job_status = "ASSIGNED"
+                offer.save() 
+                messages.success(request,f"you have accepted {bid.bidder}s bid proceed to work-area")
+                return redirect('profile')
+            else:
+                messages.warning(request,f'you have already responded to this bid with "{bid.bid_status}"')
+                return redirect('profile')
+        else:
+            if response == "Decline":
+                if bid.bid_status == "WAITING":
+                    bid.bid_status ='DECLINED' 
+                    bid.save()
+                    return redirect('profile')  
+                else:
+                    messages.warning(request,'you have already responded to this bid')   
+                    return redirect('profile')
+    else:
+        request.handle_no_permission()
+    

@@ -45,10 +45,16 @@ class OfferBids(models.Model):
     class Meta:
         verbose_name ="offer bids"
         verbose_name_plural = "offer bids"
-
+    BID_STATUS = [
+        ("WAITING",'waiting'),
+        ("ACCEPTED",'accepted'),
+        ("DECLINED",'declined')
+    ]
+    
     joboffer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     cashbid = models.IntegerField(default=0)
     bidder = models.ForeignKey(profile, on_delete=models.CASCADE)
+    bid_status = models.CharField(choices=BID_STATUS,max_length=20,default="waiting")
 
 class OfferMilestones(models.Model):
     class Meta:
