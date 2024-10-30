@@ -166,9 +166,10 @@
                       <a class="p-2" href="{% url 'bid_update' bid.joboffer.id bid.id %}"><button
                           class="btn btn-success">update
                           bid </button></a>
-                      <a class="p-2" name="delete" href="{% url 'bid_delete' bid.joboffer.id bid.id %}"><button
-                          class="btn btn-warning">delete
-                          bid </button></a>
+                      <form action="{% url 'bid_delete' bid.joboffer.id bid.id %}" method="post" class="p-2">
+                        {% csrf_token %}
+                        <button type="submit" name="delete" class="p-2 btn btn-dark">Delete Bid</button>
+                      </form>
                     </div>
                     <hr>
                     <p class="mt-4 mb-1" style="font-size: .77rem;">Bid status </p>

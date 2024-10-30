@@ -144,7 +144,8 @@ class MilestoneCRUDView(LoginRequiredMixin, View):
             milestone.joboffer = joboffer
             milestone.save()
             joboffer.milestones.add(milestone)
-            return HttpResponseRedirect(self.success_url)
+            if "finish" in request.POST :
+                return HttpResponseRedirect(self.success_url)
 
         context = {'form': form}
         return render(request, self.template_name, context)

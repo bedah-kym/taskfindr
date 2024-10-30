@@ -86,12 +86,14 @@
             </bold>
           </p>
           {% if request.user != post.author %}
-          <div class="p-2">
+          <div style="font-size:x-small"class="p-2">
             {% if bidexists != None %}
-            <a style="font-size: xx-small" name="delete"class="btn btn-outline-info m-1"
-              href="{% url 'bid_delete' task.id bidexists.first.id  %}">CANCEL BID </a>
+            <form action="{% url 'bid_delete' task.id bidexists.first.id  %}" method="post" class="p-2">
+              {% csrf_token %}
+              <button type="submit" name="delete" class="btn btn-danger">Delete Bid</button>
+            </form>
             {%else%}
-            <a style="font-size: xx-small" class="btn btn-outline-info m-1"
+            <a  class="btn btn-outline-info m-1"
               href="{% url 'new-bid' task.id %}">BID JOB </a> 
             {% endif %}
           </div>
@@ -102,7 +104,7 @@
 
         <p class="card-text">
         <h3 style="justify-content: center;">MILESTONES</h3>
-        <div class="list-group">
+        <div class="list-group mb-lg-5">
           {% if milestones %}
             {% for milestone in milestones %}
             <div class=" mt-2 mb-2 list-group-item list-group-item-action flex-column align-items-start ">
@@ -120,12 +122,16 @@
               </div>
               <p class="mb-1">{{milestone.content}}.</small>
                 {% if request.user == post.author %}
-                  <span style="display: flex;font-size: medium;"> 
-                    <a class="p-2" href="{% url 'milestone_update' task.id milestone.id  %}"><button class="btn btn-success">update
-                      </button></a>
-                    <a class="p-2" href="{% url 'milestone_delete' task.id milestone.id %}"><button class="btn btn-danger">delete
-                    </button></a>
-                  </span>
+                  <div style="display:flex; justify-content:end; font-size: medium;"> 
+                    <!-- Update Button (Form) -->
+                      <form action="{% url 'milestone_update' task.id milestone.id %}" method="get" class="p-2">
+                        <button type="submit" class="btn btn-success">Update</button>
+                      </form>
+                      <form action="{% url 'milestone_delete' task.id milestone.id %}" method="post" class="p-2">
+                        {% csrf_token %}
+                        <button type="submit" name="delete" class="btn btn-dark">Delete</button>
+                      </form>
+                    </div>
                 {% endif %}
               </div>
             {%endfor%}
@@ -134,7 +140,7 @@
           {% endif %}
         </div>
         {% if request.user == post.author%}
-          <div style="position: absolute;bottom:8%;" class="p-2 bg-light">
+          <div style="position: absolute;bottom:5%;" class="p-2 bg-light">
             <a style="font-size: small" class="btn btn-outline-info m-1"
               href="{% url 'update-offer' task.id %}">update offer</a>
             <a style="font-size: small" class="btn btn-outline-danger m-1"
