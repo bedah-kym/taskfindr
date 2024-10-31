@@ -1,0 +1,20 @@
+{%extends 'blog/base.html'%} {% load static %} {% block content %}
+<div clas="mx-auto row p-2" style="width: 100%; padding: 2%">
+    <p class="card" style="padding: 10%; font-weight: 500; margin-top: 20%; margin-bottom: 40%">
+
+        <alert class="alert alert-primary">hi thanks for comming </alert>
+
+        <small class="card-body">
+            {%if match == True %}
+            MATCH verified
+            {% else %}
+            MATCH NOT FOUND
+            {% endif %}
+        </small>
+        <small class="card-footer" style="color: darkcyan">
+            the more people you get onboard the faster the launch date arrives
+        </small>
+
+    </p>
+</div>
+{% endblock %}

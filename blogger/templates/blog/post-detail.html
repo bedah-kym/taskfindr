@@ -1,67 +1,42 @@
 {%extends 'blog/base.html'%} {% load static %} {% block content %}
-<div
-  class="container bg-light col-lg-12 col-md-12 col-sm-12"
-  style="margin-top: 10%; padding-left: unset"
->
-  <div
-    class="container bg-light mt-3 pb-20 col-lg-8 col-md-12 col-sm-12"
-    id="home"
-    style="height: 50%"
-  >
-    <div
-      class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10"
-    >
-      <div
-        class="card-header bg-info col-lg-6 col-sm-10 col-md-12 m-3 p-2 shadow-sm rounded-lg"
-      >
+<div class="row bg-light col-lg-12 col-md-12 col-sm-12" style="margin-top: 5%;width: 100%;">
+
+  <div class="bg-light mt-3 pb-20 col-lg-6 col-md-6 col-sm-12" id="home" style="">
+    <div class="card bg-light rounded-lg shadow-lg col-lg-10 col-md-12 col-sm-10 ">
+      <div class="card-header bg-info m-3 p-2 shadow-sm rounded-lg">
         <div class="row p- m-1">
-          <img
-            class="rounded-circle"
-            src="{{post.author.profile.image.url}}"
-            style="width: 20%"
-            alt="pic"
-          />
+          <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="width: 20%" alt="pic" />
           <h2 style="font-size: large" class="mx-auto card-text row">
-            <a href="{% url 'user_post' post.author.username %}"></a
-            >by{{post.author}}
+            <a href="{% url 'user_post' post.author.username %}"></a>by{{post.author}}
           </h2>
         </div>
         <div class="row bg-light rounded-lg p-2 m-3 col-sm-12" style="">
           <p>
-            <strong class="mx-auto p-1 m-1" style="font-size: large"
-              >{{ post.title|upper }}</strong
-            >
+            <strong class="mx-auto p-1 m-1" style="font-size: large">{{ post.title|upper }}</strong>
           </p>
           {% if user == post.author %}
-          <div>
-            <a
-              style="font-size: xx-small"
-              class="btn btn-outline-info m-1"
-              href="{% url 'post_update' post.id %}"
-              >update</a
-            >
-            <a
-              style="font-size: xx-small"
-              class="btn btn-outline-danger m-1"
-              href="{% url 'post_delete' post.id %}"
-              >delete</a
-            >
-          </div>
+          <p class="justify-content-end">
+            <a style=" font-size: xx-small" class="btn btn-outline-info m-1"
+              href="{% url 'post_update' post.id %}">update</a>
+            <a style="font-size: xx-small" class="btn btn-outline-danger m-1"
+              href="{% url 'post_delete' post.id %}">delete</a>
+          </p>
           {% endif %}
         </div>
       </div>
       <div class="card-body">
         {% if post.image.url is not None %}
-          <div>
-            <img style="width: 100%" src="{{post.image.url}}">
-          </div>
+        <div>
+          <img style="width: 100%" src="{{post.image.url}}">
+        </div>
         {% endif %}
         <p class="card-text">{{post.content|linebreaks}}</p>
         {% if post.ext_url is not None%}
-          <p class="card-text">Read the main story here since we are not authorised to display the whole story just headlines
-            <a href="{{post.ext_url}}">MAIN STORY SITE </a>
-          </p>
-          </p>
+        <p class="card-text">Read the main story here since we are not authorised to display the whole story just
+          headlines
+          <a href="{{post.ext_url}}">MAIN STORY SITE </a>
+        </p>
+        </p>
         {% endif %}
       </div>
 
@@ -78,16 +53,167 @@
             </span>
           </a>
           {{dislikes}}
-          <span
-            ><img
-              style="width: 10%"
-              src="{% static '\images\icons\view.gif'%}"
-            />{{views}}views
+          <span><img style="width: 10%" src="{% static '\images\icons\view.gif'%}" />{{views}}views
           </span>
         </p>
       </div>
     </div>
   </div>
+  <div class="bg-light mt-3 pb-20 col-lg-6 col-md-6 col-sm-12 d-flex">
+    <div class="card bg-light rounded-lg shadow-lg w-100 h-80 d-flex flex-column">
+      <div class="card-header bg-warning  m-3 p-2 shadow-sm rounded-lg">
+        <div class="row p- m-1">
+          <h2 style="font-size: large" class="mx-auto card-text row">
+            JOB OFFER AND INSTRUCTIONS 
+          </h2>
+        </div>
+        <div class="bg-light rounded-lg p-2 m-3 col-sm-12" style="">
+          <p> 
+            <bold>
+              {% if task.created_at != None %}
+                <p id="time-remaining" data-expiration="{{ task.created_at|add:task.time_limit|date:'c' }}"></p>
+              {%else%}
+                <p> NO TIME LIMIT </p>
+              {% endif %}  
+
+              {% if task.time_left.total_seconds == 0 %}
+                <strong class="mx-auto p-1 m-1" style="font-size: large">WAIT FOR THE JOB TO BE UPDATED</strong>
+              {% elif task.time_left.total_seconds > 0 %}
+                <strong class="mx-auto p-1 m-1" style="font-size: large">HURRY WHILE YOU STILL HAVE TIME</strong>
+              {% endif %}
+          
+              </strong>
+            </bold>
+          </p>
+          {% if request.user != post.author %}
+          <div style="font-size:x-small"class="p-2">
+            {% if bidexists  %}
+            <form action="{% url 'bid_delete' task.id bidexists.first.id  %}" method="post" class="p-2">
+              {% csrf_token %}
+              <button type="submit" name="delete" class="btn btn-danger">Delete Bid</button>
+            </form>
+            {%else%}
+            <a  class="btn btn-outline-info m-1"
+              href="{% url 'new-bid' task.id %}">BID JOB </a> 
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card-body bg-secondary">
+
+        <p class="card-text">
+        <h3 style="justify-content: center;">MILESTONES</h3>
+        <div class="list-group mb-lg-5">
+          {% if milestones %}
+            {% for milestone in milestones %}
+            <div class=" mt-2 mb-2 list-group-item list-group-item-action flex-column align-items-start ">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1 ">{{milestone.heading}}</h5>
+                <small class="text-muted">EXTRA CASH <b>{{milestone.extra_cash}}</b></small>
+                <span class="p-2 badge 
+                {% if milestone.tags == 'REQUIRED' %} badge-danger 
+                {% elif milestone.tags == 'OPTIONAL' %} badge-warning 
+                {% elif milestone.tags == 'SUGGESTION' %} badge-info 
+                {% else %} badge-secondary 
+                {% endif %} badge-pill">
+                {{ milestone.tags }}
+                </span>
+              </div>
+              <p class="mb-1">{{milestone.content}}.</small>
+                {% if request.user == post.author %}
+                  <div style="display:flex; justify-content:end; font-size: medium;"> 
+                    <!-- Update Button (Form) -->
+                      <form action="{% url 'milestone_update' task.id milestone.id %}" method="get" class="p-2">
+                        <button type="submit" class="btn btn-success">Update</button>
+                      </form>
+                      <form action="{% url 'milestone_delete' task.id milestone.id %}" method="post" class="p-2">
+                        {% csrf_token %}
+                        <button type="submit" name="delete" class="btn btn-dark">Delete</button>
+                      </form>
+                    </div>
+                {% endif %}
+              </div>
+            {%endfor%}
+          {%else%}
+           <p> this job has no milestones</p>
+          {% endif %}
+        </div>
+        {% if request.user == post.author%}
+          <div style="position: absolute;bottom:5%;" class="p-2 bg-light">
+            <a style="font-size: small" class="btn btn-outline-info m-1"
+              href="{% url 'update-offer' task.id %}">update offer</a>
+          </div>
+        {% endif %}
+        </p>
+
+      </div>
+
+      <div style="font-size: small" class="card-footer bg-light">
+        <p>{{ post.date_posted}}</p>
+      </div>
+    </div>
+  </div>
 </div>
+<div class="mt-3 container col-lg-6 col-md-6 col-sm-10 justify-content-center">
+  <div>
+    {{form.errors}}
+  </div>
+  <!--the rating form should only be seen by the worker assigned to the job-->
+  {% if request.user.profile.is_verified and request.user != post.author %}
+  <form class="p-2" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_rating" class="form-label">Rate this item:</label>
+      <select name="rating" id="id_rating" class="form-select">
+        {% for value, label in form.rating.field.choices %}
+        <option value="{{ value }}"{% if form.rating.value == value %} selected {% endif %}>
+          {{ label }} ★
+        </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      {{ form.comment.label_tag }}
+      {{ form.comment }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Rating</button>
+  </form>
+  {% endif %}
+</div>
+<script>
+  // Helper function to format the time
+  function formatTimeRemaining(totalSeconds) {
+    let hours = Math.floor(totalSeconds / 3600);
+    let minutes = Math.floor((totalSeconds % 3600) / 60);
+    let seconds = totalSeconds % 60;
+
+    return `${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  function updateTimeRemaining() {
+    const expirationElement = document.getElementById('time-remaining');
+    const expirationTime = new Date(expirationElement.getAttribute('data-expiration'));
+    const now = new Date();
+
+    const timeRemaining = Math.floor((expirationTime - now) / 1000); // time in seconds
+
+    if (timeRemaining > 0) {
+      expirationElement.textContent = "Time remaining: " + formatTimeRemaining(timeRemaining);
+    } else {
+      expirationElement.textContent = "This task has expired.";
+    }
+  }
+
+  // Update the time every second
+  setInterval(updateTimeRemaining, 1000);
+
+  // Run it once immediately to show the initial value
+  updateTimeRemaining();
+</script>
+
+
 
 {% endblock %}
