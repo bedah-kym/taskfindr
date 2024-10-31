@@ -13,11 +13,25 @@ class profile(models.Model):
     phone_number = models.IntegerField(default=0)
     reffered_by = models.CharField(max_length=50,default=None,null=True)
     leveled_up = models.BooleanField(default=False)
-
+    is_verified = models.BooleanField(default=False)
+    work_done = models.ManyToManyField(blogpost,related_name="jobs_done")
+    
     def  __str__(self):
         return  f'{self.user.username} Profile'
 
-
+    def verifiy_user(self,user):
+        account=self.objects.filter(user=user)
+        if account.is_verified:
+            return True
+        else:
+            account.is_verified=True
+            
+    def unverify_user(self,user):
+        account=self.objects.filter(user=user)
+        if account.is_verified:
+            account.is_verified=False
+        return False
+              
     def save(self,*args,**kwargs):
         super().save(*args,**kwargs)
         img= Image.open(self.image.path)
@@ -57,7 +71,7 @@ class Cashaccount(models.Model):
             spincash += spin.value
         total=0
         for post in posts:
-            cash=post.value
+            cash=post.price_offer
             total+=cash
         taskcash=self.get_refferal_cash()
         total+=taskcash
@@ -80,16 +94,16 @@ class Cashaccount(models.Model):
         self.refferals.delete().all()
         self.mpesa_code.delete()
 
-    def reposess_account(user):
-        ac = Cashaccount.objects.filter(owner=user).first()
+    def reposess_account(self,user):
+        ac = self.objects.filter(owner=user).first()
         if ac:
             ac.is_valid=False
-            #ac.save()
+            return True
+        return False
 
     
     def __str__ (self):
         return f'{self.owner} with ksh {self.get_total_cash(self.owner)} has {self.refferals.count()} refferal(s)'
-
 
 class Withdrawrequest(models.Model):
     account = models.ForeignKey(Cashaccount, on_delete=models.CASCADE)

@@ -92,6 +92,7 @@ INSTALLED_APPS =[
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'blog',
     'users',
     'API',
@@ -100,6 +101,7 @@ INSTALLED_APPS =[
     'rest_framework',
     'rest_framework.authtoken',
     'django_feedparser',
+    'taskmanager'
     
 ]
 
@@ -195,6 +197,14 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 
 
 # Password validation

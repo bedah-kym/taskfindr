@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import blogpost
+from .models import blogpost,JobRating
 
 
 class CustomPostForm(forms.ModelForm):
@@ -39,6 +39,36 @@ class CustomPostForm(forms.ModelForm):
                'title': 'Type a word to filter the menu',}
         )
     )
+    image=forms.ImageField()
+    price_offer=forms.IntegerField(
+        label='price offer',widget=forms.NumberInput(
+            attrs={
+                'class':'form-control',
+                'placeholder':'please input numbers only !',
+                'aria-describedby':"inputGroup"
+                
+            }
+        )
+    )
     class Meta:
         model=blogpost
-        fields=['title','content','spaces']
+        fields=['title','content','spaces','image','price_offer']
+        
+class RatingForm(forms.ModelForm):
+    comment = forms.CharField(
+        label='',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder':"write an honest comment about your interaction with the job owner and if you would recconmend them or not", 
+            'required': 'required', 
+            'data-custom-attr': 'custom-value'
+        })
+    )
+    rating = forms.ChoiceField(
+        choices=JobRating.StarRating.choices,
+        widget=forms.Select,
+        required=True,  # Ensure this is set to True
+    )
+    class Meta:
+        model = JobRating
+        fields = ['rating', 'comment'] 

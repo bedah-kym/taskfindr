@@ -1,0 +1,49 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<div class="col-lg-12 col-md-10 col-sm-10">
+    <form class="form-group" method="post"> <!-- Ensure method="post" is added -->
+        {% csrf_token %}
+        <div class="shadow mt-4 p-2 mt-4 bg-success rounded 10"></div>
+        <div class="card">
+            <div class="card-header">GUIDELINES/MILESTONES FOR WORKERS </div>
+            <p>
+                Make sure you are clear in each milestone highlight briefly how you want
+                your work done.
+                {{form.errors}}
+            </p>
+            <div class="card-body">
+                <div class="form-group mb-4 mt-2 p-4 mt-5 bg-light">
+                    <span>Job Offer</span>
+                    {{ form.joboffer}}
+                </div>
+                <div class="form-group  mb-4 p-4 bg-light">
+                    <span>Title</span>
+                    {{ form.heading }}
+                </div>
+                <div class="form-group  mb-4 p-4 bg-light">
+                    <span>Content</span>
+                    {{ form.content}}
+                </div>
+                <div class="form-group  mb-4 p-4 bg-light">
+                    <span>Tags</span>
+                    {{ form.tags}}
+                </div>
+                <div class="form-group  mb-4 p-4 bg-light">
+                    <span>Extra Cash</span>
+                    {{ form.extra_cash}}
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn shadow mb-8 btn-outline-primary">
+                    ADD Milestone
+                </button>
+                <button type="submit" name="finish" class="btn shadow mb-8 btn-outline-success">
+                    Finish
+                </button>
+                
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

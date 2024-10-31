@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import blogpost,Postreaction,WheelSpin
+from .models import blogpost,Postreaction,WheelSpin,JobRating
 
 class blogpostadmin(admin.ModelAdmin):
     list_display = ('author','date_posted','spaces')
@@ -9,3 +9,4 @@ class blogpostadmin(admin.ModelAdmin):
 admin.site.register(blogpost,blogpostadmin)
 admin.site.register(Postreaction)
 admin.site.register(WheelSpin)
+admin.site.register(JobRating)

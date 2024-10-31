@@ -1,0 +1,14 @@
+{% extends "blog/base.html"%}
+
+{% load static %}
+{% block content %}
+
+<form class="col-lg-12 col-sm-6 mb-10" method="POST" style="height:500px"> {% csrf_token %}
+  <div class="container bg-light p-4 m2">
+    <h3> are you sure you want to delete [** {{object.job}} **]?</h3>
+    <button class="btn btn-sm mt-1 btn-outline-danger" type="submit"><span>delete</span> </button>
+    <a class="btn btn-sm mt-1 btn-outline-secondary" href="{% url 'profile' %}"><span>cancel</span> </a>
+  </div>
+</form>
+
+{% endblock %}
