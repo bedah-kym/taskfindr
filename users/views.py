@@ -77,7 +77,8 @@ def profile_view(request):
     'total_reffs':account.refferals.count(),
     'my_profile':myprofile,
     "tasks":myposts,
-    "bids":mybids
+    "bids":mybids,
+    "bid_counter":1
     }
 
     return render(request,'blog/profile.html',context)
