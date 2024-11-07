@@ -3,11 +3,11 @@
 {% block content %}
 <title>Home</title>
 
-<body class='container bg-success col-lg-12 col-md-12 col-sm-12 m-10 p-1'>
+<body id="bodycontainer" class='container bg-success col-lg-12 col-md-12 col-sm-12 pl-sm-2 pr-sm-2'>
   <!--notice board-->
-  <div class=" col-lg-1 col-md-1 col-sm-10 m-2 p-2">
+  <div class=" col-lg-1 col-md-1 m-2 p-2">
   </div>
-  <div class=" wow fadeInRight side-bar bg-success col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+  <div class=" wow fadeInRight side-bar bg-success col-lg-2 col-sm-1 col-md-4 m-3 p-2 shadow rounded-lg"
     data-wow-delay="0.1s">
     <div class='col p-2 m-2'>
       <p class="mx-auto">tasks done <span style="color:floralwhite;font-family:math;">
@@ -19,7 +19,7 @@
       </p>
     </div>
   </div>
-  <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+  <div class=" wow fadeInRight side-bar bg-warning col-lg-2 col-sm-3 col-md-4 m-3 p-2 shadow rounded-lg"
     data-wow-delay="0.1s">
     <div class='col p-2 m-2'>
       <p>Your Refferals :
@@ -34,7 +34,7 @@
     </div>
   </div>
 
-  <div class=" wow fadeInRight side-bar bg-info col-lg-2 col-sm-8 col-md-4 col-sm-10 m-3 p-2 shadow rounded-lg"
+  <div class=" wow fadeInRight side-bar bg-info col-lg-2 col-sm-3 col-md-4  m-3 p-2 shadow rounded-lg"
     data-wow-delay="0.1s">
     <div class='col p-2 m-2'>
       <p>level bonus: <span style="color:floralwhite;font-family:math;">
@@ -62,7 +62,7 @@
   <div class="row pt-2">
     {% for post in posts %}
     <div class="col-lg-3 col-md-6 col-sm-12 mb-4 d-flex">
-      <div class="wow fadeInRight side-bar card bg-light rounded-lg shadow-lg w-100 h-80 d-flex flex-column">
+      <div style="width:97%;" class="wow fadeInRight side-bar card bg-light rounded-lg shadow-lg h-80 d-flex flex-column">
         <div class="card-header bg-info m-1 p-1 shadow-sm rounded-lg">
           <div class="row p-2 m-2">
             <img class="rounded-circle" src="{{post.author.profile.image.url}}" style="max-width:25%" alt="pic">
@@ -87,9 +87,6 @@
               style="margin-bottom:10px;">
               <i class="bi bi-eyeglasses fs-4">view</i>
             </a>
-          </div>
-          <div style="font-size:small;">
-            {{post.job_offer}}
           </div>
         </div>
         <div class="card-footer bg-light ">
@@ -145,7 +142,5 @@
   </div>
 
 </body>
-
-
 
 {% endblock %}

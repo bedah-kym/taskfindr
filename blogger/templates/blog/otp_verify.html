@@ -1,0 +1,21 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container col-lg-6 col-md-10- col-sm-10 shadow-lg p-4 mb-4 mt-5 bg-white rounded-lg">
+    <h2 class="text-center mb-4" style="font-family: cursive;">
+        <i class="bi bi-door-open"></i>VERIFY OTP 
+    </h2>
+
+    <form method="POST" class="needs-validation" novalidate id="registrationForm">
+        {% csrf_token %}
+
+        <div class="form-group mb-3">
+            <label for="otp">hello, lets verify your phone number</label>
+            <input id="otp" type="text" name="otp">
+            <button class="btn btn-success" type="submit">FINISH</button>
+        </div>
+
+    </form>
+</div>
+{% endblock%}

@@ -229,7 +229,7 @@ def AcceptOrDeclineBidView(request,bid_id,response):
                 return redirect('profile')
         else:
             if response == "Decline":
-                if bid.bid_status == "WAITING":
+                if bid.bid_status == "WAITING"or bid.bid_status == "waiting":
                     bid.bid_status ='DECLINED' 
                     bid.save()
                     return redirect('profile')  

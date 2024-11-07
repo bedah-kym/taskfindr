@@ -13,6 +13,9 @@ from.validators import Reffcodevalidator
 from .emails import warning_email
 from taskmanager.models import OfferBids
 from blog.models import blogpost
+from .helper import MessageHandler
+import secrets
+
 
 def register_view(request,**kwargs):
 
@@ -20,26 +23,55 @@ def register_view(request,**kwargs):
         form = registration_form (request.POST)
         if form.is_valid():
             username=form.cleaned_data.get('username')
-            phonenumber = form.cleaned_data.get('phone')
-            code= kwargs['code']
-            if Reffcodevalidator(code) == True:
-                form.save()
-                reff_code = code
-                owner = User.objects.get(username=username)
-                prof=profile.objects.create(user = owner,reffered_by = reff_code,phone_number=phonenumber)
-                prof.save()
-                messages.warning(request,"make sure you check your EMAIL for a verification link to LOG IN , if you dont find it check your SPAM folder")
-                messages.success(request,f'WELCOME {username} you are now a member. PLEASE READ THE SITE GUIDE')
-                send_verification_email(request, form)
-                return redirect('about')
+            if User.objects.filter(username__iexact=username).exists():
+                messages.warning(request,"this username already exists !!")
+                return(redirect('register'))
             else:
-                messages.warning(request,f'Sorry {username} you need a valid refferal link to register,click register to use our default link')
-                return redirect(reverse("register",kwargs={"code":code}))
+                phonenumber = form.cleaned_data.get('phone')
+                generate_otp_sms(phonenumber)
+                redirect(f'profile')
+                redirect.set_cookie("can_otp_enter",True,max_age=600)
+                   
+                code = kwargs['code']
+                if Reffcodevalidator(code) == True:
+                    form.save()
+                    reff_code = code
+                    owner = User.objects.get(username=username)
+                    prof=profile.objects.create(user = owner,reffered_by = reff_code,phone_number=phonenumber)
+                    prof.save()
+                    messages.warning(request,"make sure you check your EMAIL for a verification link to LOG IN , if you dont find it check your SPAM folder")
+                    messages.success(request,f'WELCOME {username} you are now a member. PLEASE READ THE SITE GUIDE')
+                    send_verification_email(request, form)
+                    return redirect('otp-verify')
+                else:
+                    messages.warning(request,f'Sorry {username} you need a valid refferal link to register,click register to use our default link')
+                    return redirect(reverse("register",kwargs={"code":code}))
         else:
             messages.info(request,"sorry! try again ")
     else:
         form = registration_form()
     return render(request,'blog/register.html',{'form':form})
+
+def generate_otp_sms(phonenumber):#replace with africastalking in prod
+    phone = '748677515'
+    otp = secrets.randbelow(10000)
+    otp = str(otp).zfill(4)  # Ensures OTP is 4 digits, even if <1000
+    MessageHandler(phone,otp).send_otp_via_message()
+    
+@login_required    
+def verify_otp(request):
+    userprofile = request.user.profile
+    if request.method=="POST":    
+        if request.COOKIES.get('can_otp_enter')!=None:
+            if(userprofile.otp==request.POST['otp']):
+                red=redirect("profile")
+                red.set_cookie('verified',True)
+                return red
+            messages.warning(request,"wrong otp")
+        else:
+            messages.warning(request,"no OTP you OTP has expired")        
+    return render(request,"blog/otp_verify.html")
+    
 
 @login_required
 def profile_view(request):
@@ -77,7 +109,8 @@ def profile_view(request):
     'total_reffs':account.refferals.count(),
     'my_profile':myprofile,
     "tasks":myposts,
-    "bids":mybids
+    "bids":mybids,
+    "bid_counter":1
     }
 
     return render(request,'blog/profile.html',context)

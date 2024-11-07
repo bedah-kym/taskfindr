@@ -3,6 +3,7 @@ body {
   background-color: #fff;
   height: 200vh;
   position: relative;
+  width: 100%;
 }
 
 body:before {
@@ -19,6 +20,8 @@ body:before {
   opacity: 0;
   visibility: hidden;
   z-index: 1;
+  padding-left:4px;
+  padding-right:4px;
 }
 
 body.offcanvas-menu:before {
@@ -108,6 +111,10 @@ input:checked+.star-label {
 }
 
 @media (max-width:590px) {
+  #bodycontainer{
+    padding-left:4px;
+    padding-right:4px;
+  }
   .events_hero {
     color: #c1e016;
     padding: 22%;

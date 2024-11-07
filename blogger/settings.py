@@ -104,7 +104,10 @@ INSTALLED_APPS =[
     'taskmanager'
     
 ]
-
+TWILIO_SID = os.environ.get('Twilio_Account_SID')
+TWILIO_TOKEN = os.environ.get('Twilio_Auth_Token')
+TWILIO_PHONE_NUMBER = os.environ.get('Twilio_Phone_Number')
+COUNTRY_CODE = '+254'
 
 JET_SIDE_MENU_COMPACT = False
 JET_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultIndexDashboard'

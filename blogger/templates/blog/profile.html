@@ -177,13 +177,15 @@
                     <code>{{bid.bid_status}}</code>
                     <div>
                       {% if bid.bid_status == 'ACCEPTED' or bid.bid_status == 'DECLINED' %}
-                        <small style="display: flex;justify-content: end; font-family: monospace;">you can delete this bid, </small>
+                      <small style="display: flex;justify-content: end; font-family: monospace;">you can delete this
+                        bid, </small>
                       {% endif %}
                       {% if bid.joboffer.job_status != "OPEN"%}
-                      <small style="display: flex;justify-content: end; font-family: monospace;">this job isnt open anymore </small>
+                      <small style="display: flex;justify-content: end; font-family: monospace;">this job isnt open
+                        anymore </small>
                       {% endif %}
                     </div>
-                      
+
                   </div>
                 </div>
               </div>
@@ -256,7 +258,7 @@
         {% for offer in task.job_offer.all %}
         {% for bid in offer.bids.all %}
         <tr>
-          <th scope="row">1</th>
+          <th scope="row">{{bid.counter}}</th>
           <td>{{bid.bidder}}</td>
           <td style="font-family: 'Courier New', Courier, monospace;">{{bid.joboffer}}</td>
           <td style="font-family: 'Courier New', Courier, monospace;">{{bid.cashbid}}</td>
